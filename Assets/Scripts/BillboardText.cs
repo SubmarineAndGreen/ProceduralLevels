@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class BillboardText : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    Camera cam;
+
+    private void Start() {
+        cam = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        transform.rotation = cam.transform.rotation;
     }
 }
