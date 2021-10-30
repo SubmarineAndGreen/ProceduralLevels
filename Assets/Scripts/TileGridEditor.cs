@@ -11,7 +11,6 @@ public class TileGridEditor : Editor
 
     TileGrid editedGrid = null;
     string saveDir;
-    const string saveFolder = "InputGrids";
     GUIContent gridPickerTooltip;
     string newGridName = "";
 
@@ -24,7 +23,7 @@ public class TileGridEditor : Editor
     {
         base.OnInspectorGUI();
 
-        saveDir = Application.dataPath + "/" + saveFolder;
+        saveDir = $"{Application.dataPath}/{TileGrid.saveFolder}";
         //tworzy folder tylko gdy go nie ma
         Directory.CreateDirectory(saveDir);
 
@@ -55,13 +54,13 @@ public class TileGridEditor : Editor
 
         GUILayout.BeginHorizontal();
 
-        guiButton("Save", loadGrid);
-        guiButton("Load", saveGrid);
+        guiButton("Save", saveGrid);
+        guiButton("Load", loadGrid);
 
         GUILayout.EndHorizontal();
 
         newGridName = EditorGUILayout.TextField(new GUIContent("New File Name"), newGridName);
-        guiButton("Create new grid file", newGrid);
+        guiButton("Create new file", newGrid);
     }
 
     void HandleItemClick(object parameter)
@@ -103,12 +102,12 @@ public class TileGridEditor : Editor
 
     void loadGrid()
     {
-
+        editedGrid.loadFromFile();
     }
 
     void saveGrid()
     {
-
+        editedGrid.saveToFile();
     }
 
     void newGrid()
