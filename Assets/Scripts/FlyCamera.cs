@@ -16,18 +16,16 @@ public class FlyCamera : MonoBehaviour
     private const float CAMERA_STEP = 0.1f;
     void Update()
     {
-        isMovementEnabled = Input.GetMouseButton(RMB);
+        isMovementEnabled = MyInput.cameraControls.isMovementEnabled;
         
         if(isMovementEnabled) {
-            Cursor.lockState = CursorLockMode.Locked;
 
-            _movementInput.x = Input.GetAxisRaw("Horizontal");
-            _movementInput.z = Input.GetAxisRaw("Vertical");
-
-            _mouseInput.x = Input.GetAxisRaw("Mouse X");
-            _mouseInput.y = Input.GetAxisRaw("Mouse Y");
-            _mouseScroll = Input.mouseScrollDelta.y;
-
+            _movementInput.x = MyInput.cameraControls.movementInput.x;
+            _movementInput.z = MyInput.cameraControls.movementInput.z;
+            _mouseInput.x = MyInput.cameraControls.mouseInput.x;
+            _mouseInput.y = MyInput.cameraControls.mouseInput.y;
+            _mouseScroll = MyInput.cameraControls.mouseScroll;
+;
             cameraSpeed = Mathf.Max(CAMERA_STEP, cameraSpeed + _mouseScroll * CAMERA_STEP);
 
             transform.localPosition += 
@@ -36,8 +34,6 @@ public class FlyCamera : MonoBehaviour
 
             transform.Rotate(Vector3.up, _mouseInput.x * mouseSensitivity, Space.World);
             transform.Rotate(transform.right, INVERT_CAMERA *  _mouseInput.y * mouseSensitivity, Space.World);
-        } else {
-            Cursor.lockState = CursorLockMode.None;
         }
     }
 }

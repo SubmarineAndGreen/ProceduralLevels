@@ -12,11 +12,63 @@ public class TileGrid : MonoBehaviour
     public const string saveFolder = "InputGrids";
     private Vector3Int dimensions = new Vector3Int(3, 3, 3);
     int[,,] tileIndices;
+    [SerializeField] private GameObject cursorPrefab;
+    private GameObject cursor;
+    private Vector3Int cursorPosition;
+
 
     private void Start()
     {
         loadIndicesArray();
-        // saveToFile();
+        cursor = Instantiate(cursorPrefab, Vector3.zero, Quaternion.Euler(0, 90, 0));
+    }
+
+    private void Update() {
+        gridCursorMovement();
+    }
+
+    void gridCursorMovement() {
+        const float cursorStep = 1f;
+
+        if(MyInput.gridControls.disabled) {
+            return;
+        }
+
+        bool keyW = MyInput.gridControls.keyW;
+        bool keyA = MyInput.gridControls.keyA;
+        bool keyS = MyInput.gridControls.keyS;
+        bool keyD = MyInput.gridControls.keyD;
+
+        bool heightToggle = MyInput.gridControls.heightToggle;
+
+        Vector3Int cursorMovement;
+
+        if(heightToggle) {
+            cursorMovement = new Vector3Int(
+                0,
+                (keyW ? 1 : 0) + (keyS ? -1 : 0),
+                0
+            );
+        } else {
+            cursorMovement = new Vector3Int(
+                (keyA ? -1 : 0) + (keyD ? 1 : 0),
+                0,
+                (keyW ? 1 : 0) + (keyS ? -1 : 0)
+            );
+        }
+
+        Debug.Log(cursorMovement);
+
+        cursorPosition += cursorMovement;
+        cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, dimensions.x - 1);
+        cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, dimensions.y - 1);
+        cursorPosition.z = Mathf.Clamp(cursorPosition.z, 0, dimensions.z - 1);
+
+        cursor.transform.localPosition = new Vector3(
+            cursorPosition.x * cursorStep,
+            cursorPosition.y * cursorStep,
+            cursorPosition.z * cursorStep
+        );
     }
 
     void loadIndicesArray()
