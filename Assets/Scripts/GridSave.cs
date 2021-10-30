@@ -7,7 +7,7 @@ public struct GridSave
     public Vector3Int dimensions;
     public TileModel[] tiles;
 
-    public GridSave(Vector3Int dimensions, int[,,] tileIndices)
+    public GridSave(Vector3Int dimensions, int[,,] tileIndices, int[,,] tileRotations)
     {
         this.dimensions = dimensions;
 
@@ -23,21 +23,32 @@ public struct GridSave
                 for (int z = 0; z < dimensions.z; z++)
                 {
                     tiles[currentTile++] =
-                        new TileModel(tileIndices[x, y, z], new Vector3Int(x, y, z));
+                        new TileModel(tileIndices[x, y, z], tileRotations[x, y, z], new Vector3Int(x, y, z));
                 }
             }
         }
     }
 
-    public int[,,] TilesAsIntArray()
+    public int[,,] getTileIndices()
     {
-        int[,,] indicesArray = new int[dimensions.x, dimensions.y, dimensions.z];
+        int[,,] indices = new int[dimensions.x, dimensions.y, dimensions.z];
 
         foreach (TileModel model in tiles)
         {
-            indicesArray[model.position.x, model.position.y, model.position.z] = model.tileIndex;
+            indices[model.position.x, model.position.y, model.position.z] = model.tileIndex;
         }
 
-        return indicesArray;
+        return indices;
+    }
+
+    public int[,,] getTileRotations() {
+        int[,,] rotations = new int[dimensions.x, dimensions.y, dimensions.z];
+
+        foreach (TileModel model in tiles)
+        {
+            rotations[model.position.x, model.position.y, model.position.z] = model.rotation;
+        }
+
+        return rotations;
     }
 }

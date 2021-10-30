@@ -11,6 +11,7 @@ public class MyInput : MonoBehaviour
     void Update()
     {
         cameraControls.isMovementEnabled = Input.GetMouseButton(RMB);
+        
         if (cameraControls.isMovementEnabled)
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -30,6 +31,11 @@ public class MyInput : MonoBehaviour
             gridControls.keyS = Input.GetKeyDown(KeyCode.S);
             gridControls.keyD = Input.GetKeyDown(KeyCode.D);
             gridControls.heightToggle = Input.GetKey(KeyCode.LeftShift);
+            gridControls.place = Input.GetKeyDown(KeyCode.Space);
+            gridControls.nextTile = Input.GetKeyDown(KeyCode.E);
+            gridControls.previousTile = Input.GetKeyDown(KeyCode.Q);
+            gridControls.rotate = Input.GetKeyDown(KeyCode.R);
+            gridControls.remove = Input.GetKeyDown(KeyCode.Delete);
         }
     }
 }
@@ -42,6 +48,11 @@ public struct GridControls
     public bool keyS;
     public bool keyD;
     public bool heightToggle;
+    public bool nextTile;
+    public bool previousTile;
+    public bool place;
+    public bool remove;
+    public bool rotate;
 }
 
 public struct CameraControls
