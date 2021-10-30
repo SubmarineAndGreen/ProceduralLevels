@@ -8,8 +8,8 @@ using System;
 
 public class TileGrid : MonoBehaviour
 {
-    [HideInInspector]
-    public string currentSaveFile;
+    [HideInInspector] public string currentSaveFile;
+    [SerializeField] private Vector3 dimensions;
 }
 
 
@@ -122,12 +122,20 @@ public class TileGridEditor : Editor
 
     void newGrid()
     {
-        FileStream test;
+        FileStream newFile;
 
-        try {
-            test = File.Create($"{saveDir}/{newGridName}.json");
-            Debug.Log("Created new file: " + test.Name);
-        } catch {
+        if(String.IsNullOrWhiteSpace(newGridName)) {
+            Debug.LogError("File not created: invalid filename");
+            return;
+        }
+
+        try
+        {
+            newFile = File.Create($"{saveDir}/{newGridName}.json");
+            Debug.Log("Created new file: " + newFile.Name);
+        }
+        catch
+        {
             Debug.LogError("Something went wrong creating new file!");
         }
     }
