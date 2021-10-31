@@ -7,19 +7,20 @@ using TMPro;
 
 public class TileGrid : MonoBehaviour
 {
+    const int TILE_EMPTY = -1;
     [SerializeField] private TextMeshProUGUI previewRotationText;
     [SerializeField] private TextMeshProUGUI selectedTileRotationText;
     [SerializeField] private GameObject cursorPrefab;
-    [Space(50)]
+    [Header("Editor Controls")]
     [SerializeField] private TileSet tileSet;
     [HideInInspector] public string currentSaveFile;
     public const string saveFolder = "InputGrids";
-    
+
     private Vector3Int dimensions = new Vector3Int(3, 3, 3);
     int[,,] tileIndices;
     int[,,] tileRotations;
     GameObject[,,] tileObjects;
-    
+
     private GameObject cursor;
     private Vector3Int cursorPosition;
     private List<GameObject> tilePreviews;
@@ -32,8 +33,14 @@ public class TileGrid : MonoBehaviour
 
     private void Start()
     {
+        tileObjects = new GameObject[dimensions.x, dimensions.y, dimensions.z];
+        if (!loadFromFile())
+        {
+            tileIndices = new int[dimensions.x, dimensions.y, dimensions.z];
+            tileRotations = new int[dimensions.x, dimensions.y, dimensions.z];
+        }
 
-        loadIndicesArray();
+
         cursor = Instantiate(cursorPrefab, Vector3.zero, Quaternion.Euler(0, 90, 0));
 
         tilePreviews = new List<GameObject>();
@@ -57,15 +64,6 @@ public class TileGrid : MonoBehaviour
         updateUI();
     }
 
-    void loadIndicesArray()
-    {
-        if (!loadFromFile())
-        {
-            tileIndices = new int[dimensions.x, dimensions.y, dimensions.z];
-        }
-        tileObjects = new GameObject[dimensions.x, dimensions.y, dimensions.z];
-    }
-
     public void saveToFile()
     {
         GridSave save = new GridSave(dimensions, tileIndices, tileRotations);
@@ -83,6 +81,7 @@ public class TileGrid : MonoBehaviour
             dimensions = loadedSave.dimensions;
             tileIndices = loadedSave.getTileIndices();
             tileRotations = loadedSave.getTileRotations();
+            rebuild();
             return true;
         }
         catch (FileNotFoundException e)
@@ -95,6 +94,45 @@ public class TileGrid : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void clear()
+    {
+        for (int x = 0; x < dimensions.x; x++)
+        {
+            for (int y = 0; y < dimensions.y; y++)
+            {
+                for (int z = 0; z < dimensions.z; z++)
+                {
+                    tileIndices[x, y, z] = TILE_EMPTY;
+                    tileRotations[x, y, z] = 0;
+                }
+            }
+        }
+        rebuild();
+    }
+
+    //przeladuj wszystkie plytki w przypadku np. ladowania z pliku
+    public void rebuild()
+    {
+        for (int x = 0; x < dimensions.x; x++)
+        {
+            for (int y = 0; y < dimensions.y; y++)
+            {
+                for (int z = 0; z < dimensions.z; z++)
+                {
+                    if (tileIndices[x, y, z] == TILE_EMPTY)
+                    {
+                        removeTile(new Vector3Int(x, y, z));
+                    }
+                    else
+                    {
+                        Destroy(tileObjects[x, y, z]);
+                        placeTile(tileIndices[x, y, z], new Vector3Int(x, y, z), tileRotations[x, y, z]);
+                    }
+                }
+            }
+        }
     }
 
     void gridCursorMovement()
@@ -159,6 +197,7 @@ public class TileGrid : MonoBehaviour
         activePreview.SetActive(true);
         activePreview.transform.SetParent(cursor.transform);
         activePreview.transform.localPosition = Vector3.zero + halfTileOffset;
+        activePreview.transform.rotation = Quaternion.Euler(0, activeTileRotation * 90, 0);
     }
 
     void tileSelectionControls()
@@ -207,31 +246,35 @@ public class TileGrid : MonoBehaviour
         Vector3 halfTileOffset = new Vector3(0.5f, 0, -0.5f);
         if (MyInput.gridControls.place)
         {
-            removeTile();
-            placeTile();
+            removeTile(cursorPosition);
+            placeTile(activeTileIndex, cursorPosition, activeTileRotation);
         }
-        if(MyInput.gridControls.remove)
+        if (MyInput.gridControls.remove)
         {
-            removeTile();
+            removeTile(cursorPosition);
         }
     }
 
-    void placeTile()
+    void placeTile(int tileSetIndex, Vector3Int position, int rotation)
     {
-        tileObjects[cursorPosition.x, cursorPosition.y, cursorPosition.z] =
-                Instantiate(tileSet.tiles[activeTileIndex], 
-                            activePreview.transform.position,
-                            activePreview.transform.rotation);
-        tileRotations[cursorPosition.x, cursorPosition.y, cursorPosition.z] = activeTileRotation;
+        Vector3 halfTileOffset = new Vector3(-0.5f, 0, -0.5f);
+        tileIndices[position.x, position.y, position.z] = tileSetIndex;
+        tileObjects[position.x, position.y, position.z] =
+                Instantiate(tileSet.tiles[tileSetIndex],
+                            transform.position + position + halfTileOffset,
+                            Quaternion.Euler(0, rotation * 90, 0));
+        tileRotations[position.x, position.y, position.z] = rotation;
     }
 
-    void removeTile()
+    void removeTile(Vector3Int position)
     {
-        Destroy(tileObjects[cursorPosition.x, cursorPosition.y, cursorPosition.z]);
-        tileRotations[cursorPosition.x, cursorPosition.y, cursorPosition.z] = 0;
+        Destroy(tileObjects[position.x, position.y, position.z]);
+        tileRotations[position.x, position.y, position.z] = 0;
+        tileIndices[position.x, position.y, position.z] = TILE_EMPTY;
     }
 
-    void updateUI() {
+    void updateUI()
+    {
         const string text1 = "Rotation: ";
         const string text2 = "Selected Tile Rotation: ";
 

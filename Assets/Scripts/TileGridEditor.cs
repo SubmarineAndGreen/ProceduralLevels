@@ -54,13 +54,17 @@ public class TileGridEditor : Editor
 
         GUILayout.BeginHorizontal();
 
-        guiButton("Save", saveGrid);
-        guiButton("Load", loadGrid);
+        guiButton("Save", editedGrid.saveToFile);
+        guiButton("Load", () => {
+            editedGrid.loadFromFile();
+        });
 
         GUILayout.EndHorizontal();
 
         newGridName = EditorGUILayout.TextField(new GUIContent("New File Name"), newGridName);
         guiButton("Create new file", newGrid);
+        guiButton("Rebuild", editedGrid.rebuild);
+        guiButton("Clear Grid", editedGrid.clear);
     }
 
     void HandleItemClick(object parameter)
@@ -98,16 +102,6 @@ public class TileGridEditor : Editor
         {
             callback();
         }
-    }
-
-    void loadGrid()
-    {
-        editedGrid.loadFromFile();
-    }
-
-    void saveGrid()
-    {
-        editedGrid.saveToFile();
     }
 
     void newGrid()
