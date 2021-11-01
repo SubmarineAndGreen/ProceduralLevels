@@ -15,10 +15,9 @@ public class TileGrid : MonoBehaviour
     [SerializeField] private TileSet tileSet;
     [HideInInspector] public string currentSaveFile;
     public const string saveFolder = "InputGrids";
-
-    private Vector3Int dimensions = new Vector3Int(3, 3, 3);
-    int[,,] tileIndices;
-    int[,,] tileRotations;
+    [HideInInspector] public Vector3Int dimensions = new Vector3Int(3, 3, 3);
+    [HideInInspector] public int[,,] tileIndices;
+    [HideInInspector] public int[,,] tileRotations;
     GameObject[,,] tileObjects;
 
     private GameObject cursor;
