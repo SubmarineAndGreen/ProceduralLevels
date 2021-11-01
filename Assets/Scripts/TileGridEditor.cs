@@ -13,6 +13,7 @@ public class TileGridEditor : Editor
     string saveDir;
     GUIContent gridPickerTooltip;
     string newGridName = "";
+    Vector3Int resizeDimensions = new Vector3Int();
 
     private void OnEnable()
     {
@@ -57,14 +58,18 @@ public class TileGridEditor : Editor
         guiButton("Save", editedGrid.saveToFile);
         guiButton("Load", () => {
             editedGrid.loadFromFile();
+            editedGrid.rebuildGrid();
         });
 
         GUILayout.EndHorizontal();
 
         newGridName = EditorGUILayout.TextField(new GUIContent("New File Name"), newGridName);
         guiButton("Create new file", newGrid);
-        guiButton("Rebuild", editedGrid.rebuild);
-        guiButton("Clear Grid", editedGrid.clear);
+        // guiButton("Rebuild", editedGrid.rebuild);
+        guiButton("Clear Grid", editedGrid.clearGrid);
+        
+        resizeDimensions = EditorGUILayout.Vector3IntField("New Dimensions", resizeDimensions);
+        guiButton("Resize", () => editedGrid.resize(resizeDimensions));
     }
 
     void HandleItemClick(object parameter)

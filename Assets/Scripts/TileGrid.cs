@@ -33,12 +33,22 @@ public class TileGrid : MonoBehaviour
 
     private void Start()
     {
-        tileObjects = new GameObject[dimensions.x, dimensions.y, dimensions.z];
-        if (!loadFromFile())
+        Boolean loadedFromFile = loadFromFile();
+
+        if (!loadedFromFile)
         {
             tileIndices = new int[dimensions.x, dimensions.y, dimensions.z];
             tileRotations = new int[dimensions.x, dimensions.y, dimensions.z];
         }
+
+        tileObjects = new GameObject[dimensions.x, dimensions.y, dimensions.z];
+
+        if (loadedFromFile)
+        {
+            rebuildGrid();
+        }
+
+
 
 
         cursor = Instantiate(cursorPrefab, Vector3.zero, Quaternion.Euler(0, 90, 0));
@@ -81,7 +91,6 @@ public class TileGrid : MonoBehaviour
             dimensions = loadedSave.dimensions;
             tileIndices = loadedSave.getTileIndices();
             tileRotations = loadedSave.getTileRotations();
-            rebuild();
             return true;
         }
         catch (FileNotFoundException e)
@@ -96,7 +105,7 @@ public class TileGrid : MonoBehaviour
         return false;
     }
 
-    public void clear()
+    public void clearGrid()
     {
         for (int x = 0; x < dimensions.x; x++)
         {
@@ -109,11 +118,11 @@ public class TileGrid : MonoBehaviour
                 }
             }
         }
-        rebuild();
+        rebuildGrid();
     }
 
     //przeladuj wszystkie plytki w przypadku np. ladowania z pliku
-    public void rebuild()
+    public void rebuildGrid()
     {
         for (int x = 0; x < dimensions.x; x++)
         {
@@ -271,6 +280,61 @@ public class TileGrid : MonoBehaviour
         Destroy(tileObjects[position.x, position.y, position.z]);
         tileRotations[position.x, position.y, position.z] = 0;
         tileIndices[position.x, position.y, position.z] = TILE_EMPTY;
+    }
+
+    public void resize(Vector3Int newDimensions)
+    {
+        if (newDimensions.x <= 1 || newDimensions.y <= 0 || newDimensions.z <= 0)
+        {
+            Debug.LogError("Error resizing the grid: minimum grid size is 2x2x2");
+            return;
+        }
+
+        int[,,] newTileIndices = new int[newDimensions.x, newDimensions.y, newDimensions.z];
+        int[,,] newTileRotations = new int[newDimensions.x, newDimensions.y, newDimensions.z];
+        GameObject[,,] newTileObjects = new GameObject[newDimensions.x, newDimensions.y, newDimensions.z];
+
+        //copy overlaping tiles
+        for (int x = 0; x < newDimensions.x; x++)
+        {
+            for (int y = 0; y < newDimensions.y; y++)
+            {
+                for (int z = 0; z < newDimensions.z; z++)
+                {
+                    if (x < dimensions.x && y < dimensions.y && z < dimensions.z)
+                    {
+                        newTileIndices[x, y, z] = tileIndices[x, y, z];
+                        newTileRotations[x, y, z] = tileRotations[x, y, z];
+                        newTileObjects[x, y, z] = tileObjects[x, y, z];
+                    }
+                    else
+                    {
+                        newTileIndices[x, y, z] = TILE_EMPTY;
+                        newTileRotations[x, y, z] = 0;
+                    }
+                }
+            }
+        }
+
+        //cleanup out of bounds tiles
+        for (int x = 0; x < dimensions.x; x++)
+        {
+            for (int y = 0; y < dimensions.y; y++)
+            {
+                for (int z = 0; z < dimensions.z; z++)
+                {
+                    if (x >= newDimensions.x || y >= newDimensions.y || z >= newDimensions.z)
+                    {
+                        Destroy(tileObjects[x, y, z]);
+                    }
+                }
+            }
+        }
+
+        tileIndices = newTileIndices;
+        tileRotations = newTileRotations;
+        tileObjects = newTileObjects;
+        dimensions = newDimensions;
     }
 
     void updateUI()
