@@ -11,7 +11,7 @@ public class ModelSampler : MonoBehaviour
 
     public List<GridAdjacencyConstraint> simpleTiledModel(Vector3Int dimensions, int[,,] tileIndices)
     {
-        var adjacencies = new List<GridAdjacencyConstraint>();
+        var constraints = new List<GridAdjacencyConstraint>();
         for (int x = 0; x < dimensions.x; x++)
         {
             for (int y = 0; y < dimensions.y; y++)
@@ -28,7 +28,7 @@ public class ModelSampler : MonoBehaviour
             foreach(var item in ACUtils.DirectionsToVectors) {
                 Vector3Int neighborPosition = origin + item.Value;
                 if(ACUtils.isInBounds(inputGrid.dimensions ,neighborPosition)) {
-                    adjacencies.Add(new GridAdjacencyConstraint(
+                    constraints.Add(new GridAdjacencyConstraint(
                         tileIndexToModelIndex(
                             inputGrid.tileIndices[origin.x, origin.y, origin.z],
                             inputGrid.tileRotations[origin.x, origin.y, origin.z]
@@ -43,7 +43,7 @@ public class ModelSampler : MonoBehaviour
             }
         }
 
-        return adjacencies;
+        return constraints;
     }
 
     int tileIndexToModelIndex(int index, int rotation) {
