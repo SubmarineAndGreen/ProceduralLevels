@@ -6,15 +6,14 @@ using System.Linq;
 
 public class ModelSampler : MonoBehaviour
 {
+    [HideInInspector] public const string saveFolder = "WfcModels";
     const int nOfRotations = 4;
     [SerializeField] TileGrid inputGrid;
     [SerializeField] bool ignoreEmptyTiles;
 
-    public void run()
+    public HashSet<GridAdjacencyConstraint> run()
     {
-        HashSet<GridAdjacencyConstraint> model = simpleTiledModel(inputGrid.dimensions, inputGrid.tileIndices);
-        var constraints = new GridAdjacencyConstraintCollection(model.ToList());
-        Debug.Log(JsonUtility.ToJson(constraints));
+        return simpleTiledModel(inputGrid.dimensions, inputGrid.tileIndices);
     }
 
     private HashSet<GridAdjacencyConstraint> simpleTiledModel(Vector3Int dimensions, int[,,] tileIndices)

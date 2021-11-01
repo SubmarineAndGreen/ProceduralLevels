@@ -13,7 +13,7 @@ public class TileGrid : MonoBehaviour
     [SerializeField] private GameObject cursorPrefab;
     [Header("Editor Controls")]
     [SerializeField] private TileSet tileSet;
-    [HideInInspector] public string currentSaveFile;
+    [HideInInspector] public string currentSaveFile = "";
     public const string saveFolder = "InputGrids";
     [HideInInspector] public Vector3Int dimensions = new Vector3Int(3, 3, 3);
     [HideInInspector] public int[,,] tileIndices;

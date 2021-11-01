@@ -301,7 +301,7 @@ MonoBehaviour:
   selectedTileRotationText: {fileID: 1365138956}
   cursorPrefab: {fileID: 6526753209231964760, guid: d182178f4c339c649ad5d066736aa3b6, type: 3}
   tileSet: {fileID: 11400000, guid: 85acd50e261e1e74e9f219c010ab5475, type: 2}
-  currentSaveFile: gridtest.json
+  currentSaveFile: StraightRoad.json
   dimensions: {x: 3, y: 3, z: 3}
 --- !u!4 &561711772
 Transform:
@@ -330,7 +330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputGrid: {fileID: 561711771}
-  ignoreEmptyTiles: 1
+  ignoreEmptyTiles: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,9 +1,11 @@
+using System.Linq;
 using UnityEditor;
 
 [CustomEditor(typeof(ModelSampler))]
 public class ModelSamplerEditor : Editor {
 
     ModelSampler sampler;
+    string modelName = "";
 
     private void OnEnable() {
         sampler = target as ModelSampler;
@@ -11,6 +13,11 @@ public class ModelSamplerEditor : Editor {
 
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
-        EditorUtils.guiButton("Create Simple Tiled Model", sampler.run);
+        modelName = EditorGUILayout.TextField("Model Name", modelName);
+        EditorUtils.guiButton("Create Simple Tiled Model", () => {
+            var constraints = sampler.run();
+            WfcModel model = new WfcModel(constraints.ToList());
+            model.saveToFile(modelName);
+        });
     }
 }

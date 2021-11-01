@@ -28,30 +28,9 @@ public class TileGridEditor : Editor
         //tworzy folder tylko gdy go nie ma
         Directory.CreateDirectory(saveDir);
 
-        if (!String.IsNullOrEmpty(editedGrid.currentSaveFile))
-        {
-            gridPickerTooltip = new GUIContent(editedGrid.currentSaveFile);
-        }
-        else
-        {
-            gridPickerTooltip = new GUIContent("File Name");
-        }
-
-
-        if (EditorGUILayout.DropdownButton(gridPickerTooltip, FocusType.Passive))
-        {
-            GenericMenu gridPickerMenu = new GenericMenu();
-            var saveFiles = getGridSaveFiles();
-            if (saveFiles != null)
-            {
-                foreach (string item in saveFiles)
-                {
-                    gridPickerMenu.AddItem(new GUIContent(item), false, HandleItemClick, item);
-                }
-            }
-
-            gridPickerMenu.ShowAsContext();
-        }
+        EditorUtils.filePicker(editedGrid.currentSaveFile, saveDir, (object parameter) => {
+            editedGrid.currentSaveFile = parameter as string;
+        });
 
         GUILayout.BeginHorizontal();
 
@@ -63,42 +42,13 @@ public class TileGridEditor : Editor
 
         GUILayout.EndHorizontal();
 
-        newGridName = EditorGUILayout.TextField(new GUIContent("New File Name"), newGridName);
+        newGridName = EditorGUILayout.TextField(new GUIContent("File name"), newGridName);
         EditorUtils.guiButton("Create new file", newGrid);
         // EditorUtils.guiButton("Rebuild", editedGrid.rebuild);
         EditorUtils.guiButton("Clear Grid", editedGrid.clearGrid);
         
         resizeDimensions = EditorGUILayout.Vector3IntField("New Dimensions", resizeDimensions);
         EditorUtils.guiButton("Resize", () => editedGrid.resize(resizeDimensions));
-    }
-
-    void HandleItemClick(object parameter)
-    {
-        if (editedGrid)
-        {
-            editedGrid.currentSaveFile = parameter as string;
-        }
-    }
-
-    List<string> getGridSaveFiles()
-    {
-        try
-        {
-            List<string> filePaths = Directory.GetFiles(saveDir)
-            .Where(
-                fileName => !fileName.EndsWith(".meta")
-            ).ToList<string>();
-
-            List<string> fileNames = new List<string>();
-            filePaths.ForEach(path => fileNames.Add(Path.GetFileName(path)));
-            return fileNames;
-        }
-        catch
-        {
-            Debug.LogError("Trouble getting grid save files: invalid directory");
-            return null;
-        }
-
     }
 
     void newGrid()

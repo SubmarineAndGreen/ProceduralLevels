@@ -111,13 +111,3 @@ public class GridAdjacencyConstraint : IEquatable<GridAdjacencyConstraint>
     }
 }
 
-[Serializable]
-public class GridAdjacencyConstraintCollection
-{
-    public List<GridAdjacencyConstraint> constraints;
-
-    public GridAdjacencyConstraintCollection(List<GridAdjacencyConstraint> constraints)
-    {
-        this.constraints = constraints;
-    }
-}
