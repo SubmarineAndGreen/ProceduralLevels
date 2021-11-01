@@ -1,78 +1,29 @@
-using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class GridAdjacencyConstraint
+public class ACUtils
 {
-    int valueA;
-    int valueB;
-    Directions3D directionAtoB;
-
-    public GridAdjacencyConstraint(int valueA, int valueB, Directions3D directionAtoB)
+    public static bool isInBounds(Vector3Int dimensions, Vector3Int position)
     {
-        this.valueA = valueA;
-        this.valueB = valueB;
-        this.directionAtoB = directionAtoB;
+        if (position.x >= dimensions.x || position.y >= dimensions.y || position.z >= dimensions.z)
+        {
+            return false;
+        }
+        if (position.x < 0 || position.y < 0 || position.z < 0)
+        {
+            return false;
+        }
+        return true;
     }
 
-    public bool isSupported(int valueToCheck, int variableX, int variableY, List<int>[,] allVariables)
+    
+    public static Dictionary<Directions3D, Vector3Int> DirectionsToVectors = new Dictionary<Directions3D, Vector3Int>()
     {
-        if (valueToCheck != valueA)
-        {
-            return true;
-        }
-
-        List<int> variableToSearch = getVariableInConstraintDirection(variableX, variableY, allVariables);
-        
-        if(variableToSearch == null) {
-            return true;
-        }
-
-        foreach(int value in variableToSearch) {
-            if(value == valueB) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private List<int> getVariableInConstraintDirection(int variableX, int variableY, List<int>[,] allVariables)
-    {
-        int newX = variableX, newY = variableY;
-        switch (directionAtoB)
-        {
-            case Direction.NORTH:
-                newX -= 1;
-                break;
-            case Direction.EAST:
-                newY += 1;
-                break;
-            case Direction.SOUTH:
-                newX += 1;
-                break;
-            case Direction.WEST:
-                newY -= 1;
-                break;
-        }
-
-        if(isInBounds(newX, newY)) {
-            return allVariables[newX, newY];
-        } else {
-            return null;
-        }
-
-        bool isInBounds(int x, int y)
-        {
-            if (x < 0 || x >= allVariables.GetLength(0))
-            {
-                return false;
-            }
-            if (y < 0 || y >= allVariables.GetLength(1))
-            {
-                return false;
-            }
-
-            return true;
-        }
-    }
+        {Directions3D.UP, Vector3Int.up},
+        {Directions3D.DOWN, Vector3Int.down},
+        {Directions3D.FORWARD, Vector3Int.forward},
+        {Directions3D.RIGHT, Vector3Int.right},
+        {Directions3D.BACK, Vector3Int.back},
+        {Directions3D.LEFT, Vector3Int.left}
+    };
 }
