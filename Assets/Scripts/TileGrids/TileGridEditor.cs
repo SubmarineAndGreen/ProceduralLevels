@@ -55,8 +55,8 @@ public class TileGridEditor : Editor
 
         GUILayout.BeginHorizontal();
 
-        guiButton("Save", editedGrid.saveToFile);
-        guiButton("Load", () => {
+        EditorUtils.guiButton("Save", editedGrid.saveToFile);
+        EditorUtils.guiButton("Load", () => {
             editedGrid.loadFromFile();
             editedGrid.rebuildGrid();
         });
@@ -64,12 +64,12 @@ public class TileGridEditor : Editor
         GUILayout.EndHorizontal();
 
         newGridName = EditorGUILayout.TextField(new GUIContent("New File Name"), newGridName);
-        guiButton("Create new file", newGrid);
-        // guiButton("Rebuild", editedGrid.rebuild);
-        guiButton("Clear Grid", editedGrid.clearGrid);
+        EditorUtils.guiButton("Create new file", newGrid);
+        // EditorUtils.guiButton("Rebuild", editedGrid.rebuild);
+        EditorUtils.guiButton("Clear Grid", editedGrid.clearGrid);
         
         resizeDimensions = EditorGUILayout.Vector3IntField("New Dimensions", resizeDimensions);
-        guiButton("Resize", () => editedGrid.resize(resizeDimensions));
+        EditorUtils.guiButton("Resize", () => editedGrid.resize(resizeDimensions));
     }
 
     void HandleItemClick(object parameter)
@@ -99,14 +99,6 @@ public class TileGridEditor : Editor
             return null;
         }
 
-    }
-
-    void guiButton(string label, Action callback)
-    {
-        if (GUILayout.Button(label))
-        {
-            callback();
-        }
     }
 
     void newGrid()

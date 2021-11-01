@@ -7,7 +7,7 @@ using TMPro;
 
 public class TileGrid : MonoBehaviour
 {
-    const int TILE_EMPTY = -1;
+    [HideInInspector] public const int TILE_EMPTY = -1;
     [SerializeField] private TextMeshProUGUI previewRotationText;
     [SerializeField] private TextMeshProUGUI selectedTileRotationText;
     [SerializeField] private GameObject cursorPrefab;

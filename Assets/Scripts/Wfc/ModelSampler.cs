@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ModelSampler : MonoBehaviour
 {
@@ -9,9 +10,16 @@ public class ModelSampler : MonoBehaviour
     [SerializeField] TileGrid inputGrid;
     [SerializeField] bool ignoreEmptyTiles;
 
-    public List<GridAdjacencyConstraint> simpleTiledModel(Vector3Int dimensions, int[,,] tileIndices)
+    public void run()
     {
-        var constraints = new List<GridAdjacencyConstraint>();
+        HashSet<GridAdjacencyConstraint> model = simpleTiledModel(inputGrid.dimensions, inputGrid.tileIndices);
+        var constraints = new GridAdjacencyConstraintCollection(model.ToList());
+        Debug.Log(JsonUtility.ToJson(constraints));
+    }
+
+    private HashSet<GridAdjacencyConstraint> simpleTiledModel(Vector3Int dimensions, int[,,] tileIndices)
+    {
+        var constraints = new HashSet<GridAdjacencyConstraint>();
         for (int x = 0; x < dimensions.x; x++)
         {
             for (int y = 0; y < dimensions.y; y++)
@@ -25,9 +33,22 @@ public class ModelSampler : MonoBehaviour
 
         void searchNeighbors(Vector3Int origin)
         {
-            foreach(var item in ACUtils.DirectionsToVectors) {
+            foreach (var item in ACUtils.DirectionsToVectors)
+            {
                 Vector3Int neighborPosition = origin + item.Value;
-                if(ACUtils.isInBounds(inputGrid.dimensions ,neighborPosition)) {
+
+                if (ACUtils.isInBounds(inputGrid.dimensions, neighborPosition))
+                {
+                    //dont make constraints where some tile is an empty tile
+                    if (ignoreEmptyTiles &&
+                    (
+                       inputGrid.tileIndices[neighborPosition.x, neighborPosition.y, neighborPosition.z] == TileGrid.TILE_EMPTY
+                    || inputGrid.tileIndices[origin.x, origin.y, origin.z] == TileGrid.TILE_EMPTY
+                    ))
+                    {
+                        continue;
+                    }
+
                     constraints.Add(new GridAdjacencyConstraint(
                         tileIndexToModelIndex(
                             inputGrid.tileIndices[origin.x, origin.y, origin.z],
@@ -46,16 +67,23 @@ public class ModelSampler : MonoBehaviour
         return constraints;
     }
 
-    int tileIndexToModelIndex(int index, int rotation) {
+    int tileIndexToModelIndex(int index, int rotation)
+    {
         return index * nOfRotations + rotation;
     }
 
-    int modelIndexToTileIndex(int index) {
+    int modelIndexToTileIndex(int index)
+    {
         return (index - (index % nOfRotations)) / nOfRotations;
     }
 
-    int modelIndexToRotation(int index) {
+    int modelIndexToRotation(int index)
+    {
         return index % nOfRotations;
     }
+
+
 }
+
+
 
