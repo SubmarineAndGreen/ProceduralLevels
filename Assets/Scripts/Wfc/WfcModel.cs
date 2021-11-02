@@ -6,10 +6,12 @@ using UnityEngine;
 [Serializable]
 public class WfcModel
 {
+    public List<int> tileIds;
     public List<GridAdjacencyConstraint> constraints;
 
-    public WfcModel(List<GridAdjacencyConstraint> constraints)
+    public WfcModel(List<int> tileIds, List<GridAdjacencyConstraint> constraints)
     {
+        this.tileIds = tileIds;
         this.constraints = constraints;
     }
 

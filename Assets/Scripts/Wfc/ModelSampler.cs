@@ -11,20 +11,27 @@ public class ModelSampler : MonoBehaviour
     [SerializeField] TileGrid inputGrid;
     [SerializeField] bool ignoreEmptyTiles;
 
-    public HashSet<GridAdjacencyConstraint> run()
+    public WfcModel run()
     {
         return simpleTiledModel(inputGrid.dimensions, inputGrid.tileIndices);
     }
 
-    private HashSet<GridAdjacencyConstraint> simpleTiledModel(Vector3Int dimensions, int[,,] tileIndices)
+    private WfcModel simpleTiledModel(Vector3Int dimensions, int[,,] tileIndices)
     {
         var constraints = new HashSet<GridAdjacencyConstraint>();
+        var tileIds = new HashSet<int>();
+
         for (int x = 0; x < dimensions.x; x++)
         {
             for (int y = 0; y < dimensions.y; y++)
             {
                 for (int z = 0; z < dimensions.z; z++)
                 {
+                    if(tileIndices[x, y, z] != TileGrid.TILE_EMPTY)
+                    tileIds.Add(tileIndexToModelIndex(
+                        tileIndices[x, y, z],
+                        inputGrid.tileRotations[x, y, z]
+                    ));
                     searchNeighbors(new Vector3Int(x, y, z));
                 }
             }
@@ -39,11 +46,9 @@ public class ModelSampler : MonoBehaviour
                 if (SolverUtils.isInBounds(inputGrid.dimensions, neighborPosition))
                 {
                     //dont make constraints where some tile is an empty tile
-                    if (ignoreEmptyTiles &&
-                    (
-                       inputGrid.tileIndices[neighborPosition.x, neighborPosition.y, neighborPosition.z] == TileGrid.TILE_EMPTY
-                    || inputGrid.tileIndices[origin.x, origin.y, origin.z] == TileGrid.TILE_EMPTY
-                    ))
+                    if (ignoreEmptyTiles 
+                    && (inputGrid.tileIndices[neighborPosition.x, neighborPosition.y, neighborPosition.z] == TileGrid.TILE_EMPTY
+                    || inputGrid.tileIndices[origin.x, origin.y, origin.z] == TileGrid.TILE_EMPTY))
                     {
                         continue;
                     }
@@ -63,7 +68,7 @@ public class ModelSampler : MonoBehaviour
             }
         }
 
-        return constraints;
+        return new WfcModel(tileIds.ToList(), constraints.ToList());
     }
 
     int tileIndexToModelIndex(int index, int rotation)

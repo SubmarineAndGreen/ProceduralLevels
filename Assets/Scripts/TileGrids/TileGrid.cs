@@ -16,7 +16,8 @@ public class TileGrid : MonoBehaviour
     [SerializeField] private TileSet tileSet;
     [SerializeField] private bool loadFromFileOnStart = false;
     [HideInInspector] public string currentSaveFile = "";
-    [HideInInspector] public Vector3Int dimensions = new Vector3Int(3, 3, 3);
+    private Vector3Int defaultDimensions = new Vector3Int(3, 3, 3);
+    [HideInInspector] public Vector3Int dimensions;
     [HideInInspector] public bool areEditingControlsOn = false;
     [HideInInspector] public int[,,] tileIndices;
     [HideInInspector] public int[,,] tileRotations;
@@ -47,9 +48,10 @@ public class TileGrid : MonoBehaviour
 
         if (!loadedFromFile)
         {
-            tileIndices = new int[dimensions.x, dimensions.y, dimensions.z];
-            tileRotations = new int[dimensions.x, dimensions.y, dimensions.z];
-            tileObjects = new GameObject[dimensions.x, dimensions.y, dimensions.z];
+            tileIndices = new int[defaultDimensions.x, defaultDimensions.y, defaultDimensions.z];
+            tileRotations = new int[defaultDimensions.x, defaultDimensions.y, defaultDimensions.z];
+            tileObjects = new GameObject[defaultDimensions.x, defaultDimensions.y, defaultDimensions.z];
+            fillWithEmpty();
         }
 
 
@@ -57,10 +59,7 @@ public class TileGrid : MonoBehaviour
         {
             rebuildGrid();
         }
-        else
-        {
-            fillWithEmpty();
-        }
+
 
 
 

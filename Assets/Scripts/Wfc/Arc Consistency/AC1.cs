@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AC1 : IConstraintSolver
 {
-    public void run(Vector3Int dimensions, List<int>[,,] variables, GridAdjacencyConstraint[] constraints)
+    public bool run(Vector3Int dimensions, List<int>[,,] variables, List<GridAdjacencyConstraint> constraints)
     {
         while (true)
         {
@@ -19,13 +19,20 @@ public class AC1 : IConstraintSolver
                         for (int z = 0; z < dimensions.z; z++)
                         {
                             //foreach value in domain of that variable
-                            foreach (int value in variables[x, y, z])
+                            for (int i = 0; i < variables[x, y, z].Count; i++)
                             {
+                                int value = variables[x, y, z][i];
                                 //search for support of that value on the constraint
                                 if (!constraint.isSupported(value, new Vector3Int(x, y, z), dimensions, variables))
                                 {
                                     //if no support is found remove value from the domain
                                     variables[x, y, z].Remove(value);
+                                    //if there is a variable with no possibilities,
+                                    //there is no valid solution, return false
+                                    if(variables[x, y, z].Count == 0)
+                                    {
+                                        return false;
+                                    }
                                     wasAnyValueRemoved = true;
                                 }
                             }
@@ -35,7 +42,7 @@ public class AC1 : IConstraintSolver
                 //if nothing has been removed in this loop, exit
                 if (!wasAnyValueRemoved)
                 {
-                    return;
+                    return true;
                 }
             }
         }

@@ -15,8 +15,7 @@ public class ModelSamplerEditor : Editor {
         base.OnInspectorGUI();
         modelName = EditorGUILayout.TextField("Model Name", modelName);
         EditorUtils.guiButton("Create Simple Tiled Model", () => {
-            var constraints = sampler.run();
-            WfcModel model = new WfcModel(constraints.ToList());
+            WfcModel model = sampler.run();
             model.saveToFile(modelName);
         });
     }
