@@ -50,7 +50,7 @@ public class TileGridEditor : Editor
         newGridName = EditorGUILayout.TextField(new GUIContent("File name"), newGridName);
         EditorUtils.guiButton("Create new file", newGrid);
         // EditorUtils.guiButton("Rebuild", editedGrid.rebuild);
-        EditorUtils.guiButton("Clear Grid", editedGrid.clearGrid);
+        EditorUtils.guiButton("Clear Grid", editedGrid.fillWithEmpty);
         
         resizeDimensions = EditorGUILayout.Vector3IntField("New Dimensions", resizeDimensions);
         EditorUtils.guiButton("Resize", () => editedGrid.resize(resizeDimensions));

@@ -49,9 +49,9 @@ public class TileGrid : MonoBehaviour
         {
             tileIndices = new int[dimensions.x, dimensions.y, dimensions.z];
             tileRotations = new int[dimensions.x, dimensions.y, dimensions.z];
+            tileObjects = new GameObject[dimensions.x, dimensions.y, dimensions.z];
         }
 
-        tileObjects = new GameObject[dimensions.x, dimensions.y, dimensions.z];
 
         if (loadedFromFile)
         {
@@ -59,7 +59,7 @@ public class TileGrid : MonoBehaviour
         }
         else
         {
-            clearGrid();
+            fillWithEmpty();
         }
 
 
@@ -110,9 +110,15 @@ public class TileGrid : MonoBehaviour
         {
             string jsonString = File.ReadAllText($"{Application.dataPath}/{SAVE_FOLDER}/{currentSaveFile}");
             GridSave loadedSave = JsonUtility.FromJson<GridSave>(jsonString);
+            if (tileObjects != null)
+            {
+                destroyTileObjects();
+            }
             dimensions = loadedSave.dimensions;
             tileIndices = loadedSave.getTileIndices();
             tileRotations = loadedSave.getTileRotations();
+            tileObjects = new GameObject[dimensions.x, dimensions.y, dimensions.z];
+
             return true;
         }
         catch (FileNotFoundException e)
@@ -127,7 +133,7 @@ public class TileGrid : MonoBehaviour
         return false;
     }
 
-    public void clearGrid()
+    public void fillWithEmpty()
     {
         for (int x = 0; x < dimensions.x; x++)
         {
@@ -146,27 +152,21 @@ public class TileGrid : MonoBehaviour
     //przeladuj wszystkie plytki w przypadku np. ladowania z pliku
     public void rebuildGrid()
     {
+        destroyTileObjects();
         for (int x = 0; x < dimensions.x; x++)
         {
             for (int y = 0; y < dimensions.y; y++)
             {
                 for (int z = 0; z < dimensions.z; z++)
                 {
-                    if (tileIndices[x, y, z] == TILE_EMPTY)
-                    {
-                        removeTile(new Vector3Int(x, y, z));
-                    }
-                    else
-                    {
-                        Destroy(tileObjects[x, y, z]);
-                        placeTile(tileIndices[x, y, z], new Vector3Int(x, y, z), tileRotations[x, y, z]);
-                    }
+                    placeTile(tileIndices[x, y, z], new Vector3Int(x, y, z), tileRotations[x, y, z]);
                 }
             }
         }
     }
 
-    public void destroyTileObjects() {
+    public void destroyTileObjects()
+    {
         for (int x = 0; x < dimensions.x; x++)
         {
             for (int y = 0; y < dimensions.y; y++)
@@ -302,11 +302,14 @@ public class TileGrid : MonoBehaviour
     void placeTile(int tileSetIndex, Vector3Int position, int rotation)
     {
         Vector3 halfTileOffset = new Vector3(-0.5f, 0, -0.5f);
+        if (tileSetIndex != TILE_EMPTY)
+        {
+            tileObjects[position.x, position.y, position.z] =
+            Instantiate(tileSet.tiles[tileSetIndex],
+                        transform.position + position + halfTileOffset,
+                        Quaternion.Euler(0, rotation * 90, 0));
+        }
         tileIndices[position.x, position.y, position.z] = tileSetIndex;
-        tileObjects[position.x, position.y, position.z] =
-                Instantiate(tileSet.tiles[tileSetIndex],
-                            transform.position + position + halfTileOffset,
-                            Quaternion.Euler(0, rotation * 90, 0));
         tileRotations[position.x, position.y, position.z] = rotation;
     }
 
