@@ -19,4 +19,10 @@ public class WfcModel
         Directory.CreateDirectory($"{Application.dataPath}/{ModelSampler.SAVE_FOLDER}");
         File.WriteAllText($"{Application.dataPath}/{ModelSampler.SAVE_FOLDER}/{filename}.json", jsonString);
     }
+
+    public static WfcModel loadFromFile(string filename)
+    {  
+        string jsonString = File.ReadAllText($"{Application.dataPath}/{ModelSampler.SAVE_FOLDER}/{filename}");
+        return JsonUtility.FromJson<WfcModel>(jsonString);
+    }
 }

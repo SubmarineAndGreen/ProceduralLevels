@@ -32,11 +32,11 @@ public class ModelSampler : MonoBehaviour
 
         void searchNeighbors(Vector3Int origin)
         {
-            foreach (var item in ACUtils.DirectionsToVectors)
+            foreach (var item in SolverUtils.DirectionsToVectors)
             {
                 Vector3Int neighborPosition = origin + item.Value;
 
-                if (ACUtils.isInBounds(inputGrid.dimensions, neighborPosition))
+                if (SolverUtils.isInBounds(inputGrid.dimensions, neighborPosition))
                 {
                     //dont make constraints where some tile is an empty tile
                     if (ignoreEmptyTiles &&

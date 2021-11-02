@@ -81,26 +81,26 @@ public class GridAdjacencyConstraint : IEquatable<GridAdjacencyConstraint>
         switch (directionAtoB)
         {
             case Directions3D.UP:
-                resultPosition += ACUtils.DirectionsToVectors[Directions3D.UP];
+                resultPosition += SolverUtils.DirectionsToVectors[Directions3D.UP];
                 break;
             case Directions3D.DOWN:
-                resultPosition += ACUtils.DirectionsToVectors[Directions3D.DOWN];
+                resultPosition += SolverUtils.DirectionsToVectors[Directions3D.DOWN];
                 break;
             case Directions3D.FORWARD:
-                resultPosition += ACUtils.DirectionsToVectors[Directions3D.FORWARD];
+                resultPosition += SolverUtils.DirectionsToVectors[Directions3D.FORWARD];
                 break;
             case Directions3D.RIGHT:
-                resultPosition += ACUtils.DirectionsToVectors[Directions3D.RIGHT];
+                resultPosition += SolverUtils.DirectionsToVectors[Directions3D.RIGHT];
                 break;
             case Directions3D.BACK:
-                resultPosition += ACUtils.DirectionsToVectors[Directions3D.BACK];
+                resultPosition += SolverUtils.DirectionsToVectors[Directions3D.BACK];
                 break;
             case Directions3D.LEFT:
-                resultPosition += ACUtils.DirectionsToVectors[Directions3D.LEFT];
+                resultPosition += SolverUtils.DirectionsToVectors[Directions3D.LEFT];
                 break;
         }
 
-        if (ACUtils.isInBounds(dimensions, resultPosition))
+        if (SolverUtils.isInBounds(dimensions, resultPosition))
         {
             return allVariables[resultPosition.x, resultPosition.y, resultPosition.z];
         }

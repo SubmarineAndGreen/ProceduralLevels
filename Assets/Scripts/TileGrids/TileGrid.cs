@@ -36,9 +36,12 @@ public class TileGrid : MonoBehaviour
     {
         Boolean loadedFromFile;
 
-        if(!loadFromFileOnStart) {
+        if (!loadFromFileOnStart)
+        {
             loadedFromFile = false;
-        } else {
+        }
+        else
+        {
             loadedFromFile = loadFromFile();
         }
 
@@ -53,6 +56,10 @@ public class TileGrid : MonoBehaviour
         if (loadedFromFile)
         {
             rebuildGrid();
+        }
+        else
+        {
+            clearGrid();
         }
 
 
@@ -74,7 +81,8 @@ public class TileGrid : MonoBehaviour
 
     private void Update()
     {
-        if(areEditingControlsOn) {
+        if (areEditingControlsOn)
+        {
             gridCursorMovement();
             tileSelectionControls();
             rotationControls();
@@ -93,6 +101,11 @@ public class TileGrid : MonoBehaviour
 
     public bool loadFromFile()
     {
+        if (String.IsNullOrWhiteSpace(currentSaveFile))
+        {
+            return false;
+        }
+
         try
         {
             string jsonString = File.ReadAllText($"{Application.dataPath}/{SAVE_FOLDER}/{currentSaveFile}");
@@ -148,6 +161,19 @@ public class TileGrid : MonoBehaviour
                         Destroy(tileObjects[x, y, z]);
                         placeTile(tileIndices[x, y, z], new Vector3Int(x, y, z), tileRotations[x, y, z]);
                     }
+                }
+            }
+        }
+    }
+
+    public void destroyTileObjects() {
+        for (int x = 0; x < dimensions.x; x++)
+        {
+            for (int y = 0; y < dimensions.y; y++)
+            {
+                for (int z = 0; z < dimensions.z; z++)
+                {
+                    Destroy(tileObjects[x, y, z]);
                 }
             }
         }
@@ -293,9 +319,9 @@ public class TileGrid : MonoBehaviour
 
     public void resize(Vector3Int newDimensions)
     {
-        if (newDimensions.x <= 1 || newDimensions.y <= 0 || newDimensions.z <= 0)
+        if (newDimensions.x <= 0 || newDimensions.y <= 0 || newDimensions.z <= 0)
         {
-            Debug.LogError("Error resizing the grid: minimum grid size is 2x2x2");
+            Debug.LogError("Error resizing the grid: invalid dimensions");
             return;
         }
 
