@@ -7,18 +7,20 @@ using TMPro;
 
 public class TileGrid : MonoBehaviour
 {
-    [HideInInspector] public const int TILE_EMPTY = -1;
+    public const int TILE_EMPTY = -1;
+    public const string SAVE_FOLDER = "InputGrids";
     [SerializeField] private TextMeshProUGUI previewRotationText;
     [SerializeField] private TextMeshProUGUI selectedTileRotationText;
     [SerializeField] private GameObject cursorPrefab;
     [Header("Editor Controls")]
     [SerializeField] private TileSet tileSet;
+    [SerializeField] private bool loadFromFileOnStart = false;
     [HideInInspector] public string currentSaveFile = "";
-    public const string saveFolder = "InputGrids";
     [HideInInspector] public Vector3Int dimensions = new Vector3Int(3, 3, 3);
+    [HideInInspector] public bool areEditingControlsOn = false;
     [HideInInspector] public int[,,] tileIndices;
     [HideInInspector] public int[,,] tileRotations;
-    GameObject[,,] tileObjects;
+    private GameObject[,,] tileObjects;
 
     private GameObject cursor;
     private Vector3Int cursorPosition;
@@ -32,7 +34,13 @@ public class TileGrid : MonoBehaviour
 
     private void Start()
     {
-        Boolean loadedFromFile = loadFromFile();
+        Boolean loadedFromFile;
+
+        if(!loadFromFileOnStart) {
+            loadedFromFile = false;
+        } else {
+            loadedFromFile = loadFromFile();
+        }
 
         if (!loadedFromFile)
         {
@@ -50,7 +58,7 @@ public class TileGrid : MonoBehaviour
 
 
 
-        cursor = Instantiate(cursorPrefab, Vector3.zero, Quaternion.Euler(0, 90, 0));
+        cursor = Instantiate(cursorPrefab, transform.position, Quaternion.Euler(0, 90, 0));
 
         tilePreviews = new List<GameObject>();
 
@@ -66,11 +74,13 @@ public class TileGrid : MonoBehaviour
 
     private void Update()
     {
-        gridCursorMovement();
-        tileSelectionControls();
-        rotationControls();
-        placeAndRemoveControls();
-        updateUI();
+        if(areEditingControlsOn) {
+            gridCursorMovement();
+            tileSelectionControls();
+            rotationControls();
+            placeAndRemoveControls();
+            updateUI();
+        }
     }
 
     public void saveToFile()
@@ -78,14 +88,14 @@ public class TileGrid : MonoBehaviour
         GridSave save = new GridSave(dimensions, tileIndices, tileRotations);
         string jsonString = JsonUtility.ToJson(save);
         Debug.Log(jsonString);
-        File.WriteAllText($"{Application.dataPath}/{saveFolder}/{currentSaveFile}", jsonString);
+        File.WriteAllText($"{Application.dataPath}/{SAVE_FOLDER}/{currentSaveFile}", jsonString);
     }
 
     public bool loadFromFile()
     {
         try
         {
-            string jsonString = File.ReadAllText($"{Application.dataPath}/{saveFolder}/{currentSaveFile}");
+            string jsonString = File.ReadAllText($"{Application.dataPath}/{SAVE_FOLDER}/{currentSaveFile}");
             GridSave loadedSave = JsonUtility.FromJson<GridSave>(jsonString);
             dimensions = loadedSave.dimensions;
             tileIndices = loadedSave.getTileIndices();
@@ -185,10 +195,10 @@ public class TileGrid : MonoBehaviour
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, dimensions.y - 1);
         cursorPosition.z = Mathf.Clamp(cursorPosition.z, 0, dimensions.z - 1);
 
-        cursor.transform.localPosition = new Vector3(
-            cursorPosition.x * cursorStep,
-            cursorPosition.y * cursorStep,
-            cursorPosition.z * cursorStep
+        cursor.transform.position = new Vector3(
+            this.transform.position.x + cursorPosition.x * cursorStep,
+            this.transform.position.y + cursorPosition.y * cursorStep,
+            this.transform.position.z + cursorPosition.z * cursorStep
         );
     }
 

@@ -6,7 +6,7 @@ using System.Linq;
 
 public class ModelSampler : MonoBehaviour
 {
-    [HideInInspector] public const string saveFolder = "WfcModels";
+    public const string SAVE_FOLDER = "WfcModels";
     const int nOfRotations = 4;
     [SerializeField] TileGrid inputGrid;
     [SerializeField] bool ignoreEmptyTiles;

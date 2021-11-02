@@ -16,7 +16,7 @@ public class WfcModel
     public void saveToFile(string filename)
     {
         string jsonString = JsonUtility.ToJson(this);
-        Directory.CreateDirectory($"{Application.dataPath}/{ModelSampler.saveFolder}");
-        File.WriteAllText($"{Application.dataPath}/{ModelSampler.saveFolder}/{filename}.json", jsonString);
+        Directory.CreateDirectory($"{Application.dataPath}/{ModelSampler.SAVE_FOLDER}");
+        File.WriteAllText($"{Application.dataPath}/{ModelSampler.SAVE_FOLDER}/{filename}.json", jsonString);
     }
 }

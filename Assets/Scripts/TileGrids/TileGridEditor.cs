@@ -22,11 +22,16 @@ public class TileGridEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        
         base.OnInspectorGUI();
 
-        saveDir = $"{Application.dataPath}/{TileGrid.saveFolder}";
+        saveDir = $"{Application.dataPath}/{TileGrid.SAVE_FOLDER}";
         //tworzy folder tylko gdy go nie ma
         Directory.CreateDirectory(saveDir);
+
+        EditorGUILayout.Space(10);
+        EditorUtils.guiButton("Edit this grid", toggleEditingGrids);
+        EditorGUILayout.Space(10);
 
         EditorUtils.filePicker(editedGrid.currentSaveFile, saveDir, (object parameter) => {
             editedGrid.currentSaveFile = parameter as string;
@@ -69,5 +74,15 @@ public class TileGridEditor : Editor
         {
             Debug.LogError("Something went wrong creating new file!");
         }
+    }
+
+    void toggleEditingGrids() {
+        TileGrid[] allGrids = FindObjectsOfType<TileGrid>();
+        foreach(TileGrid grid in allGrids) {
+            if(grid != editedGrid) {
+                grid.areEditingControlsOn = false;
+            }
+        }
+        editedGrid.areEditingControlsOn = true;
     }
 }
