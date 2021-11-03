@@ -5,9 +5,9 @@ using System;
 using UnityEngine.UI;
 using TMPro;
 
-public class TileGrid : MonoBehaviour
-{
+public class TileGrid : MonoBehaviour {
     public const int TILE_EMPTY = -1;
+    public const int NO_ROTATION = 0;
     public const string SAVE_FOLDER = "InputGrids";
     [SerializeField] private TextMeshProUGUI previewRotationText;
     [SerializeField] private TextMeshProUGUI selectedTileRotationText;
@@ -19,9 +19,9 @@ public class TileGrid : MonoBehaviour
     private Vector3Int defaultDimensions = new Vector3Int(3, 3, 3);
     [HideInInspector] public Vector3Int dimensions;
     [HideInInspector] public bool areEditingControlsOn = false;
-    [HideInInspector] public int[,,] tileIndices;
-    [HideInInspector] public int[,,] tileRotations;
-    private GameObject[,,] tileObjects;
+    [HideInInspector] public Array3D<int> tileIndices;
+    [HideInInspector] public Array3D<int> tileRotations;
+    private Array3D<GameObject> tileObjects;
 
     private GameObject cursor;
     private Vector3Int cursorPosition;
@@ -29,34 +29,27 @@ public class TileGrid : MonoBehaviour
     private int activeTileIndex;
     private int activeTileRotation;
     private GameObject activePreview;
-    private int rotation;
 
 
 
-    private void Start()
-    {
+    private void Start() {
         Boolean loadedFromFile;
 
-        if (!loadFromFileOnStart)
-        {
+        if (!loadFromFileOnStart) {
             loadedFromFile = false;
-        }
-        else
-        {
+        } else {
             loadedFromFile = loadFromFile();
         }
 
-        if (!loadedFromFile)
-        {
-            tileIndices = new int[defaultDimensions.x, defaultDimensions.y, defaultDimensions.z];
-            tileRotations = new int[defaultDimensions.x, defaultDimensions.y, defaultDimensions.z];
-            tileObjects = new GameObject[defaultDimensions.x, defaultDimensions.y, defaultDimensions.z];
+        if (!loadedFromFile) {
+            tileIndices = new Array3D<int>(defaultDimensions);
+            tileRotations = new Array3D<int>(defaultDimensions);
+            tileObjects = new Array3D<GameObject>(defaultDimensions);
             fillWithEmpty();
         }
 
 
-        if (loadedFromFile)
-        {
+        if (loadedFromFile) {
             rebuildGrid();
         }
 
@@ -68,8 +61,7 @@ public class TileGrid : MonoBehaviour
 
         tilePreviews = new List<GameObject>();
 
-        foreach (GameObject tile in tileSet.tiles)
-        {
+        foreach (GameObject tile in tileSet.tiles) {
             GameObject preview = Instantiate(tile);
             preview.SetActive(false);
             tilePreviews.Add(preview);
@@ -78,10 +70,8 @@ public class TileGrid : MonoBehaviour
         changeTilePreview();
     }
 
-    private void Update()
-    {
-        if (areEditingControlsOn)
-        {
+    private void Update() {
+        if (areEditingControlsOn) {
             gridCursorMovement();
             tileSelectionControls();
             rotationControls();
@@ -90,100 +80,65 @@ public class TileGrid : MonoBehaviour
         }
     }
 
-    public void saveToFile()
-    {
+    public void saveToFile() {
         GridSave save = new GridSave(dimensions, tileIndices, tileRotations);
         string jsonString = JsonUtility.ToJson(save);
         Debug.Log(jsonString);
         File.WriteAllText($"{Application.dataPath}/{SAVE_FOLDER}/{currentSaveFile}", jsonString);
     }
 
-    public bool loadFromFile()
-    {
-        if (String.IsNullOrWhiteSpace(currentSaveFile))
-        {
+    public bool loadFromFile() {
+        if (String.IsNullOrWhiteSpace(currentSaveFile)) {
             return false;
         }
 
-        try
-        {
+        try {
             string jsonString = File.ReadAllText($"{Application.dataPath}/{SAVE_FOLDER}/{currentSaveFile}");
             GridSave loadedSave = JsonUtility.FromJson<GridSave>(jsonString);
-            if (tileObjects != null)
-            {
+            if (tileObjects != null) {
                 destroyTileObjects();
             }
             dimensions = loadedSave.dimensions;
             tileIndices = loadedSave.getTileIndices();
             tileRotations = loadedSave.getTileRotations();
-            tileObjects = new GameObject[dimensions.x, dimensions.y, dimensions.z];
+            tileObjects = new Array3D<GameObject>(dimensions);
 
             return true;
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             Debug.Log("Loading grid file failed: file not found " + e.FileName);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Debug.Log("Loading grid file failed: " + e.Message);
         }
 
         return false;
     }
 
-    public void fillWithEmpty()
-    {
-        for (int x = 0; x < dimensions.x; x++)
-        {
-            for (int y = 0; y < dimensions.y; y++)
-            {
-                for (int z = 0; z < dimensions.z; z++)
-                {
-                    tileIndices[x, y, z] = TILE_EMPTY;
-                    tileRotations[x, y, z] = 0;
-                }
-            }
-        }
+    public void fillWithEmpty() {
+        tileIndices.setEach(value => TILE_EMPTY);
+        tileRotations.setEach(value => 0);
         rebuildGrid();
     }
 
     //przeladuj wszystkie plytki w przypadku np. ladowania z pliku
-    public void rebuildGrid()
-    {
+    public void rebuildGrid() {
         destroyTileObjects();
-        for (int x = 0; x < dimensions.x; x++)
-        {
-            for (int y = 0; y < dimensions.y; y++)
-            {
-                for (int z = 0; z < dimensions.z; z++)
-                {
-                    placeTile(tileIndices[x, y, z], new Vector3Int(x, y, z), tileRotations[x, y, z]);
-                }
-            }
-        }
+
+        tileIndices.forEach((position, value) => {
+            placeTile(value, position, tileRotations.at(position));
+        });
     }
 
-    public void destroyTileObjects()
-    {
-        for (int x = 0; x < dimensions.x; x++)
-        {
-            for (int y = 0; y < dimensions.y; y++)
-            {
-                for (int z = 0; z < dimensions.z; z++)
-                {
-                    Destroy(tileObjects[x, y, z]);
-                }
-            }
-        }
+    public void destroyTileObjects() {
+        tileObjects.setEach(value => {
+            Destroy(value);
+            return null;
+        });
     }
 
-    void gridCursorMovement()
-    {
+    void gridCursorMovement() {
         const float cursorStep = 1f;
 
-        if (MyInput.gridControls.disabled)
-        {
+        if (MyInput.gridControls.disabled) {
             return;
         }
 
@@ -196,16 +151,13 @@ public class TileGrid : MonoBehaviour
 
         Vector3Int cursorMovement;
 
-        if (heightToggle)
-        {
+        if (heightToggle) {
             cursorMovement = new Vector3Int(
                 0,
                 (keyW ? 1 : 0) + (keyS ? -1 : 0),
                 0
             );
-        }
-        else
-        {
+        } else {
             cursorMovement = new Vector3Int(
                 (keyA ? -1 : 0) + (keyD ? 1 : 0),
                 0,
@@ -227,12 +179,10 @@ public class TileGrid : MonoBehaviour
         );
     }
 
-    void changeTilePreview()
-    {
+    void changeTilePreview() {
         Vector3 halfTileOffset = new Vector3(0.5f, 0, -0.5f);
 
-        if (activePreview != null)
-        {
+        if (activePreview != null) {
             activePreview.transform.SetParent(null);
             activePreview.SetActive(false);
         }
@@ -243,40 +193,31 @@ public class TileGrid : MonoBehaviour
         activePreview.transform.rotation = Quaternion.Euler(0, activeTileRotation * 90, 0);
     }
 
-    void tileSelectionControls()
-    {
+    void tileSelectionControls() {
         bool indexChanged = false;
-        if (MyInput.gridControls.nextTile)
-        {
+        if (MyInput.gridControls.nextTile) {
             activeTileIndex++;
-            if (activeTileIndex > tileSet.tiles.Count - 1)
-            {
+            if (activeTileIndex > tileSet.tiles.Count - 1) {
                 activeTileIndex = 0;
             }
             indexChanged = true;
         }
-        if (MyInput.gridControls.previousTile)
-        {
+        if (MyInput.gridControls.previousTile) {
             activeTileIndex--;
-            if (activeTileIndex < 0)
-            {
+            if (activeTileIndex < 0) {
                 activeTileIndex = tileSet.tiles.Count - 1;
             }
             indexChanged = true;
         }
-        if (indexChanged)
-        {
+        if (indexChanged) {
             changeTilePreview();
         }
     }
 
-    void rotationControls()
-    {
-        if (MyInput.gridControls.rotate)
-        {
+    void rotationControls() {
+        if (MyInput.gridControls.rotate) {
             activeTileRotation += 1;
-            if (activeTileRotation > 3)
-            {
+            if (activeTileRotation > 3) {
                 activeTileRotation = 0;
             }
 
@@ -284,89 +225,80 @@ public class TileGrid : MonoBehaviour
         }
     }
 
-    void placeAndRemoveControls()
-    {
+    void placeAndRemoveControls() {
         Vector3 halfTileOffset = new Vector3(0.5f, 0, -0.5f);
-        if (MyInput.gridControls.place)
-        {
-            removeTile(cursorPosition);
+
+        if (MyInput.gridControls.place) {
             placeTile(activeTileIndex, cursorPosition, activeTileRotation);
         }
-        if (MyInput.gridControls.remove)
-        {
+        if (MyInput.gridControls.remove) {
             removeTile(cursorPosition);
         }
     }
 
-    void placeTile(int tileSetIndex, Vector3Int position, int rotation)
-    {
+    void placeTile(int tileSetIndex, Vector3Int position, int rotation) {
+        removeTile(position);
+
         Vector3 halfTileOffset = new Vector3(-0.5f, 0, -0.5f);
-        if (tileSetIndex != TILE_EMPTY)
-        {
-            tileObjects[position.x, position.y, position.z] =
-            Instantiate(tileSet.tiles[tileSetIndex],
+
+        if (tileSetIndex != TILE_EMPTY) {
+            GameObject newTileObject = Instantiate(tileSet.tiles[tileSetIndex],
                         transform.position + position + halfTileOffset,
                         Quaternion.Euler(0, rotation * 90, 0));
+            tileObjects.set(position, newTileObject);
         }
-        tileIndices[position.x, position.y, position.z] = tileSetIndex;
-        tileRotations[position.x, position.y, position.z] = rotation;
+
+        tileIndices.set(position, tileSetIndex);
+        tileRotations.set(position, rotation);
     }
 
-    void removeTile(Vector3Int position)
-    {
-        Destroy(tileObjects[position.x, position.y, position.z]);
-        tileRotations[position.x, position.y, position.z] = 0;
-        tileIndices[position.x, position.y, position.z] = TILE_EMPTY;
+    void removeTile(Vector3Int position) {
+        Destroy(tileObjects.at(position));
+        tileRotations.set(position, 0);
+        tileIndices.set(position, TILE_EMPTY);
     }
 
-    public void resize(Vector3Int newDimensions)
-    {
-        if (newDimensions.x <= 0 || newDimensions.y <= 0 || newDimensions.z <= 0)
-        {
+    public void resize(Vector3Int newDimensions) {
+        if (newDimensions.x <= 0 || newDimensions.y <= 0 || newDimensions.z <= 0) {
             Debug.LogError("Error resizing the grid: invalid dimensions");
             return;
         }
 
-        int[,,] newTileIndices = new int[newDimensions.x, newDimensions.y, newDimensions.z];
-        int[,,] newTileRotations = new int[newDimensions.x, newDimensions.y, newDimensions.z];
-        GameObject[,,] newTileObjects = new GameObject[newDimensions.x, newDimensions.y, newDimensions.z];
+        Array3D<int> newTileIndices = new Array3D<int>(newDimensions);
+        Array3D<int> newTileRotations = new Array3D<int>(newDimensions);
+        Array3D<GameObject> newTileObjects = new Array3D<GameObject>(newDimensions);
 
-        //copy overlaping tiles
-        for (int x = 0; x < newDimensions.x; x++)
-        {
-            for (int y = 0; y < newDimensions.y; y++)
-            {
-                for (int z = 0; z < newDimensions.z; z++)
-                {
-                    if (x < dimensions.x && y < dimensions.y && z < dimensions.z)
-                    {
-                        newTileIndices[x, y, z] = tileIndices[x, y, z];
-                        newTileRotations[x, y, z] = tileRotations[x, y, z];
-                        newTileObjects[x, y, z] = tileObjects[x, y, z];
-                    }
-                    else
-                    {
-                        newTileIndices[x, y, z] = TILE_EMPTY;
-                        newTileRotations[x, y, z] = 0;
-                    }
-                }
+        //copy overlaping tiles their rotations and spawned prefabs
+        newTileIndices.setEach((x, y, z, value) => {
+            if (x < dimensions.x && y < dimensions.y && z < dimensions.z) {
+                return tileIndices.at(x, y, z);
+            } else {
+                return TILE_EMPTY;
             }
-        }
+        });
+
+        newTileRotations.setEach((x, y, z, value) => {
+            if (x < dimensions.x && y < dimensions.y && z < dimensions.z) {
+                return tileRotations.at(x, y, z);
+            } else {
+                return NO_ROTATION;
+            }
+        });
+
+        newTileObjects.setEach((x, y, z, value) => {
+            if (x < dimensions.x && y < dimensions.y && z < dimensions.z) {
+                return tileObjects.at(x, y, z);
+            } else {
+                return null;
+            }
+        });
 
         //cleanup out of bounds tiles
-        for (int x = 0; x < dimensions.x; x++)
-        {
-            for (int y = 0; y < dimensions.y; y++)
-            {
-                for (int z = 0; z < dimensions.z; z++)
-                {
-                    if (x >= newDimensions.x || y >= newDimensions.y || z >= newDimensions.z)
-                    {
-                        Destroy(tileObjects[x, y, z]);
-                    }
-                }
+        tileObjects.forEach((x, y, z) => {
+            if (x >= newDimensions.x || y >= newDimensions.y || z >= newDimensions.z) {
+                Destroy(tileObjects.at(x, y, z));
             }
-        }
+        });
 
         tileIndices = newTileIndices;
         tileRotations = newTileRotations;
@@ -374,13 +306,12 @@ public class TileGrid : MonoBehaviour
         dimensions = newDimensions;
     }
 
-    void updateUI()
-    {
+    void updateUI() {
         const string text1 = "Rotation: ";
         const string text2 = "Selected Tile Rotation: ";
 
         previewRotationText.text = text1 + activeTileRotation;
-        selectedTileRotationText.text = text2 + tileRotations[cursorPosition.x, cursorPosition.y, cursorPosition.z];
+        selectedTileRotationText.text = text2 + tileRotations.at(cursorPosition);
     }
 }
 
