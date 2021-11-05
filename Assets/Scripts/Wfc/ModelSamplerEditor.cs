@@ -15,7 +15,7 @@ public class ModelSamplerEditor : Editor {
         base.OnInspectorGUI();
         modelName = EditorGUILayout.TextField("Model Name", modelName);
         EditorUtils.guiButton("Create Simple Tiled Model", () => {
-            WfcModel model = sampler.run();
+            SimpleTiledModel model = sampler.run();
             model.saveToFile(modelName);
         });
     }

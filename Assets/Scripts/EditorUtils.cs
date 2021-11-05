@@ -15,10 +15,12 @@ public class EditorUtils
         }
     }
 
-    public static void filePicker(string label, string path, GenericMenu.MenuFunction2 itemClickCallback)
+    public static void filePicker(string prefixLabel, string text, string path, GenericMenu.MenuFunction2 itemClickCallback)
     {
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PrefixLabel(prefixLabel);
 
-        if (EditorGUILayout.DropdownButton(new GUIContent(label), FocusType.Passive))
+        if (EditorGUILayout.DropdownButton(new GUIContent(text), FocusType.Passive))
         {
             GenericMenu gridPickerMenu = new GenericMenu();
             var files = getFilesAtPath(path);
@@ -32,6 +34,7 @@ public class EditorUtils
 
             gridPickerMenu.ShowAsContext();
         }
+        EditorGUILayout.EndHorizontal();
     }
 
     private static List<string> getFilesAtPath(string path)

@@ -33,7 +33,7 @@ public class TileGridEditor : Editor
         EditorUtils.guiButton("Edit this grid", toggleEditingGrids);
         EditorGUILayout.Space(10);
 
-        EditorUtils.filePicker(editedGrid.currentSaveFile, saveDir, (object parameter) => {
+        EditorUtils.filePicker("Grid Save File", editedGrid.currentSaveFile, saveDir, (object parameter) => {
             editedGrid.currentSaveFile = parameter as string;
         });
 
@@ -47,7 +47,7 @@ public class TileGridEditor : Editor
 
         GUILayout.EndHorizontal();
 
-        newGridName = EditorGUILayout.TextField(new GUIContent("File name"), newGridName);
+        newGridName = EditorGUILayout.TextField(new GUIContent("New file name"), newGridName);
         EditorUtils.guiButton("Create new file", newGrid);
         // EditorUtils.guiButton("Rebuild", editedGrid.rebuild);
         EditorUtils.guiButton("Clear Grid", editedGrid.fillWithEmpty);

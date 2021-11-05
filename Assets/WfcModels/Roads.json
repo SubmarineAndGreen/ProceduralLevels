@@ -1,0 +1,110 @@
+{
+    "tileIds": [
+        0,
+        4,
+        5,
+        13
+    ],
+    "rules": [
+        {
+            "valueA": 0,
+            "valueB": 4,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 0,
+            "valueB": 5,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 4,
+            "valueB": 0,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 4,
+            "valueB": 13,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 4,
+            "valueB": 0,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 0,
+            "valueB": 4,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 4,
+            "valueB": 4,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 5,
+            "valueB": 13,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 5,
+            "valueB": 0,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 5,
+            "valueB": 0,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 13,
+            "valueB": 5,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 13,
+            "valueB": 4,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 13,
+            "valueB": 5,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 13,
+            "valueB": 4,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 5,
+            "valueB": 13,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 4,
+            "valueB": 4,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 0,
+            "valueB": 5,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 4,
+            "valueB": 13,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 5,
+            "valueB": 5,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 5,
+            "valueB": 5,
+            "directionAtoB": 4
+        }
+    ]
+}

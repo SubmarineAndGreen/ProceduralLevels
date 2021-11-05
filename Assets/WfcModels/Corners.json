@@ -1,1 +1,0 @@
-{"tileIds":[4,5,7,6],"constraints":[{"valueA":4,"valueB":5,"directionAtoB":2},{"valueA":4,"valueB":7,"directionAtoB":3},{"valueA":5,"valueB":6,"directionAtoB":3},{"valueA":5,"valueB":4,"directionAtoB":4},{"valueA":7,"valueB":6,"directionAtoB":2},{"valueA":7,"valueB":4,"directionAtoB":5},{"valueA":6,"valueB":7,"directionAtoB":4},{"valueA":6,"valueB":5,"directionAtoB":5}]}

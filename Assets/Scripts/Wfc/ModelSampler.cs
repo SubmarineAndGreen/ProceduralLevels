@@ -6,25 +6,24 @@ using System.Linq;
 
 public class ModelSampler : MonoBehaviour {
     public const string SAVE_FOLDER = "WfcModels";
-    const int nOfRotations = 4;
     [SerializeField] TileGrid inputGrid;
     [SerializeField] bool ignoreEmptyTiles;
 
-    public WfcModel run() {
+    public SimpleTiledModel run() {
         return simpleTiledModel();
     }
 
-    private WfcModel simpleTiledModel() {
+    private SimpleTiledModel simpleTiledModel() {
         Vector3Int dimensions = inputGrid.dimensions;
         Array3D<int> tileIndices = inputGrid.tileIndices;
         Array3D<int> tileRotations = inputGrid.tileRotations;
 
-        var constraints = new HashSet<GridAdjacencyConstraint>();
+        var constraints = new HashSet<TileRule>();
         var tileIds = new HashSet<int>();
 
         tileIndices.forEach((position, tileIndex) => {
             if (tileIndex != TileGrid.TILE_EMPTY) {
-                tileIds.Add(tileIndexToModelIndex(
+                tileIds.Add(SimpleTiledModel.tileIndexToModelIndex(
                     tileIndex,
                     tileRotations.at(position)
                 ));
@@ -49,12 +48,12 @@ public class ModelSampler : MonoBehaviour {
                         continue;
                     }
 
-                    constraints.Add(new GridAdjacencyConstraint(
-                        tileIndexToModelIndex(
+                    constraints.Add(new TileRule(
+                        SimpleTiledModel.tileIndexToModelIndex(
                             tileIndices.at(centerTilePosition),
                             tileRotations.at(centerTilePosition)
                         ),
-                        tileIndexToModelIndex(
+                        SimpleTiledModel.tileIndexToModelIndex(
                             tileIndices.at(neighborPosition),
                             tileRotations.at(neighborPosition)
                         ),
@@ -64,22 +63,8 @@ public class ModelSampler : MonoBehaviour {
             }
         }
 
-        return new WfcModel(tileIds.ToList(), constraints.ToList());
+        return new SimpleTiledModel(tileIds.ToList(), constraints.ToList());
     }
-
-    int tileIndexToModelIndex(int index, int rotation) {
-        return index * nOfRotations + rotation;
-    }
-
-    int modelIndexToTileIndex(int index) {
-        return (index - (index % nOfRotations)) / nOfRotations;
-    }
-
-    int modelIndexToRotation(int index) {
-        return index % nOfRotations;
-    }
-
-
 }
 
 

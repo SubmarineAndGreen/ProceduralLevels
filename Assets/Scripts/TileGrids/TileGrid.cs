@@ -24,7 +24,7 @@ public class TileGrid : MonoBehaviour {
     private Array3D<GameObject> tileObjects;
 
     private GameObject cursor;
-    private Vector3Int cursorPosition;
+    [HideInInspector] public Vector3Int cursorPosition;
     private List<GameObject> tilePreviews;
     private int activeTileIndex;
     private int activeTileRotation;
@@ -45,6 +45,7 @@ public class TileGrid : MonoBehaviour {
             tileIndices = new Array3D<int>(defaultDimensions);
             tileRotations = new Array3D<int>(defaultDimensions);
             tileObjects = new Array3D<GameObject>(defaultDimensions);
+            dimensions = defaultDimensions;
             fillWithEmpty();
         }
 
@@ -61,8 +62,8 @@ public class TileGrid : MonoBehaviour {
 
         tilePreviews = new List<GameObject>();
 
-        foreach (GameObject tile in tileSet.tiles) {
-            GameObject preview = Instantiate(tile);
+        foreach (Tile tile in tileSet.tiles) {
+            GameObject preview = Instantiate(tile.tilePrefab);
             preview.SetActive(false);
             tilePreviews.Add(preview);
         }
@@ -114,8 +115,8 @@ public class TileGrid : MonoBehaviour {
     }
 
     public void fillWithEmpty() {
-        tileIndices.setEach(value => TILE_EMPTY);
-        tileRotations.setEach(value => 0);
+        tileIndices.updateEach(value => TILE_EMPTY);
+        tileRotations.updateEach(value => NO_ROTATION);
         rebuildGrid();
     }
 
@@ -129,7 +130,7 @@ public class TileGrid : MonoBehaviour {
     }
 
     public void destroyTileObjects() {
-        tileObjects.setEach(value => {
+        tileObjects.updateEach(value => {
             Destroy(value);
             return null;
         });
@@ -210,18 +211,20 @@ public class TileGrid : MonoBehaviour {
             indexChanged = true;
         }
         if (indexChanged) {
+            activeTileRotation = NO_ROTATION;
             changeTilePreview();
         }
     }
 
     void rotationControls() {
+        Symmetry symmetry = tileSet.tiles[activeTileIndex].symmetry;
         if (MyInput.gridControls.rotate) {
             activeTileRotation += 1;
-            if (activeTileRotation > 3) {
+            if (activeTileRotation >= Tile.symmetryToNumOfRotations[symmetry]) {
                 activeTileRotation = 0;
             }
 
-            activePreview.transform.Rotate(Vector3.up, 90, Space.Self);
+            activePreview.transform.rotation = Quaternion.Euler(0, 90 * activeTileRotation, 0);
         }
     }
 
@@ -242,7 +245,7 @@ public class TileGrid : MonoBehaviour {
         Vector3 halfTileOffset = new Vector3(-0.5f, 0, -0.5f);
 
         if (tileSetIndex != TILE_EMPTY) {
-            GameObject newTileObject = Instantiate(tileSet.tiles[tileSetIndex],
+            GameObject newTileObject = Instantiate(tileSet.tiles[tileSetIndex].tilePrefab,
                         transform.position + position + halfTileOffset,
                         Quaternion.Euler(0, rotation * 90, 0));
             tileObjects.set(position, newTileObject);
@@ -254,7 +257,7 @@ public class TileGrid : MonoBehaviour {
 
     void removeTile(Vector3Int position) {
         Destroy(tileObjects.at(position));
-        tileRotations.set(position, 0);
+        tileRotations.set(position, NO_ROTATION);
         tileIndices.set(position, TILE_EMPTY);
     }
 
@@ -269,7 +272,7 @@ public class TileGrid : MonoBehaviour {
         Array3D<GameObject> newTileObjects = new Array3D<GameObject>(newDimensions);
 
         //copy overlaping tiles their rotations and spawned prefabs
-        newTileIndices.setEach((x, y, z, value) => {
+        newTileIndices.updateEach((x, y, z, value) => {
             if (x < dimensions.x && y < dimensions.y && z < dimensions.z) {
                 return tileIndices.at(x, y, z);
             } else {
@@ -277,7 +280,7 @@ public class TileGrid : MonoBehaviour {
             }
         });
 
-        newTileRotations.setEach((x, y, z, value) => {
+        newTileRotations.updateEach((x, y, z, value) => {
             if (x < dimensions.x && y < dimensions.y && z < dimensions.z) {
                 return tileRotations.at(x, y, z);
             } else {
@@ -285,7 +288,7 @@ public class TileGrid : MonoBehaviour {
             }
         });
 
-        newTileObjects.setEach((x, y, z, value) => {
+        newTileObjects.updateEach((x, y, z, value) => {
             if (x < dimensions.x && y < dimensions.y && z < dimensions.z) {
                 return tileObjects.at(x, y, z);
             } else {
