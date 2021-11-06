@@ -6,6 +6,7 @@ using System.Linq;
 
 public class ModelSampler : MonoBehaviour {
     public const string SAVE_FOLDER = "WfcModels";
+    [HideInInspector] public string currentModelName;
     [SerializeField] TileGrid inputGrid;
     [SerializeField] bool ignoreEmptyTiles;
 
@@ -19,11 +20,12 @@ public class ModelSampler : MonoBehaviour {
         Grid3D<int> tileRotations = inputGrid.tileRotations;
 
         var constraints = new HashSet<TileRule>();
-        var tileIds = new HashSet<int>();
+        var modelTileIds = new HashSet<int>();
+
 
         tileIndices.forEach((position, tileIndex) => {
-            if (tileIndex != TileGrid.TILE_EMPTY) {
-                tileIds.Add(SimpleTiledModel.tileIndexToModelIndex(
+            if (!ignoreEmptyTiles || (tileIndex != TileGrid.TILE_EMPTY)) {
+                modelTileIds.Add(SimpleTiledModel.tileIndexToModelIndex(
                     tileIndex,
                     tileRotations.at(position)
                 ));
@@ -63,7 +65,7 @@ public class ModelSampler : MonoBehaviour {
             }
         }
 
-        return new SimpleTiledModel(tileIds.ToList(), constraints.ToList());
+        return new SimpleTiledModel(modelTileIds.ToList(), constraints.ToList());
     }
 }
 

@@ -5,7 +5,6 @@ using UnityEditor;
 public class ModelSamplerEditor : Editor {
 
     ModelSampler sampler;
-    string modelName = "";
 
     private void OnEnable() {
         sampler = target as ModelSampler;
@@ -13,10 +12,10 @@ public class ModelSamplerEditor : Editor {
 
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
-        modelName = EditorGUILayout.TextField("Model Name", modelName);
+        sampler.currentModelName = EditorGUILayout.TextField("Model Name", sampler.currentModelName);
         EditorUtils.guiButton("Create Simple Tiled Model", () => {
             SimpleTiledModel model = sampler.run();
-            model.saveToFile(modelName);
+            model.saveToFile(sampler.currentModelName);
         });
     }
 }

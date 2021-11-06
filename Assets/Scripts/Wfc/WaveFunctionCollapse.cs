@@ -6,102 +6,59 @@ using TMPro;
 using UnityEngine;
 
 public class WaveFunctionCollapse : MonoBehaviour {
-    [SerializeField] private TextMeshProUGUI debugVariablesText;
     [HideInInspector] public string modelFile;
-    // [SerializeField] private TileGrid inputGrid;
     public TileGrid outputGrid;
-    [SerializeField] private int numberOfTries;
-    [HideInInspector] public SolverAC1 solver = new SolverAC1();
+    public TileSet tileSet;
     [HideInInspector] public SimpleTiledModel model;
-    [HideInInspector] public Grid3D<Variable> variables;
+    //number of tile rotations included in model for each  unique tile <index, rotations>
+    [HideInInspector] public Dictionary<int, int> uniqueTileCounts;
+    //additional frequency wieghts based on number of rotations of a tile in a model
+    private List<int> frequencyRotationWeights;
+    //frequencyHints per tile/rotation pair in model taking rotationWeights in account
+    private List<int> frequencyHints;
 
-    public void run() {
-        initialize();
-        bool allCollapsed = false;
+    public Grid3D<int> run(TileRule[] rules, int[] frequencyHints) {
+        return null;
+    }
 
-        while (!allCollapsed) {
-            allCollapsed = true;
-            foreach (Variable variable in variables) {
-                if(!variable.collapsed)
-                {
-                    allCollapsed = false;
-                    variable.lockValue();
-                    break;
-                }
-            }
-            bool ok = solver.run(variables, model.rules);
-            if(!ok) 
-            {
-                Debug.Log("Solver failed!");
-                break;
-            }
+    class cell {
+        public List<bool> possibleTiles;
+
+        // public int totalPossibleTileFrequency(List<int> tilesInModel) {
+        //     int total = 0;
+        //     for(int i = 0; i < possibleTiles.Count; i++) {
+        //         int tileIndex = tilesInModel[i];
+        //         bool possible = possibleTiles[i];
+        //         if(possible) {
+        //             total += 
+        //         }
+        //     }
+        // }
+    }
+
+    class wfcState {
+        public Grid3D<cell> grid;
+        public int remainingUncollapsedCells;
+        public TileRule[] TileRules;
+        public int[] frequencyHints;
+
+        public Vector3Int chooseNextCell() {
+            return Vector3Int.zero;
         }
 
-        populateGrid();
-    }
+        public void collapseCellAt(Vector3Int position) {
 
-    public void populateGrid() {
-        Grid3D<int> tileIndices = new Grid3D<int>(outputGrid.dimensions); 
-        Grid3D<int> tileRotations = new Grid3D<int>(outputGrid.dimensions); 
-
-        variables.forEach((Vector3Int position, Variable variable) => {
-
-            if(variable.domain.Count == 1) {
-                int index = variable.domain[0];
-                tileIndices.set(position, SimpleTiledModel.modelIndexToTileIndex(index));
-                tileRotations.set(position, SimpleTiledModel.modelIndexToRotation(index));
-            } else {
-                tileIndices.set(position, TileGrid.TILE_EMPTY);
-                tileRotations.set(position, TileGrid.NO_ROTATION);
-            }
-        });
-
-        outputGrid.tileIndices = tileIndices;
-        outputGrid.tileRotations = tileRotations;
-        outputGrid.rebuildGrid();
-    }
-
-    public void initialize() {
-        model = SimpleTiledModel.loadFromFile(modelFile);
-        variables = new Grid3D<Variable>(outputGrid.dimensions);
-        variables.updateEach(_ => new Variable(model.tileIds));
-    }
-
-    private void Update() {
-        updateDebugUI();
-    }
-
-    public void updateDebugUI() {
-        if (variables == null) {
-            return;
         }
 
+        public void propagate() {
 
-        const string variablesText = "Possible Tiles: ";
-
-        debugVariablesText.text = variablesText;
-        foreach (int value in variables.at(outputGrid.cursorPosition).domain) {
-            debugVariablesText.text += value.ToString() + " ";
         }
-    }
 
-    //TODO visualistion
-}
+        public void run() {
 
-public class Variable {
-    public List<int> domain;
-    public bool collapsed => domain.Count == 1;
-
-    public void lockValue() {
-        int pick = UnityEngine.Random.Range(0, domain.Count - 1);
-        domain = domain.Where(val => val == domain[pick]).ToList();
-    }
-
-    public Variable(List<int> tileSet) {
-        domain = new List<int>(tileSet);
+        }
     }
 }
-
 
 
 

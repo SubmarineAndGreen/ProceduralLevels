@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyCamera : MonoBehaviour
+public class FreeCamera : MonoBehaviour
 {
     [SerializeField] private float cameraSpeed = 5f;
     [SerializeField] private float mouseSensitivity = 2f;
