@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SolverAC1 {
-    public bool constrainVariable(Array3D<Variable> variables, Vector3Int position, List<TileRule> rules) {
+    public bool constrainVariable(Grid3D<Variable> variables, Vector3Int position, List<TileRule> rules) {
         bool removedAny = false;
         Variable variable = variables.at(position);
 
@@ -28,7 +28,7 @@ public class SolverAC1 {
                 }
 
                 if (!isSupportedFromDirection && !noRulesForDirection) {
-                    Debug.Log(tileIndex + " failing direction:" + direction);
+                    // Debug.Log(tileIndex + " failing direction:" + direction);
                     variable.domain.Remove(tileIndex);
                     removedAny = true;
                 }
@@ -38,7 +38,7 @@ public class SolverAC1 {
         return removedAny;
     }
 
-    public bool run(Array3D<Variable> variables, List<TileRule> rules) {
+    public bool run(Grid3D<Variable> variables, List<TileRule> rules) {
         bool success = true;
         bool removedAnyValues;
 
@@ -77,7 +77,7 @@ public class SolverAC1 {
 
 
 
-    public bool isSupported(int value, Vector3Int tilePosition, Array3D<Variable> variables, TileRule rule) {
+    public bool isSupported(int value, Vector3Int tilePosition, Grid3D<Variable> variables, TileRule rule) {
         if (rule.valueA != value) {
             return false;
         }

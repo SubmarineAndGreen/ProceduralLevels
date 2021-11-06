@@ -3,18 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Array3D<T> : IEnumerable {
+public class Grid3D<T> : IEnumerable {
     private T[,,] _values;
 
-    public Array3D(Vector3Int dimensions) {
+    public Grid3D(Vector3Int dimensions) {
         _values = new T[dimensions.x, dimensions.y, dimensions.z];
     }
 
-    public Array3D(T[,,] values) {
+    public Grid3D(T[,,] values) {
         _values = values;
     }
 
-    public Array3D(Vector3Int dimensions, T[] flatArray) {
+    public Grid3D(Vector3Int dimensions, T[] flatArray) {
         _values = new T[dimensions.x, dimensions.y, dimensions.z];
         int xMax = _values.GetLength(0), yMax = _values.GetLength(1);
         this.forEach((x, y, z) => {

@@ -15,8 +15,8 @@ public class ModelSampler : MonoBehaviour {
 
     private SimpleTiledModel simpleTiledModel() {
         Vector3Int dimensions = inputGrid.dimensions;
-        Array3D<int> tileIndices = inputGrid.tileIndices;
-        Array3D<int> tileRotations = inputGrid.tileRotations;
+        Grid3D<int> tileIndices = inputGrid.tileIndices;
+        Grid3D<int> tileRotations = inputGrid.tileRotations;
 
         var constraints = new HashSet<TileRule>();
         var tileIds = new HashSet<int>();
@@ -33,8 +33,8 @@ public class ModelSampler : MonoBehaviour {
 
         void scanNeighbors(Vector3Int centerTilePosition) {
             Vector3Int dimensions = inputGrid.dimensions;
-            Array3D<int> tileIndices = inputGrid.tileIndices;
-            Array3D<int> tileRotations = inputGrid.tileRotations;
+            Grid3D<int> tileIndices = inputGrid.tileIndices;
+            Grid3D<int> tileRotations = inputGrid.tileRotations;
 
             foreach (var item in SolverUtils.DirectionsToVectors) {
                 Vector3Int offset = item.Value;

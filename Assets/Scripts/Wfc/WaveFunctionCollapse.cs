@@ -13,7 +13,7 @@ public class WaveFunctionCollapse : MonoBehaviour {
     [SerializeField] private int numberOfTries;
     [HideInInspector] public SolverAC1 solver = new SolverAC1();
     [HideInInspector] public SimpleTiledModel model;
-    [HideInInspector] public Array3D<Variable> variables;
+    [HideInInspector] public Grid3D<Variable> variables;
 
     public void run() {
         initialize();
@@ -41,8 +41,8 @@ public class WaveFunctionCollapse : MonoBehaviour {
     }
 
     public void populateGrid() {
-        Array3D<int> tileIndices = new Array3D<int>(outputGrid.dimensions); 
-        Array3D<int> tileRotations = new Array3D<int>(outputGrid.dimensions); 
+        Grid3D<int> tileIndices = new Grid3D<int>(outputGrid.dimensions); 
+        Grid3D<int> tileRotations = new Grid3D<int>(outputGrid.dimensions); 
 
         variables.forEach((Vector3Int position, Variable variable) => {
 
@@ -63,7 +63,7 @@ public class WaveFunctionCollapse : MonoBehaviour {
 
     public void initialize() {
         model = SimpleTiledModel.loadFromFile(modelFile);
-        variables = new Array3D<Variable>(outputGrid.dimensions);
+        variables = new Grid3D<Variable>(outputGrid.dimensions);
         variables.updateEach(_ => new Variable(model.tileIds));
     }
 

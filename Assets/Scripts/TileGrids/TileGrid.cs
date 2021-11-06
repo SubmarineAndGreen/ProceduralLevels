@@ -19,9 +19,9 @@ public class TileGrid : MonoBehaviour {
     private Vector3Int defaultDimensions = new Vector3Int(3, 3, 3);
     [HideInInspector] public Vector3Int dimensions;
     [HideInInspector] public bool areEditingControlsOn = false;
-    [HideInInspector] public Array3D<int> tileIndices;
-    [HideInInspector] public Array3D<int> tileRotations;
-    private Array3D<GameObject> tileObjects;
+    [HideInInspector] public Grid3D<int> tileIndices;
+    [HideInInspector] public Grid3D<int> tileRotations;
+    private Grid3D<GameObject> tileObjects;
 
     private GameObject cursor;
     [HideInInspector] public Vector3Int cursorPosition;
@@ -42,9 +42,9 @@ public class TileGrid : MonoBehaviour {
         }
 
         if (!loadedFromFile) {
-            tileIndices = new Array3D<int>(defaultDimensions);
-            tileRotations = new Array3D<int>(defaultDimensions);
-            tileObjects = new Array3D<GameObject>(defaultDimensions);
+            tileIndices = new Grid3D<int>(defaultDimensions);
+            tileRotations = new Grid3D<int>(defaultDimensions);
+            tileObjects = new Grid3D<GameObject>(defaultDimensions);
             dimensions = defaultDimensions;
             fillWithEmpty();
         }
@@ -102,7 +102,7 @@ public class TileGrid : MonoBehaviour {
             dimensions = loadedSave.dimensions;
             tileIndices = loadedSave.getTileIndices();
             tileRotations = loadedSave.getTileRotations();
-            tileObjects = new Array3D<GameObject>(dimensions);
+            tileObjects = new Grid3D<GameObject>(dimensions);
 
             return true;
         } catch (FileNotFoundException e) {
@@ -267,9 +267,9 @@ public class TileGrid : MonoBehaviour {
             return;
         }
 
-        Array3D<int> newTileIndices = new Array3D<int>(newDimensions);
-        Array3D<int> newTileRotations = new Array3D<int>(newDimensions);
-        Array3D<GameObject> newTileObjects = new Array3D<GameObject>(newDimensions);
+        Grid3D<int> newTileIndices = new Grid3D<int>(newDimensions);
+        Grid3D<int> newTileRotations = new Grid3D<int>(newDimensions);
+        Grid3D<GameObject> newTileObjects = new Grid3D<GameObject>(newDimensions);
 
         //copy overlaping tiles their rotations and spawned prefabs
         newTileIndices.updateEach((x, y, z, value) => {
