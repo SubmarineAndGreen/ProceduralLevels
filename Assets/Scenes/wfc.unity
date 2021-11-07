@@ -435,7 +435,7 @@ MonoBehaviour:
   previewRotationText: {fileID: 1638167738}
   selectedTileRotationText: {fileID: 1365138956}
   cursorPrefab: {fileID: 6526753209231964760, guid: d182178f4c339c649ad5d066736aa3b6, type: 3}
-  tileSet: {fileID: 11400000, guid: 713201d3a054c4649a2e8e83f4491605, type: 2}
+  tileSet: {fileID: 11400000, guid: b2fba426db0720e469af171127d53208, type: 2}
   loadFromFileOnStart: 0
   currentSaveFile: roads.json
   dimensions: {x: 4, y: 4, z: 4}
@@ -548,7 +548,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 633328297}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 0}
+  m_LocalPosition: {x: 20, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1228197857}
@@ -567,17 +567,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tries: 1
-  buildGridOnFailedAttempt: 1
+  buildGridOnFailedAttempt: 0
   modelFile: roadsWithForks.json
   outputGrid: {fileID: 633328298}
   tileSet: {fileID: 11400000, guid: 713201d3a054c4649a2e8e83f4491605, type: 2}
   model:
-    tileModelIndices: 0000000008000000090000000b0000000a0000000400000005000000100000000c000000120000001300000011000000
+    tileModelIndices: 09000000080000000a000000000000000b0000000400000005000000100000000c000000120000001300000011000000
     frequencyHints:
+    - 0.25
+    - 0.25
+    - 0.25
     - 1
-    - 0.25
-    - 0.25
-    - 0.25
     - 0.25
     - 0.5
     - 0.5
@@ -587,6 +587,15 @@ MonoBehaviour:
     - 0.25
     - 0.25
     rules:
+    - valueA: 9
+      valueB: 11
+      directionAtoB: 3
+    - valueA: 8
+      valueB: 10
+      directionAtoB: 2
+    - valueA: 10
+      valueB: 8
+      directionAtoB: 4
     - valueA: 0
       valueB: 0
       directionAtoB: 2
@@ -599,6 +608,12 @@ MonoBehaviour:
     - valueA: 0
       valueB: 0
       directionAtoB: 4
+    - valueA: 11
+      valueB: 9
+      directionAtoB: 5
+    - valueA: 8
+      valueB: 10
+      directionAtoB: 3
     - valueA: 0
       valueB: 8
       directionAtoB: 2
@@ -631,6 +646,15 @@ MonoBehaviour:
       directionAtoB: 5
     - valueA: 0
       valueB: 9
+      directionAtoB: 4
+    - valueA: 10
+      valueB: 8
+      directionAtoB: 5
+    - valueA: 11
+      valueB: 9
+      directionAtoB: 2
+    - valueA: 9
+      valueB: 11
       directionAtoB: 4
     - valueA: 0
       valueB: 11
@@ -904,7 +928,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.65
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1141,7 +1165,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.25459138, y: -0, z: -0, w: 0.96704876}
-  m_LocalPosition: {x: 6.26, y: 4.33, z: -4.01}
+  m_LocalPosition: {x: 26.42, y: 4.33, z: -4.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 844332697}

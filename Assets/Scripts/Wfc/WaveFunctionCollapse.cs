@@ -11,6 +11,7 @@ public class WaveFunctionCollapse : MonoBehaviour {
     public int tries;
     public static bool logging = false;
     public bool buildGridOnFailedAttempt = true;
+    public bool loadHandPlacedTiles = false;
     public static string logsPath;
     [HideInInspector] public string modelFile;
     public TileGrid outputGrid;
@@ -41,12 +42,40 @@ public class WaveFunctionCollapse : MonoBehaviour {
         };
 
 
-        state.grid.forEach(position => {
+                state.grid.forEach((position, tile) => {
             Cell cell = new Cell(model);
             cell.position = position;
+            if (loadHandPlacedTiles) {
+                int tileIndex = outputGrid.tileIndices.at(position);
+                int tileRotation = outputGrid.tileRotations.at(position);
+
+                if (tileIndex != TileGrid.TILE_EMPTY) {
+                    int modelIndex = SimpleTiledModel.tileIndexToModelIndex(tileIndex, tileRotation);
+                    for (int i = 0; i < cell.possibleTiles.Count; i++) {
+                        if (model.tileModelIndices[i] == modelIndex) {
+                            cell.possibleTiles[i] = true;
+                        } else {
+                            cell.possibleTiles[i] = false;
+                            state.tileRemovals.Push(new RemovalUpdate() {
+                                tileIndex = model.tileModelIndices[i],
+                                tilePosition = position
+                            });
+                        }
+                    }
+                    cell.isCollapsed = true;
+                    state.remainingUncollapsedCells -= 1;
+                }
+            }
             state.grid.set(position, cell);
-            state.entropyQueue.Enqueue(cell, cell.entropy());
+
+            if (!cell.isCollapsed) {
+                state.entropyQueue.Enqueue(cell, cell.entropy());
+            }
         });
+
+        if(loadHandPlacedTiles) {
+            state.propagate();
+        }
 
         log(state.grid);
         if (!state.run() && !buildGridOnFailedAttempt) {
