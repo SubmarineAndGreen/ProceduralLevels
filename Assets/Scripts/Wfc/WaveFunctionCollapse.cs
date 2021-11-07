@@ -17,50 +17,44 @@ public class WaveFunctionCollapse : MonoBehaviour {
     //frequencyHints per tile/rotation pair in model taking rotationWeights in account
     private List<int> frequencyHints;
 
-    public Grid3D<int> run(TileRule[] rules, int[] frequencyHints) {
-        return null;
-    }
-
     public void wfc() {
         WfcState wfc = new WfcState() {
             model = this.model,
             grid = new Grid3D<Cell>(outputGrid.dimensions),
+            remainingUncollapsedCells = outputGrid.dimensions.x * outputGrid.dimensions.y * outputGrid.dimensions.z,
+            entropyList = new SortedList<float, Cell>(),
+            tileRemovals = new Stack<RemovalUpdate>()
         };
 
-        Cell cellTemplate = new Cell(model);
-
         wfc.grid.forEach(position => {
-            Cell cellToInit = new Cell();
-            cellToInit.position = position; 
-            cellToInit.possibleTiles = cellTemplate.possibleTiles;
-            cellToInit.model = cellTemplate.model;
-            cellToInit.sumOfPossibleTileWeights = cellTemplate.sumOfPossibleTileWeights;
-            cellToInit.sumOfPossibleTileWeightTimesLogWeights = cellTemplate.sumOfPossibleTileWeightTimesLogWeights;
-            cellToInit.tileSupportCounts = cellTemplate.tileSupportCounts;
-            wfc.grid.set(position, cellToInit);
+            Cell cell = new Cell(model);
+            cell.position = position;
+            cell.entropyNoise = UnityEngine.Random.Range(0, 0.001f) + UnityEngine.Random.Range(0, 0.0001f);
+            wfc.grid.set(position, cell);
+            wfc.entropyList.Add(cell.entropy(), cell);
         });
 
         wfc.run();
 
-        // Grid3D<int> tileIndices = new Grid3D<int>(outputGrid.dimensions);
-        // Grid3D<int> tileRotations = new Grid3D<int>(outputGrid.dimensions);
+        Grid3D<int> tileIndices = new Grid3D<int>(outputGrid.dimensions);
+        Grid3D<int> tileRotations = new Grid3D<int>(outputGrid.dimensions);
 
-        // wfc.grid.forEach((position, cell) => {
-        //     int tile = TileGrid.TILE_EMPTY, rotation = TileGrid.NO_ROTATION;
-        //     for (int i = 0; i < cell.possibleTiles.Count; i++) {
-        //         bool possible = cell.possibleTiles[i];
-        //         if(possible) {
-        //             tile = SimpleTiledModel.modelIndexToTileIndex(model.tileModelIndices[i]);
-        //             rotation = SimpleTiledModel.modelIndexToRotation(model.tileModelIndices[i]);
-        //         }
-        //     }
-        //     tileIndices.set(position, tile);
-        //     tileRotations.set(position, rotation);
-        // });
+        wfc.grid.forEach((position, cell) => {
+            int tile = TileGrid.TILE_EMPTY, rotation = TileGrid.NO_ROTATION;
+            for (int i = 0; i < cell.possibleTiles.Count; i++) {
+                bool possible = cell.possibleTiles[i];
+                if(possible) {
+                    tile = SimpleTiledModel.modelIndexToTileIndex(model.tileModelIndices[i]);
+                    rotation = SimpleTiledModel.modelIndexToRotation(model.tileModelIndices[i]);
+                }
+            }
+            tileIndices.set(position, tile);
+            tileRotations.set(position, rotation);
+        });
 
-        // outputGrid.tileIndices = tileIndices;
-        // outputGrid.tileRotations = tileRotations;
-        // outputGrid.rebuildGrid();
+        outputGrid.tileIndices = tileIndices;
+        outputGrid.tileRotations = tileRotations;
+        outputGrid.rebuildGrid();
     }
 
     class Cell {
@@ -70,8 +64,8 @@ public class WaveFunctionCollapse : MonoBehaviour {
         public float sumOfPossibleTileWeights;
         public float sumOfPossibleTileWeightTimesLogWeights;
         //introduce noise to make sure that at no point two tiles have equal entropy, for resolving draws
-        //when picking tile with lowest entropy
-        // private float entropyNoise;
+        //when picking tile with lowest entropy (sorted list cant have 2 same keys)
+        public float entropyNoise;
         public bool isCollapsed = false;
         public List<TileSupportCount> tileSupportCounts;
 
@@ -95,8 +89,7 @@ public class WaveFunctionCollapse : MonoBehaviour {
 
             this.tileSupportCounts = initialTileSupportCounts();
 
-            // const float eps = 0.001f;
-            // entropyNoise = UnityEngine.Random.Range(0, eps);
+            entropyNoise = UnityEngine.Random.Range(0, 0.00001f) + UnityEngine.Random.Range(0, 0.0001f);
         }
 
         public Cell() {
@@ -117,8 +110,8 @@ public class WaveFunctionCollapse : MonoBehaviour {
                             counts.supportByDirection[(int)direction] += 1;
                         }
                     }
-                    result.Add(counts);
                 }
+                result.Add(counts);
             }
 
             return result;
@@ -165,7 +158,7 @@ public class WaveFunctionCollapse : MonoBehaviour {
         //with caching for 'sum of weights' and 'sum of weight * log2 weight'
         public float entropy() {
             return Mathf.Log(sumOfPossibleTileWeights, 2)
-             - (sumOfPossibleTileWeightTimesLogWeights / sumOfPossibleTileWeights);
+             - (sumOfPossibleTileWeightTimesLogWeights / sumOfPossibleTileWeights) + entropyNoise;
         }
         // |   0   |   4   |   5   | 6  |
         //   <-- remaining  --> ^
@@ -191,14 +184,12 @@ public class WaveFunctionCollapse : MonoBehaviour {
         public SimpleTiledModel model;
         public Grid3D<Cell> grid;
         public int remainingUncollapsedCells;
-        public TileRule[] TileRules;
-        public int[] frequencyHints;
         public SortedList<float, Cell> entropyList;
         public Stack<RemovalUpdate> tileRemovals;
 
         public Vector3Int chooseNextCell() {
             while (entropyList.Count > 0) {
-                Cell cell = entropyList[0];
+                Cell cell = entropyList.Values[0];
                 entropyList.RemoveAt(0);
                 if (!cell.isCollapsed) {
                     return cell.position;
@@ -233,6 +224,9 @@ public class WaveFunctionCollapse : MonoBehaviour {
                 //propagate the effect of removeal to neighbour in each direction
                 foreach (Directions3D direction in SolverUtils.allDirections) {
                     Vector3Int neighbourPosition = removalUpdate.tilePosition + SolverUtils.DirectionsToVectors[direction];
+                    if(!SolverUtils.isInBounds(grid.dimensions, neighbourPosition)) {
+                        continue;
+                    }
                     Cell neighbourCell = grid.at(neighbourPosition);
                     foreach (TileRule rule in model.rules) {
                         if (rule.valueA != removalUpdate.tileIndex || rule.directionAtoB != direction) {
@@ -249,13 +243,14 @@ public class WaveFunctionCollapse : MonoBehaviour {
                             foreach (int count in supportCount.supportByDirection) {
                                 if (count == 0) containsAnyZeroCounts = true;
                             }
+                            //if tile hasnt been removed yet
                             if (!containsAnyZeroCounts) {
                                 neighbourCell.removeTile(rule.valueB);
-                                bool cellHasNoPossibleTiles = false;
+                                bool cellHasPossibleTiles = false;
                                 neighbourCell.possibleTiles.ForEach((possible) => {
-                                    cellHasNoPossibleTiles |= possible;
+                                    cellHasPossibleTiles |= possible;
                                 });
-                                if (cellHasNoPossibleTiles) {
+                                if (!cellHasPossibleTiles) {
                                     // CONTRADICTION!! restart wfc
                                     return false;
                                 }
@@ -279,10 +274,11 @@ public class WaveFunctionCollapse : MonoBehaviour {
             while(remainingUncollapsedCells > 0) {
                 Vector3Int nextPosition = chooseNextCell();
                 collapseCellAt(nextPosition);
-                if(propagate()) {
+                if(!propagate()) {
                     Debug.Log("Contradiction!");
                     return;
                 }
+                remainingUncollapsedCells -= 1;
             }
         }
     }
