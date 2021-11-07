@@ -23,7 +23,7 @@ public class WaveFunctionCollapseEditor : Editor {
         });
 
         EditorUtils.guiButton("Run", () => {
-            wfc.wfc();
+            wfc.run(wfc.tries);
         });
 
 

@@ -435,9 +435,9 @@ MonoBehaviour:
   previewRotationText: {fileID: 1638167738}
   selectedTileRotationText: {fileID: 1365138956}
   cursorPrefab: {fileID: 6526753209231964760, guid: d182178f4c339c649ad5d066736aa3b6, type: 3}
-  tileSet: {fileID: 11400000, guid: 85acd50e261e1e74e9f219c010ab5475, type: 2}
-  loadFromFileOnStart: 1
-  currentSaveFile: RoadsAll.json
+  tileSet: {fileID: 11400000, guid: 713201d3a054c4649a2e8e83f4491605, type: 2}
+  loadFromFileOnStart: 0
+  currentSaveFile: roads.json
   dimensions: {x: 4, y: 4, z: 4}
   areEditingControlsOn: 0
   cursorPosition: {x: 0, y: 0, z: 0}
@@ -534,9 +534,9 @@ MonoBehaviour:
   previewRotationText: {fileID: 1638167738}
   selectedTileRotationText: {fileID: 1365138956}
   cursorPrefab: {fileID: 6526753209231964760, guid: d182178f4c339c649ad5d066736aa3b6, type: 3}
-  tileSet: {fileID: 11400000, guid: 85acd50e261e1e74e9f219c010ab5475, type: 2}
-  loadFromFileOnStart: 1
-  currentSaveFile: 10x1x10.json
+  tileSet: {fileID: 11400000, guid: 713201d3a054c4649a2e8e83f4491605, type: 2}
+  loadFromFileOnStart: 0
+  currentSaveFile: 5x1x5.json
   dimensions: {x: 3, y: 3, z: 3}
   areEditingControlsOn: 0
   cursorPosition: {x: 0, y: 0, z: 0}
@@ -566,38 +566,218 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88628a50d782bec488a0c75036838f0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modelFile: roads.json
+  tries: 1
+  buildGridOnFailedAttempt: 1
+  modelFile: roadsWithForks.json
   outputGrid: {fileID: 633328298}
-  tileSet: {fileID: 11400000, guid: 85acd50e261e1e74e9f219c010ab5475, type: 2}
+  tileSet: {fileID: 11400000, guid: 713201d3a054c4649a2e8e83f4491605, type: 2}
   model:
-    tileModelIndices: 0000000004000000050000000c00000009000000080000000b0000000a000000
-    frequencyHints: 
-    uniqueTileIndices: 00000000010000000300000002000000
-    frequencyHintsPerUniqueTile: 01000000010000000100000001000000
+    tileModelIndices: 0000000008000000090000000b0000000a0000000400000005000000100000000c000000120000001300000011000000
+    frequencyHints:
+    - 1
+    - 0.25
+    - 0.25
+    - 0.25
+    - 0.25
+    - 0.5
+    - 0.5
+    - 0.25
+    - 1
+    - 0.25
+    - 0.25
+    - 0.25
     rules:
     - valueA: 0
       valueB: 0
       directionAtoB: 2
     - valueA: 0
-      valueB: 0
+      valueB: 8
+      directionAtoB: 3
+    - valueA: 0
+      valueB: 9
       directionAtoB: 3
     - valueA: 0
       valueB: 0
       directionAtoB: 4
-    - valueA: 4
-      valueB: 12
+    - valueA: 0
+      valueB: 8
+      directionAtoB: 2
+    - valueA: 0
+      valueB: 0
       directionAtoB: 3
+    - valueA: 8
+      valueB: 9
+      directionAtoB: 2
+    - valueA: 8
+      valueB: 11
+      directionAtoB: 3
+    - valueA: 8
+      valueB: 0
+      directionAtoB: 4
+    - valueA: 8
+      valueB: 0
+      directionAtoB: 5
+    - valueA: 9
+      valueB: 0
+      directionAtoB: 2
+    - valueA: 9
+      valueB: 10
+      directionAtoB: 3
+    - valueA: 9
+      valueB: 8
+      directionAtoB: 4
+    - valueA: 9
+      valueB: 0
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 9
+      directionAtoB: 4
+    - valueA: 0
+      valueB: 11
+      directionAtoB: 2
     - valueA: 0
       valueB: 0
       directionAtoB: 5
-    - valueA: 4
+    - valueA: 11
+      valueB: 10
+      directionAtoB: 2
+    - valueA: 11
+      valueB: 0
+      directionAtoB: 3
+    - valueA: 11
+      valueB: 0
+      directionAtoB: 4
+    - valueA: 11
+      valueB: 8
+      directionAtoB: 5
+    - valueA: 10
+      valueB: 0
+      directionAtoB: 2
+    - valueA: 10
+      valueB: 0
+      directionAtoB: 3
+    - valueA: 10
+      valueB: 11
+      directionAtoB: 4
+    - valueA: 10
+      valueB: 9
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 10
+      directionAtoB: 4
+    - valueA: 0
+      valueB: 11
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 10
+      directionAtoB: 5
+    - valueA: 9
       valueB: 4
       directionAtoB: 3
+    - valueA: 8
+      valueB: 4
+      directionAtoB: 3
+    - valueA: 0
+      valueB: 5
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 11
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 9
+      directionAtoB: 5
+    - valueA: 4
+      valueB: 10
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 8
+      directionAtoB: 5
     - valueA: 5
       valueB: 5
       directionAtoB: 2
     - valueA: 5
+      valueB: 0
+      directionAtoB: 3
+    - valueA: 5
+      valueB: 0
+      directionAtoB: 5
+    - valueA: 5
       valueB: 5
+      directionAtoB: 4
+    - valueA: 11
+      valueB: 4
+      directionAtoB: 5
+    - valueA: 10
+      valueB: 4
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 4
+      directionAtoB: 2
+    - valueA: 4
+      valueB: 0
+      directionAtoB: 2
+    - valueA: 4
+      valueB: 4
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 0
+      directionAtoB: 4
+    - valueA: 0
+      valueB: 4
+      directionAtoB: 4
+    - valueA: 0
+      valueB: 5
+      directionAtoB: 5
+    - valueA: 4
+      valueB: 4
+      directionAtoB: 5
+    - valueA: 11
+      valueB: 5
+      directionAtoB: 2
+    - valueA: 5
+      valueB: 9
+      directionAtoB: 2
+    - valueA: 5
+      valueB: 11
+      directionAtoB: 4
+    - valueA: 9
+      valueB: 5
+      directionAtoB: 4
+    - valueA: 4
+      valueB: 16
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 12
+      directionAtoB: 3
+    - valueA: 8
+      valueB: 5
+      directionAtoB: 2
+    - valueA: 5
+      valueB: 10
+      directionAtoB: 2
+    - valueA: 5
+      valueB: 8
+      directionAtoB: 4
+    - valueA: 10
+      valueB: 5
+      directionAtoB: 4
+    - valueA: 0
+      valueB: 16
+      directionAtoB: 2
+    - valueA: 16
+      valueB: 5
+      directionAtoB: 2
+    - valueA: 16
+      valueB: 4
+      directionAtoB: 3
+    - valueA: 16
+      valueB: 0
+      directionAtoB: 4
+    - valueA: 16
+      valueB: 4
+      directionAtoB: 5
+    - valueA: 5
+      valueB: 16
       directionAtoB: 4
     - valueA: 5
       valueB: 12
@@ -618,227 +798,83 @@ MonoBehaviour:
       valueB: 12
       directionAtoB: 4
     - valueA: 4
-      valueB: 4
+      valueB: 18
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 16
       directionAtoB: 5
     - valueA: 4
       valueB: 12
       directionAtoB: 5
-    - valueA: 9
-      valueB: 4
-      directionAtoB: 3
-    - valueA: 8
-      valueB: 4
-      directionAtoB: 3
-    - valueA: 11
-      valueB: 5
-      directionAtoB: 2
     - valueA: 5
-      valueB: 9
+      valueB: 18
       directionAtoB: 2
-    - valueA: 5
-      valueB: 11
-      directionAtoB: 4
-    - valueA: 9
-      valueB: 5
-      directionAtoB: 4
-    - valueA: 12
-      valueB: 12
-      directionAtoB: 2
-    - valueA: 12
-      valueB: 12
-      directionAtoB: 3
-    - valueA: 12
-      valueB: 12
-      directionAtoB: 4
-    - valueA: 4
-      valueB: 11
-      directionAtoB: 3
-    - valueA: 4
-      valueB: 9
-      directionAtoB: 5
-    - valueA: 4
-      valueB: 10
-      directionAtoB: 3
-    - valueA: 4
-      valueB: 8
-      directionAtoB: 5
-    - valueA: 12
-      valueB: 12
-      directionAtoB: 5
-    - valueA: 11
-      valueB: 4
-      directionAtoB: 5
-    - valueA: 10
-      valueB: 4
-      directionAtoB: 5
-    - valueA: 8
-      valueB: 5
-      directionAtoB: 2
-    - valueA: 5
-      valueB: 10
-      directionAtoB: 2
-    - valueA: 5
-      valueB: 8
-      directionAtoB: 4
-    - valueA: 10
-      valueB: 5
-      directionAtoB: 4
-    - valueA: 10
+    - valueA: 18
       valueB: 0
       directionAtoB: 2
-    - valueA: 10
-      valueB: 0
+    - valueA: 18
+      valueB: 4
       directionAtoB: 3
-    - valueA: 0
-      valueB: 10
-      directionAtoB: 4
-    - valueA: 0
-      valueB: 8
-      directionAtoB: 3
-    - valueA: 0
+    - valueA: 18
       valueB: 5
-      directionAtoB: 3
-    - valueA: 0
-      valueB: 10
+      directionAtoB: 4
+    - valueA: 18
+      valueB: 4
       directionAtoB: 5
     - valueA: 0
-      valueB: 8
-      directionAtoB: 2
-    - valueA: 8
-      valueB: 0
+      valueB: 18
       directionAtoB: 4
-    - valueA: 8
+    - valueA: 4
+      valueB: 19
+      directionAtoB: 3
+    - valueA: 0
+      valueB: 17
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 18
+      directionAtoB: 5
+    - valueA: 5
+      valueB: 19
+      directionAtoB: 2
+    - valueA: 19
+      valueB: 5
+      directionAtoB: 2
+    - valueA: 19
+      valueB: 0
+      directionAtoB: 3
+    - valueA: 19
+      valueB: 5
+      directionAtoB: 4
+    - valueA: 19
+      valueB: 4
+      directionAtoB: 5
+    - valueA: 5
+      valueB: 17
+      directionAtoB: 2
+    - valueA: 5
+      valueB: 19
+      directionAtoB: 4
+    - valueA: 17
+      valueB: 5
+      directionAtoB: 2
+    - valueA: 17
+      valueB: 4
+      directionAtoB: 3
+    - valueA: 17
+      valueB: 5
+      directionAtoB: 4
+    - valueA: 17
       valueB: 0
       directionAtoB: 5
     - valueA: 5
-      valueB: 0
-      directionAtoB: 3
-    - valueA: 5
-      valueB: 0
-      directionAtoB: 5
-    - valueA: 0
-      valueB: 4
-      directionAtoB: 2
-    - valueA: 0
-      valueB: 5
-      directionAtoB: 5
-    - valueA: 4
-      valueB: 0
-      directionAtoB: 2
-    - valueA: 4
-      valueB: 0
+      valueB: 17
       directionAtoB: 4
     - valueA: 0
-      valueB: 4
-      directionAtoB: 4
-    - valueA: 0
-      valueB: 11
-      directionAtoB: 2
-    - valueA: 11
-      valueB: 0
-      directionAtoB: 3
-    - valueA: 11
-      valueB: 0
-      directionAtoB: 4
-    - valueA: 0
-      valueB: 9
-      directionAtoB: 3
-    - valueA: 0
-      valueB: 11
-      directionAtoB: 5
-    - valueA: 9
-      valueB: 0
-      directionAtoB: 2
-    - valueA: 9
-      valueB: 0
-      directionAtoB: 5
-    - valueA: 0
-      valueB: 9
-      directionAtoB: 4
-    - valueA: 10
-      valueB: 4
-      directionAtoB: 2
-    - valueA: 4
-      valueB: 11
-      directionAtoB: 2
-    - valueA: 4
-      valueB: 10
-      directionAtoB: 4
-    - valueA: 11
-      valueB: 4
-      directionAtoB: 4
-    - valueA: 5
-      valueB: 5
-      directionAtoB: 3
-    - valueA: 11
-      valueB: 5
-      directionAtoB: 3
-    - valueA: 10
-      valueB: 5
-      directionAtoB: 3
-    - valueA: 10
-      valueB: 11
-      directionAtoB: 2
-    - valueA: 10
-      valueB: 9
-      directionAtoB: 3
-    - valueA: 11
-      valueB: 8
-      directionAtoB: 3
-    - valueA: 11
-      valueB: 10
-      directionAtoB: 4
-    - valueA: 5
-      valueB: 5
-      directionAtoB: 5
-    - valueA: 9
-      valueB: 4
-      directionAtoB: 2
-    - valueA: 4
-      valueB: 8
-      directionAtoB: 2
-    - valueA: 4
-      valueB: 9
-      directionAtoB: 4
-    - valueA: 8
-      valueB: 4
-      directionAtoB: 4
-    - valueA: 5
-      valueB: 8
-      directionAtoB: 3
-    - valueA: 5
-      valueB: 11
-      directionAtoB: 5
-    - valueA: 5
-      valueB: 9
-      directionAtoB: 3
-    - valueA: 5
-      valueB: 10
-      directionAtoB: 5
-    - valueA: 9
-      valueB: 8
-      directionAtoB: 2
-    - valueA: 9
-      valueB: 10
-      directionAtoB: 5
-    - valueA: 8
-      valueB: 9
-      directionAtoB: 4
-    - valueA: 8
-      valueB: 11
-      directionAtoB: 5
-    - valueA: 8
-      valueB: 5
-      directionAtoB: 5
-    - valueA: 9
-      valueB: 5
+      valueB: 19
       directionAtoB: 5
     - valueA: 4
-      valueB: 4
-      directionAtoB: 2
-    - valueA: 4
-      valueB: 4
-      directionAtoB: 4
+      valueB: 17
+      directionAtoB: 5
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
