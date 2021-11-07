@@ -8,7 +8,7 @@ using UnityEngine;
 public class SimpleTiledModel {
     const int nOfRotations = 4;
     public List<int> tileModelIndices;
-    public List<int> frequencyHints;
+    public List<float> frequencyHints;
     private Dictionary<int, int> frequencyHintsForUniqueTiles = new Dictionary<int, int>();
 
     public List<TileRule> rules;
@@ -16,7 +16,11 @@ public class SimpleTiledModel {
     public SimpleTiledModel(List<int> tileModelIndices, List<TileRule> rules) {
         this.tileModelIndices = tileModelIndices;
         this.rules = rules;
-    }
+        this.frequencyHints = new List<float>();
+        for(int i = 0; i < tileModelIndices.Count; i++) {
+            frequencyHints.Add(1);
+        }
+    } 
 
     public void saveToFile(string filename) {
         string jsonString = JsonUtility.ToJson(this);
@@ -45,10 +49,11 @@ public class SimpleTiledModel {
     public void updateFrequencyHints(Dictionary<int, int> frequencyHintsForUniqueTiles) {
 
         var uniqueTileCounts = new Dictionary<int, int>();
-        var frequencyRotationWeights = new List<int>();
+        var frequencyRotationWeights = new List<float>();
         var uniqueTileIndices = getUniqueTileIndices();
 
-        foreach (int tile in uniqueTileIndices) {
+        foreach (int modelIndex in tileModelIndices) {
+            int tile = modelIndexToTileIndex(modelIndex);
             if (uniqueTileCounts.ContainsKey(tile)) {
                 uniqueTileCounts[tile] += 1;
             } else {
@@ -57,12 +62,12 @@ public class SimpleTiledModel {
         }
 
         foreach (int modelIndex in tileModelIndices) {
-            int tile = SimpleTiledModel.modelIndexToTileIndex(modelIndex);
+            int tile = modelIndexToTileIndex(modelIndex);
             //1 over 'n of rotations' so for tile that has 4 available rotations each variant will have weight 0.25 
-            frequencyRotationWeights.Add(1 / uniqueTileCounts[tile]);
+            frequencyRotationWeights.Add(1f / uniqueTileCounts[tile]);
         }
 
-        frequencyHints = new List<int>();
+        frequencyHints = new List<float>();
         for (int i = 0; i < tileModelIndices.Count; i++) {
             int tileModelIndex = tileModelIndices[i];
             int index = modelIndexToTileIndex(tileModelIndex);

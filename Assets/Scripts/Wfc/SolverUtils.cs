@@ -26,4 +26,23 @@ public class SolverUtils
         {Directions3D.BACK, Vector3Int.back},
         {Directions3D.LEFT, Vector3Int.left}
     };
+
+    public const int nOfDirections = 6;
+    public static Directions3D[] allDirections = {
+        Directions3D.UP,
+        Directions3D.DOWN,
+        Directions3D.FORWARD,
+        Directions3D.RIGHT,
+        Directions3D.BACK,
+        Directions3D.LEFT
+    };
+
+    public static Dictionary<Directions3D, Directions3D> oppositeDirections = new Dictionary<Directions3D, Directions3D>() {
+        {Directions3D.UP, Directions3D.DOWN},
+        {Directions3D.DOWN, Directions3D.UP},
+        {Directions3D.FORWARD, Directions3D.BACK},
+        {Directions3D.RIGHT, Directions3D.LEFT},
+        {Directions3D.BACK, Directions3D.FORWARD},
+        {Directions3D.LEFT, Directions3D.RIGHT}
+    };
 }

@@ -23,7 +23,7 @@ public class WaveFunctionCollapseEditor : Editor {
         });
 
         EditorUtils.guiButton("Run", () => {
-            // wfc.run();
+            wfc.wfc();
         });
 
 
@@ -45,7 +45,8 @@ public class WaveFunctionCollapseEditor : Editor {
 
             EditorUtils.guiButton("Save frequencies to model", () => {
                 wfc.model.updateFrequencyHints(frequencyHintsForUniqueTiles);
-                wfc.model.saveToFile(wfc.modelFile);
+                //TODO: remove replace
+                wfc.model.saveToFile(wfc.modelFile.Replace(".json", ""));
             });
         }
 
