@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SolverUtils
+public class SamplerUtils
 {
     public static bool isInBounds(Vector3Int dimensions, Vector3Int position)
     {

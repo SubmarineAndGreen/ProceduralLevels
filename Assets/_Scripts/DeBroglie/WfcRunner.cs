@@ -53,12 +53,12 @@ public class WfcRunner : MonoBehaviour {
         var model = new AdjacentModel(DirectionSet.Cartesian3d);
         foreach (TileRule rule in rules) {
             Directions3D direction = rule.directionAtoB;
-            Vector3Int v = SolverUtils.DirectionsToVectors[direction];
+            Vector3Int v = SamplerUtils.DirectionsToVectors[direction];
             model.AddAdjacency(tileObjects[rule.valueA], tileObjects[rule.valueB], v.x, v.y, v.z);
         }
 
         foreach (var item in tileObjects) {
-            int tileIndex = SimpleTiledModel.modelIndexToTileIndex(item.Key);
+            int tileIndex = TileUtils.modelIndexToTileIndex(item.Key);
             int numberOfRotations = Tile.symmetryToNumberOfRotations[input.tileSet.tiles[tileIndex].symmetry];
             model.SetFrequency(item.Value, 1.0 / numberOfRotations);
         }
@@ -84,8 +84,8 @@ public class WfcRunner : MonoBehaviour {
         for (int x = 0; x < outputDimensions.x; x++) {
             for (int y = 0; y < outputDimensions.y; y++) {
                 for (int z = 0; z < outputDimensions.z; z++) {
-                    output.tileIndices.set(new Vector3Int(x, y, z), SimpleTiledModel.modelIndexToTileIndex(tilesOut[x, y, z]));
-                    output.tileRotations.set(new Vector3Int(x, y, z), SimpleTiledModel.modelIndexToRotation(tilesOut[x, y, z]));
+                    output.tileIndices.set(new Vector3Int(x, y, z), TileUtils.modelIndexToTileIndex(tilesOut[x, y, z]));
+                    output.tileRotations.set(new Vector3Int(x, y, z), TileUtils.modelIndexToRotation(tilesOut[x, y, z]));
                 }
             }
         }
@@ -102,7 +102,7 @@ public class WfcRunner : MonoBehaviour {
         int[,,] tilesOut = new int[outputDimensions.x, outputDimensions.y, outputDimensions.z];
 
         input.tileIndices.forEach((x, y, z, index) => {
-            tilesIn[x, y, z] = SimpleTiledModel.tileIndexToModelIndex(index, input.tileRotations.at(x, y, z));
+            tilesIn[x, y, z] = TileUtils.tileIndexToModelIndex(index, input.tileRotations.at(x, y, z));
         });
 
         GridTopology outputGridTopo = new GridTopology(outputDimensions.x, outputDimensions.y, outputDimensions.z, false);
@@ -131,8 +131,8 @@ public class WfcRunner : MonoBehaviour {
         for (int x = 0; x < outputDimensions.x; x++) {
             for (int y = 0; y < outputDimensions.y; y++) {
                 for (int z = 0; z < outputDimensions.z; z++) {
-                    output.tileIndices.set(new Vector3Int(x, y, z), SimpleTiledModel.modelIndexToTileIndex(tilesOut[x, y, z]));
-                    output.tileRotations.set(new Vector3Int(x, y, z), SimpleTiledModel.modelIndexToRotation(tilesOut[x, y, z]));
+                    output.tileIndices.set(new Vector3Int(x, y, z), TileUtils.modelIndexToTileIndex(tilesOut[x, y, z]));
+                    output.tileRotations.set(new Vector3Int(x, y, z), TileUtils.modelIndexToRotation(tilesOut[x, y, z]));
                 }
             }
         }
