@@ -12,6 +12,7 @@ public class TileGrid : MonoBehaviour {
     public const string SAVE_FOLDER = "InputGrids";
     [SerializeField] private TextMeshProUGUI previewRotationText;
     [SerializeField] private TextMeshProUGUI selectedTileRotationText;
+    [SerializeField] private TextMeshProUGUI tileText;
     [SerializeField] private GameObject cursorPrefab;
     [Header("Editor Controls")]
     public TileSet tileSet;
@@ -60,12 +61,14 @@ public class TileGrid : MonoBehaviour {
 
 
         cursor = Instantiate(cursorPrefab, transform.position, Quaternion.Euler(0, 90, 0));
+        cursor.transform.SetParent(this.transform);
 
         tilePreviews = new List<GameObject>();
 
         foreach (Tile tile in tileSet.tiles) {
             GameObject preview = Instantiate(tile.tilePrefab);
             preview.SetActive(false);
+            preview.transform.SetParent(this.transform);
             tilePreviews.Add(preview);
         }
 
@@ -140,16 +143,6 @@ public class TileGrid : MonoBehaviour {
     void gridCursorMovement() {
         const float cursorStep = 1f;
 
-        // if (!inputs.GridEditor.enabled) {
-        //     return;
-        // }
-
-        // bool keyW = InputManager.gridControls.keyW;
-        // bool keyA = InputManager.gridControls.keyA;
-        // bool keyS = InputManager.gridControls.keyS;
-        // bool keyD = InputManager.gridControls.keyD;
-
-        // bool heightToggle = InputManager.gridControls.heightToggle;
         bool heightToggle = inputs.GridEditor.HeightModifier.ReadValue<float>() == 1;
 
         Vector2Int keyboardInput = Vector2Int.zero;
@@ -172,8 +165,6 @@ public class TileGrid : MonoBehaviour {
             );
         }
 
-        // Debug.Log(cursorMovement);
-
         cursorPosition += cursorMovement;
         cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, dimensions.x - 1);
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, dimensions.y - 1);
@@ -190,7 +181,7 @@ public class TileGrid : MonoBehaviour {
         Vector3 halfTileOffset = new Vector3(0.5f, 0, -0.5f);
 
         if (activePreview != null) {
-            activePreview.transform.SetParent(null);
+            activePreview.transform.SetParent(this.transform);
             activePreview.SetActive(false);
         }
         activePreview = tilePreviews[activeTileIndex];
@@ -224,7 +215,7 @@ public class TileGrid : MonoBehaviour {
 
     void rotationControls() {
         RotationalSymmetry symmetry = tileSet.tiles[activeTileIndex].symmetry;
-        if (inputs.GridEditor.RotateTile.ReadValue<float>() == 1) {
+        if (inputs.GridEditor.RotateTile.triggered) {
             activeTileRotation += 1;
             if (activeTileRotation >= Tile.symmetryToNumberOfRotations[symmetry]) {
                 activeTileRotation = 0;
@@ -252,6 +243,7 @@ public class TileGrid : MonoBehaviour {
             GameObject newTileObject = Instantiate(tileSet.tiles[tileSetIndex].tilePrefab,
                         transform.position + position + halfTileOffset,
                         Quaternion.Euler(0, rotation * 90, 0));
+            newTileObject.transform.SetParent(this.transform, true);
             tileObjects.set(position, newTileObject);
         }
 
@@ -316,9 +308,11 @@ public class TileGrid : MonoBehaviour {
     void updateUI() {
         const string text1 = "Rotation: ";
         const string text2 = "Selected Tile Rotation: ";
+        const string text3 = "{0}: {1}";
 
         previewRotationText.text = text1 + activeTileRotation;
         selectedTileRotationText.text = text2 + tileRotations.at(cursorPosition);
+        tileText.text = string.Format(text3, activeTileIndex, tileSet.tiles[activeTileIndex].tilePrefab.name);
     }
 }
 

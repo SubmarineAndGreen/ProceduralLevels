@@ -6,14 +6,13 @@ using static InputManager;
 public class FreeCamera : MonoBehaviour {
     [SerializeField] private float cameraSpeed = 5f;
     [SerializeField] private float mouseSensitivity = 2f;
-    // private Vector3 _movementInput;
-    // private Vector2 _mouseInput;
+
     private float _mouseScroll;
     private bool isMovementEnabled;
     private const float INVERT_CAMERA = -1f;
     void Update() {
 
-        if (InputManager.inputs.FreeCamera.enabled) {
+        if (inputs.FreeCamera.enabled) {
 
             Vector2 movementInput = inputs.FreeCamera.KeyboardMovement.ReadValue<Vector2>();
             Vector3 movement = new Vector3(movementInput.x, 0, movementInput.y);

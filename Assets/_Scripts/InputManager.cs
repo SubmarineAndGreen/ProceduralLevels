@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour {
-    // public static GridControls gridControls;
-    // public static CameraControls cameraControls;
     public static InputMap inputs;
 
     private void Start() {
@@ -15,7 +13,6 @@ public class InputManager : MonoBehaviour {
     private const int RMB = 1;
     void Update() {
         if (inputs.Global.CameraOn.ReadValue<float>() == 1) {
-            // Debug.Log("test");
             Cursor.lockState = CursorLockMode.Locked;
             inputs.FreeCamera.Enable();
             inputs.GridEditor.Disable();
