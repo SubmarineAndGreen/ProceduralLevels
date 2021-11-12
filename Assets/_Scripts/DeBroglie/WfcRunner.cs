@@ -26,7 +26,9 @@ public class WfcRunner : MonoBehaviour {
         List<TileRule> rules;
         List<int> tiles;
 
-        (rules, tiles) = sampler.sample(input);
+        Adjacencies adjacencies = sampler.sample(input);
+        rules = adjacencies.rules;
+        tiles = adjacencies.uniqueTiles;
 
         Dictionary<int, DeBroglie.Tile> tileObjects = new Dictionary<int, DeBroglie.Tile>();
 
@@ -54,7 +56,9 @@ public class WfcRunner : MonoBehaviour {
         foreach (TileRule rule in rules) {
             Directions3D direction = rule.directionAtoB;
             Vector3Int v = SamplerUtils.DirectionsToVectors[direction];
+
             model.AddAdjacency(tileObjects[rule.valueA], tileObjects[rule.valueB], v.x, v.y, v.z);
+
         }
 
         foreach (var item in tileObjects) {
@@ -67,10 +71,11 @@ public class WfcRunner : MonoBehaviour {
             BackTrackDepth = backtracking ? -1 : 0
         });
 
-        while (numberOfTries > 0) {
+        int tries = numberOfTries;
+        while (tries > 0) {
             var status = propagator.Run();
             if (status != Resolution.Decided) {
-                numberOfTries--;
+                tries--;
                 Debug.Log("Undecided!");
             } else {
                 break;
