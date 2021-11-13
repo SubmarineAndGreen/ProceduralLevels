@@ -3,14 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEditor;
 
-public class ModelSampler {
+public class ModelSampler : MonoBehaviour {
 
-
-
+    public static string savePath;
+    const string saveFolder = "SamplerSaves";
+    [SerializeField] private TileGrid inputGrid;
     public bool ignoreEmptyTiles;
+    [SerializeField] private string saveFileName;
 
-    public Adjacencies sample(TileGrid inputGrid) {
+    private void OnValidate() {
+        savePath = $"{Application.dataPath}/{saveFolder}";
+    }
+
+
+    public void sample() {
 
         Vector3Int dimensions = inputGrid.dimensions;
         Grid3D<int> tileIndices = inputGrid.tileIndices;
@@ -66,7 +74,7 @@ public class ModelSampler {
                     // int nextRotation = sourceRotation;
 
                     const int sides = 4;
-                    
+
                     // up and down
                     if (direction == Directions3D.UP || direction == Directions3D.DOWN) {
                         int destStartingRotation = destinationRotation;
@@ -78,7 +86,7 @@ public class ModelSampler {
                             }
                             sourceRotation = getNextRotation(sourceTile, sourceRotation);
                         }
-                    // xz plane
+                        // xz plane
                     } else {
                         for (int i = 0; i < sides; i++) {
                             registerRule(source, sourceRotation, destination, destinationRotation, currentDirection);
@@ -103,10 +111,13 @@ public class ModelSampler {
             }
         }
 
-        return new Adjacencies() {
+        var save = new Adjacencies() {
+            tileSet = inputGrid.tileSet.name,
             rules = rules.ToList(),
             uniqueTiles = tiles.ToList()
         };
+
+        save.saveToFile($"{savePath}/{saveFileName}.json");
 
         //returns int for new rotation going clockwise (0 -> 90 -> ...)
         int getNextRotation(Tile tile, int rotation) {
@@ -141,12 +152,19 @@ public class ModelSampler {
 
 }
 
-[Serializable]
-public struct Adjacencies {
-    public string tileSet;
-    public List<TileRule> rules;
-    public List<int> uniqueTiles;
-}
 
+
+[CustomEditor(typeof(ModelSampler))]
+public class ModelSamplerEditor : Editor {
+
+    ModelSampler modelSampler;
+    private void OnEnable() {
+        modelSampler = target as ModelSampler;
+    }
+    public override void OnInspectorGUI() {
+        base.OnInspectorGUI();
+        EditorUtils.guiButton("Sample", () => modelSampler.sample());
+    }
+}
 
 
