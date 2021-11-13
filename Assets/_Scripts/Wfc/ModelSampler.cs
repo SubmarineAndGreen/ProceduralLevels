@@ -72,7 +72,7 @@ public class ModelSampler {
                         int destStartingRotation = destinationRotation;
                         for (int i = 0; i < sides; i++) {
                             destinationRotation = destStartingRotation;
-                            for (int j = 0; i < sides; j++) {
+                            for (int j = 0; j < sides; j++) {
                                 registerRule(source, sourceRotation, destination, destinationRotation, direction);
                                 getNextRotation(destinationTile, destinationRotation);
                             }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce8459994ff0e23419d04dbec8d4b0a3, type: 3}
-  m_Name: SewerPipes
+  m_Name: SewerPipesHiddenEmpty
   m_EditorClassIdentifier: 
   tiles:
   - tilePrefab: {fileID: 4625396876920950185, guid: 9c92ce32dbbe98f40a8b911df708ee13, type: 3}
@@ -41,5 +41,5 @@ MonoBehaviour:
     symmetry: 0
   - tilePrefab: {fileID: 4022231582917244894, guid: c650be644f5c7964fabf7d371717adaa, type: 3}
     symmetry: 2
-  - tilePrefab: {fileID: 4422873590863240213, guid: 46c046b3b47c8c14096feddab66d3d87, type: 3}
+  - tilePrefab: {fileID: 2450690623008994218, guid: 94405b788e6596946b9af8eca592d710, type: 3}
     symmetry: 2
