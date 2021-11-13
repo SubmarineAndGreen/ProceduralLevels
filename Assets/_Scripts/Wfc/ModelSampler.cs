@@ -141,7 +141,9 @@ public class ModelSampler {
 
 }
 
+[Serializable]
 public struct Adjacencies {
+    public string tileSet;
     public List<TileRule> rules;
     public List<int> uniqueTiles;
 }
