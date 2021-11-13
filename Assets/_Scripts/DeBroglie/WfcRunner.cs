@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
 using DeBroglie;
 using DeBroglie.Models;
 using DeBroglie.Topo;
-using UnityEngine;
-using UnityEditor;
-using Resolution = DeBroglie.Resolution;
 using DeBroglie.Constraints;
+using Resolution = DeBroglie.Resolution;
 
 public class WfcRunner : MonoBehaviour {
     public TileGrid input;
@@ -20,6 +21,9 @@ public class WfcRunner : MonoBehaviour {
     [Range(1, 4)]
     public int rotations = 1;
     public bool reflections = false;
+    [Header("Path")]
+    public bool path = true;
+    public int emptyTileIndex;
     [Header("Debug")]
     public float stepTime = 0.1f;
 
@@ -69,9 +73,13 @@ public class WfcRunner : MonoBehaviour {
             int numberOfRotations = Tile.symmetryToNumberOfRotations[input.tileSet.tiles[tileIndex].symmetry];
             model.SetFrequency(item.Value, 1.0 / numberOfRotations);
         }
+        
 
         var propagator = new TilePropagator(model, outputGridTopo, new TilePropagatorOptions() {
-            BackTrackDepth = backtrackDepth
+            BackTrackDepth = backtrackDepth,
+            Constraints = path ? new ITileConstraint[] {
+                new PathConstraint(tilesWithoutEmpty(tiles, tileObjects))
+            } : null
         });
 
         int tries = numberOfTries;
@@ -247,6 +255,18 @@ public class WfcRunner : MonoBehaviour {
 
     public void runCoroutine() {
         StartCoroutine("runAdjacentModelCoroutine");
+    }
+
+    public HashSet<DeBroglie.Tile> tilesWithoutEmpty(List<int> uniqueTiles, Dictionary<int, DeBroglie.Tile> tileObjects) {
+        HashSet<DeBroglie.Tile> result = new HashSet<DeBroglie.Tile>();
+        int emptyTileModelIndex = TileUtils.tileIndexToModelIndex(emptyTileIndex, TileGrid.NO_ROTATION);
+        foreach(int index in uniqueTiles) {
+            if(index != emptyTileModelIndex) {
+                result.Add(tileObjects[index]);
+            }
+        }
+
+        return result;
     }
 }
 
