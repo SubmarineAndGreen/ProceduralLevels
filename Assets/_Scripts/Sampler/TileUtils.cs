@@ -19,5 +19,4 @@ public class TileUtils {
     public static int modelIndexToRotation(int index) {
         return index % nOfRotations;
     }
-
 }

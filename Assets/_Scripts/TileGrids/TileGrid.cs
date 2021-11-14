@@ -48,7 +48,7 @@ public class TileGrid : MonoBehaviour {
             tileRotations = new Grid3D<int>(defaultDimensions);
             tileObjects = new Grid3D<GameObject>(defaultDimensions);
             dimensions = defaultDimensions;
-            fillWithEmpty();
+            clear();
         }
 
 
@@ -118,7 +118,7 @@ public class TileGrid : MonoBehaviour {
         return false;
     }
 
-    public void fillWithEmpty() {
+    public void clear() {
         tileIndices.updateEach(value => TILE_EMPTY);
         tileRotations.updateEach(value => NO_ROTATION);
         rebuildGrid();

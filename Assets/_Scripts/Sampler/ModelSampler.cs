@@ -69,10 +69,6 @@ public class ModelSampler : MonoBehaviour {
                     int destinationRotation = tileRotations.at(destination);
                     Directions3D currentDirection = direction;
 
-                    // RotationalSymmetry sym = sourceTile.symmetry;
-                    // registerRule(source, 0, destination, 0, direction);
-                    // int nextRotation = sourceRotation;
-
                     const int sides = 4;
 
                     // up and down
@@ -95,18 +91,6 @@ public class ModelSampler : MonoBehaviour {
                             currentDirection = SamplerUtils.nextDirectionClockwise[currentDirection];
                         }
                     }
-
-                    // rules.Add(new TileRule(
-                    //     TileUtils.tileIndexToModelIndex(
-                    //         tileIndices.at(source),
-                    //         tileRotations.at(source)
-                    //     ),
-                    //     TileUtils.tileIndexToModelIndex(
-                    //         tileIndices.at(destination),
-                    //         tileRotations.at(destination)
-                    //     ),
-                    //     direction
-                    // ));
                 }
             }
         }

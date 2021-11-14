@@ -29,7 +29,7 @@ public class Grid3D<T> : IEnumerable {
     // }
 
     public Vector3Int dimensions => new Vector3Int(_values.GetLength(0), _values.GetLength(1), _values.GetLength(2));
-    
+
 
     public T at(Vector3Int position) {
         return _values[position.x, position.y, position.z];
@@ -41,6 +41,10 @@ public class Grid3D<T> : IEnumerable {
 
     public T at(int x, int y, int z) {
         return _values[x, y, z];
+    }
+
+    public void set(int x, int y, int z, T newValue) {
+         _values[x, y, z] = newValue;
     }
 
     public bool inBounds(Vector3Int position) {
@@ -63,6 +67,29 @@ public class Grid3D<T> : IEnumerable {
         });
 
         return result;
+    }
+
+    public Grid3D<T> gridSubset(Vector3Int subsetOrigin, Vector3Int subsetDimensions) {
+        Grid3D<T> res = new Grid3D<T>(subsetDimensions);
+
+        if (!inBounds(subsetOrigin)) {
+            Debug.LogError("Grid subset origin out of bounds: " + subsetOrigin + ",original dimensions: " + dimensions);
+        }
+
+        Vector3Int bounds = subsetOrigin + subsetDimensions;
+
+        if (!inBounds(bounds)) {
+            Debug.LogError("Grid subset corner out of bounds: " + subsetOrigin + ",original dimensions: " + dimensions);
+        }
+
+        for (int x = subsetOrigin.x, subsetX = 0; x < bounds.x; x++, subsetX++) {
+            for (int y = subsetOrigin.y, subsetY = 0; y <  bounds.y; y++, subsetY++) {
+                for (int z = subsetOrigin.z, subsetZ = 0; z < bounds.z; z++, subsetZ++) {
+                    res.set(subsetX, subsetY, subsetZ, _values[x, y, z]);
+                }
+            }
+        }
+        return res;
     }
 
     public void updateEach(ValueFunction operation) {
@@ -105,14 +132,10 @@ public class Grid3D<T> : IEnumerable {
         }
     }
 
-    public void forEach(IndexAction2 action)
-    {
-        for (int x = 0; x < _values.GetLength(0); x++)
-        {
-            for (int y = 0; y < _values.GetLength(1); y++)
-            {
-                for (int z = 0; z < _values.GetLength(2); z++)
-                {
+    public void forEach(IndexAction2 action) {
+        for (int x = 0; x < _values.GetLength(0); x++) {
+            for (int y = 0; y < _values.GetLength(1); y++) {
+                for (int z = 0; z < _values.GetLength(2); z++) {
                     action(new Vector3Int(x, y, z));
                 }
             }
