@@ -34,7 +34,7 @@ public class TileGrid : MonoBehaviour {
 
 
 
-    private void Start() {
+    private void Awake() {
         Boolean loadedFromFile;
 
         if (!loadFromFileOnStart) {
@@ -55,10 +55,6 @@ public class TileGrid : MonoBehaviour {
         if (loadedFromFile) {
             rebuildGrid();
         }
-
-
-
-
 
         cursor = Instantiate(cursorPrefab, transform.position, Quaternion.Euler(0, 90, 0));
         cursor.transform.SetParent(this.transform);
@@ -134,8 +130,8 @@ public class TileGrid : MonoBehaviour {
     }
 
     public void destroyTileObjects() {
-        tileObjects.updateEach(value => {
-            Destroy(value);
+        tileObjects.updateEach(tile => {
+            Destroy(tile);
             return null;
         });
     }

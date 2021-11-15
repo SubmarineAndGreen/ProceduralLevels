@@ -69,28 +69,28 @@ public class Grid3D<T> : IEnumerable {
         return result;
     }
 
-    public Grid3D<T> gridSubset(Vector3Int subsetOrigin, Vector3Int subsetDimensions) {
-        Grid3D<T> res = new Grid3D<T>(subsetDimensions);
+    // public Grid3D<T> gridSubset(Vector3Int subsetOrigin, Vector3Int subsetDimensions) {
+    //     Grid3D<T> res = new Grid3D<T>(subsetDimensions);
 
-        if (!inBounds(subsetOrigin)) {
-            Debug.LogError("Grid subset origin out of bounds: " + subsetOrigin + ",original dimensions: " + dimensions);
-        }
+    //     if (!inBounds(subsetOrigin)) {
+    //         Debug.LogError("Grid subset origin out of bounds: " + subsetOrigin + ",original dimensions: " + dimensions);
+    //     }
 
-        Vector3Int bounds = subsetOrigin + subsetDimensions;
+    //     Vector3Int bounds = subsetOrigin + subsetDimensions;
 
-        if (!inBounds(bounds)) {
-            Debug.LogError("Grid subset corner out of bounds: " + subsetOrigin + ",original dimensions: " + dimensions);
-        }
+    //     if (!inBounds(bounds)) {
+    //         Debug.LogError("Grid subset corner out of bounds: " + subsetOrigin + ",original dimensions: " + dimensions);
+    //     }
 
-        for (int x = subsetOrigin.x, subsetX = 0; x < bounds.x; x++, subsetX++) {
-            for (int y = subsetOrigin.y, subsetY = 0; y <  bounds.y; y++, subsetY++) {
-                for (int z = subsetOrigin.z, subsetZ = 0; z < bounds.z; z++, subsetZ++) {
-                    res.set(subsetX, subsetY, subsetZ, _values[x, y, z]);
-                }
-            }
-        }
-        return res;
-    }
+    //     for (int x = subsetOrigin.x, subsetX = 0; x < bounds.x; x++, subsetX++) {
+    //         for (int y = subsetOrigin.y, subsetY = 0; y <  bounds.y; y++, subsetY++) {
+    //             for (int z = subsetOrigin.z, subsetZ = 0; z < bounds.z; z++, subsetZ++) {
+    //                 res.set(subsetX, subsetY, subsetZ, _values[x, y, z]);
+    //             }
+    //         }
+    //     }
+    //     return res;
+    // }
 
     public void updateEach(ValueFunction operation) {
         for (int x = 0; x < _values.GetLength(0); x++) {
