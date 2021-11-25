@@ -12,14 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce8459994ff0e23419d04dbec8d4b0a3, type: 3}
   m_Name: VoxelRoads
   m_EditorClassIdentifier: 
+  emptyTileIndex: 0
   tiles:
   - tilePrefab: {fileID: 919132149155446097, guid: 2ed9e512f93c2344aa86bed26e17d130, type: 3}
     symmetry: 2
+    openTop: 0
+    openBottom: 0
+    openSides: 
   - tilePrefab: {fileID: 919132149155446097, guid: fd96437d9f1481740ab2cb2c60ce0888, type: 3}
     symmetry: 1
+    openTop: 0
+    openBottom: 0
+    openSides: 
   - tilePrefab: {fileID: 919132149155446097, guid: 7d0b81c551815c64e80414614dcb5441, type: 3}
     symmetry: 0
+    openTop: 0
+    openBottom: 0
+    openSides: 
   - tilePrefab: {fileID: 919132149155446097, guid: 197e34a3d63f1a54e95f9ec0300ec77e, type: 3}
     symmetry: 2
+    openTop: 0
+    openBottom: 0
+    openSides: 
   - tilePrefab: {fileID: 919132149155446097, guid: 417386a5961116646a351b9c709307de, type: 3}
     symmetry: 0
+    openTop: 0
+    openBottom: 0
+    openSides: 

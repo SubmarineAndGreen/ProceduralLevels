@@ -313,7 +313,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelGrid: {fileID: 633328298}
-  generatedGridDimensions: {x: 5, y: 5, z: 15}
+  generatedGridDimensions: {x: 6, y: 6, z: 15}
+  upTileCapIndex: 16
+  downTileCapIndex: 17
+  sideTileCapIndex: 15
 --- !u!114 &415501193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,13 +331,2411 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 561711771}
   output: {fileID: 633328298}
-  modelFile: pipes.json
+  modelFile: pipes2.json
   runTillSolved: 1
   maxRunTime: 30
   numberOfTries: 1
   backtrackDepth: 10
   path: 1
   stepTime: 0.1
+  samplerResult:
+    tileSet: SewerPipesHiddenEmpty
+    rules:
+    - valueA: 36
+      valueB: 0
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 1
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 2
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 3
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 0
+      directionAtoB: 3
+    - valueA: 41
+      valueB: 1
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 2
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 3
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 0
+      directionAtoB: 3
+    - valueA: 40
+      valueB: 1
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 2
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 3
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 0
+      directionAtoB: 3
+    - valueA: 44
+      valueB: 1
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 2
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 3
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 0
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 1
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 2
+      directionAtoB: 5
+    - valueA: 50
+      valueB: 3
+      directionAtoB: 2
+    - valueA: 37
+      valueB: 0
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 1
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 2
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 3
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 1
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 2
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 3
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 1
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 2
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 3
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 0
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 1
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 2
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 3
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 37
+      valueB: 0
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 1
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 2
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 3
+      directionAtoB: 3
+    - valueA: 43
+      valueB: 0
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 1
+      directionAtoB: 3
+    - valueA: 41
+      valueB: 2
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 3
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 1
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 2
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 3
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 1
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 2
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 3
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 0
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 1
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 2
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 3
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 0
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 1
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 2
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 3
+      directionAtoB: 3
+    - valueA: 42
+      valueB: 0
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 1
+      directionAtoB: 3
+    - valueA: 40
+      valueB: 2
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 3
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 1
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 2
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 3
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 1
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 2
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 3
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 0
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 1
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 2
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 3
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 40
+      valueB: 0
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 1
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 2
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 3
+      directionAtoB: 3
+    - valueA: 46
+      valueB: 0
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 1
+      directionAtoB: 3
+    - valueA: 44
+      valueB: 2
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 3
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 47
+      directionAtoB: 0
+    - valueA: 1
+      valueB: 47
+      directionAtoB: 0
+    - valueA: 2
+      valueB: 47
+      directionAtoB: 0
+    - valueA: 3
+      valueB: 47
+      directionAtoB: 0
+    - valueA: 0
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 1
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 2
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 3
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 1
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 2
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 3
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 0
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 1
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 2
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 3
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 44
+      valueB: 0
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 1
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 2
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 3
+      directionAtoB: 3
+    - valueA: 51
+      valueB: 0
+      directionAtoB: 0
+    - valueA: 48
+      valueB: 0
+      directionAtoB: 0
+    - valueA: 49
+      valueB: 0
+      directionAtoB: 0
+    - valueA: 50
+      valueB: 0
+      directionAtoB: 0
+    - valueA: 52
+      valueB: 0
+      directionAtoB: 0
+    - valueA: 0
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 1
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 2
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 3
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 0
+      directionAtoB: 1
+    - valueA: 44
+      valueB: 0
+      directionAtoB: 1
+    - valueA: 45
+      valueB: 0
+      directionAtoB: 1
+    - valueA: 46
+      valueB: 0
+      directionAtoB: 1
+    - valueA: 50
+      valueB: 0
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 1
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 2
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 3
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 51
+      directionAtoB: 1
+    - valueA: 1
+      valueB: 51
+      directionAtoB: 1
+    - valueA: 2
+      valueB: 51
+      directionAtoB: 1
+    - valueA: 3
+      valueB: 51
+      directionAtoB: 1
+    - valueA: 0
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 1
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 2
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 3
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 0
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 1
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 2
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 3
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 0
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 1
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 2
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 3
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 48
+      valueB: 0
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 1
+      directionAtoB: 5
+    - valueA: 50
+      valueB: 2
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 3
+      directionAtoB: 3
+    - valueA: 0
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 1
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 2
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 3
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 0
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 1
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 2
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 3
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 52
+      valueB: 0
+      directionAtoB: 1
+    - valueA: 56
+      valueB: 0
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 1
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 2
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 3
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 4
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 4
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 4
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 4
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 4
+      directionAtoB: 3
+    - valueA: 41
+      valueB: 4
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 4
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 4
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 4
+      directionAtoB: 3
+    - valueA: 40
+      valueB: 4
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 4
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 4
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 4
+      directionAtoB: 3
+    - valueA: 44
+      valueB: 4
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 4
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 4
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 4
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 4
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 4
+      directionAtoB: 5
+    - valueA: 50
+      valueB: 4
+      directionAtoB: 2
+    - valueA: 4
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 4
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 4
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 4
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 4
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 4
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 4
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 4
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 4
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 4
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 4
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 4
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 51
+      valueB: 4
+      directionAtoB: 0
+    - valueA: 48
+      valueB: 4
+      directionAtoB: 0
+    - valueA: 49
+      valueB: 4
+      directionAtoB: 0
+    - valueA: 50
+      valueB: 4
+      directionAtoB: 0
+    - valueA: 52
+      valueB: 4
+      directionAtoB: 0
+    - valueA: 4
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 4
+      valueB: 51
+      directionAtoB: 1
+    - valueA: 4
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 4
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 4
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 4
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 4
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 56
+      valueB: 4
+      directionAtoB: 1
+    - valueA: 36
+      valueB: 8
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 8
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 8
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 8
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 8
+      directionAtoB: 3
+    - valueA: 41
+      valueB: 8
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 8
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 8
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 8
+      directionAtoB: 3
+    - valueA: 40
+      valueB: 8
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 8
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 8
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 8
+      directionAtoB: 3
+    - valueA: 44
+      valueB: 8
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 8
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 8
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 8
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 8
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 8
+      directionAtoB: 5
+    - valueA: 50
+      valueB: 8
+      directionAtoB: 2
+    - valueA: 8
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 8
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 8
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 8
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 8
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 8
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 8
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 8
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 8
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 8
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 8
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 8
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 8
+      valueB: 47
+      directionAtoB: 0
+    - valueA: 8
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 8
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 8
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 8
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 8
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 8
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 8
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 8
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 8
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 56
+      valueB: 8
+      directionAtoB: 0
+    - valueA: 47
+      valueB: 8
+      directionAtoB: 1
+    - valueA: 44
+      valueB: 8
+      directionAtoB: 1
+    - valueA: 45
+      valueB: 8
+      directionAtoB: 1
+    - valueA: 46
+      valueB: 8
+      directionAtoB: 1
+    - valueA: 52
+      valueB: 8
+      directionAtoB: 1
+    - valueA: 8
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 36
+      valueB: 12
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 12
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 12
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 12
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 12
+      directionAtoB: 3
+    - valueA: 41
+      valueB: 12
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 12
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 12
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 12
+      directionAtoB: 3
+    - valueA: 40
+      valueB: 12
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 12
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 12
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 12
+      directionAtoB: 3
+    - valueA: 44
+      valueB: 12
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 12
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 12
+      directionAtoB: 2
+    - valueA: 12
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 12
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 12
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 12
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 12
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 12
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 12
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 12
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 12
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 12
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 12
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 12
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 48
+      valueB: 12
+      directionAtoB: 0
+    - valueA: 49
+      valueB: 12
+      directionAtoB: 0
+    - valueA: 50
+      valueB: 12
+      directionAtoB: 0
+    - valueA: 51
+      valueB: 12
+      directionAtoB: 0
+    - valueA: 52
+      valueB: 12
+      directionAtoB: 0
+    - valueA: 12
+      valueB: 44
+      directionAtoB: 0
+    - valueA: 12
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 12
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 12
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 12
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 50
+      valueB: 12
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 12
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 12
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 12
+      directionAtoB: 5
+    - valueA: 12
+      valueB: 48
+      directionAtoB: 1
+    - valueA: 12
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 12
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 12
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 12
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 12
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 12
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 44
+      valueB: 12
+      directionAtoB: 1
+    - valueA: 45
+      valueB: 12
+      directionAtoB: 1
+    - valueA: 46
+      valueB: 12
+      directionAtoB: 1
+    - valueA: 47
+      valueB: 12
+      directionAtoB: 1
+    - valueA: 52
+      valueB: 12
+      directionAtoB: 1
+    - valueA: 56
+      valueB: 16
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 17
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 16
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 17
+      directionAtoB: 2
+    - valueA: 16
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 17
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 16
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 17
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 16
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 17
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 16
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 17
+      directionAtoB: 3
+    - valueA: 16
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 17
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 16
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 17
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 40
+      valueB: 16
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 17
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 16
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 17
+      directionAtoB: 3
+    - valueA: 16
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 17
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 16
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 17
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 41
+      valueB: 16
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 17
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 16
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 17
+      directionAtoB: 3
+    - valueA: 16
+      valueB: 44
+      directionAtoB: 0
+    - valueA: 17
+      valueB: 44
+      directionAtoB: 0
+    - valueA: 16
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 17
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 16
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 17
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 44
+      valueB: 16
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 17
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 16
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 17
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 16
+      directionAtoB: 0
+    - valueA: 49
+      valueB: 16
+      directionAtoB: 0
+    - valueA: 50
+      valueB: 16
+      directionAtoB: 0
+    - valueA: 51
+      valueB: 16
+      directionAtoB: 0
+    - valueA: 52
+      valueB: 16
+      directionAtoB: 0
+    - valueA: 16
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 17
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 16
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 17
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 44
+      valueB: 16
+      directionAtoB: 1
+    - valueA: 45
+      valueB: 16
+      directionAtoB: 1
+    - valueA: 46
+      valueB: 16
+      directionAtoB: 1
+    - valueA: 47
+      valueB: 16
+      directionAtoB: 1
+    - valueA: 16
+      valueB: 48
+      directionAtoB: 1
+    - valueA: 17
+      valueB: 48
+      directionAtoB: 1
+    - valueA: 16
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 17
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 16
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 17
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 48
+      valueB: 16
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 17
+      directionAtoB: 5
+    - valueA: 50
+      valueB: 16
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 17
+      directionAtoB: 3
+    - valueA: 16
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 17
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 16
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 17
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 52
+      valueB: 16
+      directionAtoB: 1
+    - valueA: 36
+      valueB: 20
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 20
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 20
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 20
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 20
+      directionAtoB: 3
+    - valueA: 41
+      valueB: 20
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 20
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 20
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 20
+      directionAtoB: 3
+    - valueA: 40
+      valueB: 20
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 20
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 20
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 20
+      directionAtoB: 3
+    - valueA: 44
+      valueB: 20
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 20
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 20
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 20
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 20
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 20
+      directionAtoB: 5
+    - valueA: 50
+      valueB: 20
+      directionAtoB: 2
+    - valueA: 20
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 20
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 20
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 20
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 20
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 20
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 20
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 20
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 20
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 20
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 20
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 20
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 20
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 20
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 20
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 20
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 20
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 20
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 20
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 20
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 20
+      directionAtoB: 0
+    - valueA: 20
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 20
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 56
+      valueB: 20
+      directionAtoB: 1
+    - valueA: 56
+      valueB: 24
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 25
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 24
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 25
+      directionAtoB: 2
+    - valueA: 24
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 25
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 24
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 25
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 24
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 25
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 24
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 25
+      directionAtoB: 3
+    - valueA: 24
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 25
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 24
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 25
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 40
+      valueB: 24
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 25
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 24
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 25
+      directionAtoB: 3
+    - valueA: 24
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 25
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 24
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 25
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 41
+      valueB: 24
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 25
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 24
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 25
+      directionAtoB: 3
+    - valueA: 24
+      valueB: 44
+      directionAtoB: 0
+    - valueA: 25
+      valueB: 44
+      directionAtoB: 0
+    - valueA: 24
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 25
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 24
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 25
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 44
+      valueB: 24
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 25
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 24
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 25
+      directionAtoB: 3
+    - valueA: 24
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 25
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 24
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 25
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 48
+      valueB: 24
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 25
+      directionAtoB: 5
+    - valueA: 50
+      valueB: 24
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 25
+      directionAtoB: 3
+    - valueA: 24
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 25
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 56
+      valueB: 24
+      directionAtoB: 0
+    - valueA: 44
+      valueB: 24
+      directionAtoB: 1
+    - valueA: 45
+      valueB: 24
+      directionAtoB: 1
+    - valueA: 46
+      valueB: 24
+      directionAtoB: 1
+    - valueA: 47
+      valueB: 24
+      directionAtoB: 1
+    - valueA: 52
+      valueB: 24
+      directionAtoB: 1
+    - valueA: 24
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 25
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 24
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 25
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 24
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 25
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 28
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 29
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 28
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 29
+      directionAtoB: 2
+    - valueA: 28
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 29
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 28
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 29
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 28
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 29
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 28
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 29
+      directionAtoB: 3
+    - valueA: 28
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 29
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 28
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 29
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 40
+      valueB: 28
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 29
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 28
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 29
+      directionAtoB: 3
+    - valueA: 28
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 29
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 28
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 29
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 41
+      valueB: 28
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 29
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 28
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 29
+      directionAtoB: 3
+    - valueA: 28
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 29
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 28
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 29
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 44
+      valueB: 28
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 29
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 28
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 29
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 28
+      directionAtoB: 0
+    - valueA: 49
+      valueB: 28
+      directionAtoB: 0
+    - valueA: 50
+      valueB: 28
+      directionAtoB: 0
+    - valueA: 51
+      valueB: 28
+      directionAtoB: 0
+    - valueA: 52
+      valueB: 28
+      directionAtoB: 0
+    - valueA: 28
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 29
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 28
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 29
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 28
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 29
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 50
+      valueB: 28
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 29
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 28
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 29
+      directionAtoB: 5
+    - valueA: 28
+      valueB: 48
+      directionAtoB: 1
+    - valueA: 29
+      valueB: 48
+      directionAtoB: 1
+    - valueA: 28
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 29
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 28
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 29
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 28
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 29
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 56
+      valueB: 28
+      directionAtoB: 1
+    - valueA: 36
+      valueB: 32
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 33
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 34
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 35
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 32
+      directionAtoB: 3
+    - valueA: 40
+      valueB: 33
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 34
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 35
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 32
+      directionAtoB: 3
+    - valueA: 41
+      valueB: 33
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 34
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 35
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 32
+      directionAtoB: 3
+    - valueA: 44
+      valueB: 33
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 34
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 35
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 32
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 33
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 34
+      directionAtoB: 5
+    - valueA: 50
+      valueB: 35
+      directionAtoB: 2
+    - valueA: 37
+      valueB: 32
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 33
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 34
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 35
+      directionAtoB: 5
+    - valueA: 32
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 33
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 34
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 35
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 32
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 33
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 34
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 35
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 32
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 33
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 34
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 35
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 37
+      valueB: 32
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 33
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 34
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 35
+      directionAtoB: 3
+    - valueA: 42
+      valueB: 32
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 33
+      directionAtoB: 3
+    - valueA: 40
+      valueB: 34
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 35
+      directionAtoB: 5
+    - valueA: 32
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 33
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 34
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 35
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 32
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 33
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 34
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 35
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 32
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 33
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 34
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 35
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 40
+      valueB: 32
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 33
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 34
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 35
+      directionAtoB: 3
+    - valueA: 43
+      valueB: 32
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 33
+      directionAtoB: 3
+    - valueA: 41
+      valueB: 34
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 35
+      directionAtoB: 5
+    - valueA: 32
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 33
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 34
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 35
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 32
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 33
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 34
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 35
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 32
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 33
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 34
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 35
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 41
+      valueB: 32
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 33
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 34
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 35
+      directionAtoB: 3
+    - valueA: 46
+      valueB: 32
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 33
+      directionAtoB: 3
+    - valueA: 44
+      valueB: 34
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 35
+      directionAtoB: 5
+    - valueA: 32
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 33
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 34
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 35
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 32
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 33
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 34
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 35
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 32
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 33
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 34
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 35
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 44
+      valueB: 32
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 33
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 34
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 35
+      directionAtoB: 3
+    - valueA: 50
+      valueB: 32
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 33
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 34
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 35
+      directionAtoB: 5
+    - valueA: 32
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 33
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 34
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 35
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 32
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 33
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 34
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 35
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 32
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 33
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 34
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 35
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 48
+      valueB: 32
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 33
+      directionAtoB: 5
+    - valueA: 50
+      valueB: 34
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 35
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 32
+      directionAtoB: 0
+    - valueA: 32
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 33
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 34
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 35
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 32
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 33
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 34
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 35
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 32
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 33
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 34
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 35
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 32
+      directionAtoB: 1
+    - valueA: 56
+      valueB: 32
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 33
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 34
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 35
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 40
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 41
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 42
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 43
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 47
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 44
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 45
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 46
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 41
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 42
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 43
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 40
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 40
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 41
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 42
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 43
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 47
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 44
+      directionAtoB: 2
+    - valueA: 36
+      valueB: 45
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 46
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 49
+      directionAtoB: 3
+    - valueA: 37
+      valueB: 50
+      directionAtoB: 4
+    - valueA: 36
+      valueB: 51
+      directionAtoB: 5
+    - valueA: 37
+      valueB: 48
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 36
+      directionAtoB: 0
+    - valueA: 56
+      valueB: 36
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 37
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 36
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 37
+      directionAtoB: 5
+    - valueA: 36
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 37
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 36
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 37
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 36
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 37
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 36
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 37
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 36
+      directionAtoB: 1
+    - valueA: 41
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 42
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 43
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 40
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 49
+      valueB: 36
+      directionAtoB: 5
+    - valueA: 50
+      valueB: 37
+      directionAtoB: 2
+    - valueA: 51
+      valueB: 36
+      directionAtoB: 3
+    - valueA: 48
+      valueB: 37
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 40
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 41
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 42
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 43
+      directionAtoB: 2
+    - valueA: 52
+      valueB: 52
+      directionAtoB: 0
+    - valueA: 52
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 52
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 52
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 52
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 40
+      directionAtoB: 0
+    - valueA: 52
+      valueB: 52
+      directionAtoB: 1
+    - valueA: 40
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 41
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 42
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 43
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 40
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 41
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 42
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 43
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 40
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 41
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 42
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 43
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 40
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 41
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 42
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 43
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 40
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 41
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 42
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 43
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 40
+      directionAtoB: 1
+    - valueA: 56
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 56
+      valueB: 52
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 52
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 52
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 52
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 56
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 44
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 45
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 46
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 47
+      valueB: 56
+      directionAtoB: 0
+    - valueA: 44
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 45
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 46
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 47
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 44
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 45
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 46
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 47
+      directionAtoB: 3
+    - valueA: 56
+      valueB: 44
+      directionAtoB: 1
+    - valueA: 56
+      valueB: 48
+      directionAtoB: 0
+    - valueA: 48
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 49
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 50
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 51
+      valueB: 56
+      directionAtoB: 1
+    - valueA: 48
+      valueB: 56
+      directionAtoB: 2
+    - valueA: 49
+      valueB: 56
+      directionAtoB: 3
+    - valueA: 50
+      valueB: 56
+      directionAtoB: 4
+    - valueA: 51
+      valueB: 56
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 48
+      directionAtoB: 4
+    - valueA: 56
+      valueB: 49
+      directionAtoB: 5
+    - valueA: 56
+      valueB: 50
+      directionAtoB: 2
+    - valueA: 56
+      valueB: 51
+      directionAtoB: 3
+    uniqueTiles: 240000002500000028000000290000002a0000002b0000002f0000002c0000002d0000002e0000003300000030000000310000003200000000000000010000000200000003000000340000003800000004000000080000000c00000010000000110000001400000018000000190000001c0000001d00000020000000210000002200000023000000
+    connections:
+    - connections: 010101000101
+    - connections: 000101010101
+    - connections: 010001010101
+    - connections: 010101010101
+    - connections: 010101000100
+    - connections: 000001010101
+    - connections: 010001000100
+    - connections: 000101000100
+    - connections: 000001000101
+    - connections: 000000010001
+    - connections: 000000010100
+    - connections: 000100010101
+    - connections: 010000010101
+    - connections: 010101000101
+    - connections: 000000000000
+    - connections: 010101010101
+    - connections: 010101010101
 --- !u!1 &561711770
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +2772,7 @@ MonoBehaviour:
   tileSet: {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
   loadFromFileOnStart: 1
   currentSaveFile: pipes.json
-  dimensions: {x: 4, y: 4, z: 4}
+  dimensions: {x: 50, y: 6, z: 50}
   areEditingControlsOn: 0
   cursorPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &561711772
@@ -457,7 +2858,7 @@ MonoBehaviour:
   tileSet: {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
   loadFromFileOnStart: 1
   currentSaveFile: 5x5x15.json
-  dimensions: {x: 3, y: 3, z: 3}
+  dimensions: {x: 8, y: 8, z: 17}
   areEditingControlsOn: 0
   cursorPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &633328299
@@ -739,8 +3140,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.25459138, y: -0, z: -0, w: 0.96704876}
-  m_LocalPosition: {x: 26.42, y: 4.33, z: -4.01}
+  m_LocalRotation: {x: 0.085913524, y: 0.91259956, z: -0.30859783, w: 0.25406376}
+  m_LocalPosition: {x: 20.149456, y: 16.532778, z: 22.971468}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 844332697}

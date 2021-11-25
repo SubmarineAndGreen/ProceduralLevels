@@ -25,6 +25,19 @@ public class SamplerUtils {
         Directions3D.LEFT
     };
 
+    // public static Vector3Int[] directionsToVectors = new Vector3Int[] {
+    //     Vector3Int.up,
+    //     Vector3Int.down,
+    //     Vector3Int.forward,
+    //     Vector3Int.right,
+    //     Vector3Int.back,
+    //     Vector3Int.left
+    // };
+
+    // public static Vector3Int[] oppositeDirections = new Vector3Int[] {
+
+    // };
+
     public static Dictionary<Directions3D, Vector3Int> DirectionsToVectors = new Dictionary<Directions3D, Vector3Int>() {
         {Directions3D.UP, Vector3Int.up},
         {Directions3D.DOWN, Vector3Int.down},

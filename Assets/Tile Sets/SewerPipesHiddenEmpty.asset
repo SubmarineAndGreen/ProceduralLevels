@@ -16,76 +16,37 @@ MonoBehaviour:
   tiles:
   - tilePrefab: {fileID: 4625396876920950185, guid: 9c92ce32dbbe98f40a8b911df708ee13, type: 3}
     symmetry: 0
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 9177180065973210858, guid: b90df8cbb795ecf4c805b207e9b9ca8a, type: 3}
     symmetry: 2
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 1486061818009411833, guid: c6e58e1edc3e692449c4ba54d86c7f65, type: 3}
     symmetry: 2
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 3679753258486068833, guid: ff7d5beb2d1ce2c40b950e312af51780, type: 3}
     symmetry: 2
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 984466034849953284, guid: 4d935f9e3b016ca4082ecd2e8b5049c2, type: 3}
     symmetry: 1
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 2127386704836573746, guid: 03a41d63e89fb1b49a898492cb16eb06, type: 3}
     symmetry: 2
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 2287650116349032884, guid: e899d8940fce34445aa9cd5587b4f2d0, type: 3}
     symmetry: 1
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 7341099654568370985, guid: dbc2dda66592ada479ce7a5a94726e85, type: 3}
     symmetry: 1
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 7715582701251520441, guid: b18f6e69f306afa4d9a1459ec102b99f, type: 3}
     symmetry: 0
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 5490643211231829601, guid: e8c1b611e1c525c4cab062f80b80c4d5, type: 3}
     symmetry: 1
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 5772924150775098088, guid: 75f3c94595b00194fa0333d12bfc54ce, type: 3}
     symmetry: 0
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 4669115297010584420, guid: 6415b482d97cc754688e918d69cfe39c, type: 3}
     symmetry: 0
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 4485256858098598472, guid: c813ab4638c47cb42982942864a52748, type: 3}
     symmetry: 0
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 4022231582917244894, guid: c650be644f5c7964fabf7d371717adaa, type: 3}
     symmetry: 2
-    openTop: 0
-    openBottom: 0
-    openSides: 
   - tilePrefab: {fileID: 2450690623008994218, guid: 94405b788e6596946b9af8eca592d710, type: 3}
     symmetry: 2
-    openTop: 0
-    openBottom: 0
-    openSides: 
+  - tilePrefab: {fileID: 2033451343518010986, guid: 5bbd8cb282c660e45b99d6ba6f995ff0, type: 3}
+    symmetry: 2
+  - tilePrefab: {fileID: 372607143310449275, guid: 31bdd94bbd46e8445b7ed452d2d51105, type: 3}
+    symmetry: 2
+  - tilePrefab: {fileID: 601667017245618766, guid: d862e12c9341cb64290b02020b9a289b, type: 3}
+    symmetry: 2

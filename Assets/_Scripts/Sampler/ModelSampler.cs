@@ -26,6 +26,12 @@ public class ModelSampler : MonoBehaviour {
 
         var rules = new HashSet<TileRule>();
         var tiles = new HashSet<int>();
+        var connections = new connectionData[inputGrid.tileSet.tiles.Count];
+
+        for (int i = 0; i < connections.Length; i++) {
+            connections[i] = new connectionData();
+            connections[i].setAllTrue();
+        }
 
 
         tileIndices.forEach((position, tileIndex) => {
@@ -33,6 +39,7 @@ public class ModelSampler : MonoBehaviour {
                 Tile tile = inputGrid.tileSet.tiles[tileIndex];
                 int rotations = Tile.symmetryToNumberOfRotations[tile.symmetry];
                 int currentRotation = tileRotations.at(position);
+                //save all unique tile indices (model indices with rotation coded in)
                 for (int i = 0; i < rotations; i++) {
                     tiles.Add(TileUtils.tileIndexToModelIndex(
                         tileIndex,
@@ -40,9 +47,9 @@ public class ModelSampler : MonoBehaviour {
                     ));
                     currentRotation = getNextRotation(tile, currentRotation);
                 }
-
-                scanNeighbors(position);
             }
+
+            scanNeighbors(position);
         });
 
         void scanNeighbors(Vector3Int source) {
@@ -57,9 +64,15 @@ public class ModelSampler : MonoBehaviour {
                 Vector3Int destination = source + offset;
 
                 if (SamplerUtils.isInBounds(dimensions, destination)) {
-                    //ignore constraints where some tile is an empty tile
-                    if (ignoreEmptyTiles && (tileIndices.at(destination) == TileGrid.TILE_EMPTY || tileIndices.at(source) == TileGrid.TILE_EMPTY)) {
-                        continue;
+                    //skip creating rules where some tile is an empty tile
+                    if (ignoreEmptyTiles) {
+                        if (tileIndices.at(source) == TileGrid.TILE_EMPTY || tileIndices.at(destination) == TileGrid.TILE_EMPTY) {
+                            continue;
+                        }
+                    }
+
+                    if(tileIndices.at(destination) == inputGrid.tileSet.emptyTileIndex) {
+                        banConnection(connections, tileIndices.at(source), tileRotations.at(source), direction);
                     }
 
                     Tile sourceTile = inputGrid.tileSet.tiles[tileIndices.at(source)];
@@ -71,7 +84,8 @@ public class ModelSampler : MonoBehaviour {
 
                     const int sides = 4;
 
-                    // up and down
+                    // up and down, rotates both tiles and samples up to 16 combinations
+                    // example rotations Source Tile, Destination Tile: 0, 0; 0, 1; 1, 0; 1, 1; 2, 0; etc.
                     if (direction == Directions3D.UP || direction == Directions3D.DOWN) {
                         int destStartingRotation = destinationRotation;
                         for (int i = 0; i < sides; i++) {
@@ -82,8 +96,22 @@ public class ModelSampler : MonoBehaviour {
                             }
                             sourceRotation = getNextRotation(sourceTile, sourceRotation);
                         }
-                        // xz plane
+
                     } else {
+                        // xz plane,
+                        // rotate source tile and keep destination tile "glued" to the same side of source tile
+                        // imagine dest tile is parented to src tile
+                        // that means dest tile is also rotated
+                        //XDX  X0X  XXX  XXX  XXX
+                        //XSX  X0X  X11  X2X  33X
+                        //XXX  XXX  XXX  X2X  XXX
+                        // ^ all resulting rules if both tiles have no symmetry, view from top
+                        // 0, 1, 2... are rotations
+                        // if some tile has symmetry rotations are looped or tile is not rotated at all
+                        // for example src has only 1 rotation (0) and dest 2 (0, 1):
+                        //XDX  X0X  XXX  XXX  XXX
+                        //XSX  X0X  X01  X0X  10X
+                        //XXX  XXX  XXX  X0X  XXX
                         for (int i = 0; i < sides; i++) {
                             registerRule(source, sourceRotation, destination, destinationRotation, currentDirection);
                             sourceRotation = getNextRotation(sourceTile, sourceRotation);
@@ -95,15 +123,18 @@ public class ModelSampler : MonoBehaviour {
             }
         }
 
-        var save = new Adjacencies() {
+        var save = new SamplerResult() {
             tileSet = inputGrid.tileSet.name,
             rules = rules.ToList(),
-            uniqueTiles = tiles.ToList()
+            uniqueTiles = tiles.ToList(),
+            connections = connections
         };
 
         save.saveToFile($"{savePath}/{saveFileName}.json");
 
-        //returns int for new rotation going clockwise (0 -> 90 -> ...)
+        //returns int for given rotation + 90deg
+        //takes into account tile symmetries
+        //because symmetric tiles have less meaningful rotations
         int getNextRotation(Tile tile, int rotation) {
             rotation += 1;
             int maxRotations = Tile.symmetryToNumberOfRotations[tile.symmetry];
@@ -113,6 +144,7 @@ public class ModelSampler : MonoBehaviour {
             return rotation;
         }
 
+        //create tile adjacency rule
         void registerRule(Vector3Int source, int sourceRotation,
          Vector3Int destination, int destinationRotation, Directions3D direction) {
 
@@ -130,6 +162,10 @@ public class ModelSampler : MonoBehaviour {
                 ),
                 direction
             ));
+        }
+
+        void banConnection(connectionData[] connections, int tileIndex, int tileRotation, Directions3D direction) {
+            connections[tileIndex].banConnection(direction, tileRotation);
         }
     }
 

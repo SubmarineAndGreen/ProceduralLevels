@@ -29,15 +29,16 @@ public class WfcRunner : MonoBehaviour {
     public bool path = true;
     [Header("Debug")]
     public float stepTime = 0.1f;
+    [HideInInspector] public SamplerResult samplerResult;
 
     public bool runAdjacentModel(out int[,,] result, Vector3Int outputDimensions) {
 
         List<TileRule> rules;
         List<int> tiles;
 
-        Adjacencies adjacencies = Adjacencies.loadFromFile($"{ModelSampler.savePath}/{modelFile}");
-        rules = adjacencies.rules;
-        tiles = adjacencies.uniqueTiles;
+        samplerResult = SamplerResult.loadFromFile($"{ModelSampler.savePath}/{modelFile}");
+        rules = samplerResult.rules;
+        tiles = samplerResult.uniqueTiles;
 
         Dictionary<int, DeBroglie.Tile> tileObjects = new Dictionary<int, DeBroglie.Tile>();
 

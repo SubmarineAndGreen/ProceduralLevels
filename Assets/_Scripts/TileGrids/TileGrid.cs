@@ -230,7 +230,7 @@ public class TileGrid : MonoBehaviour {
         }
     }
 
-    void placeTile(int tileSetIndex, Vector3Int position, int rotation) {
+    public void placeTile(int tileSetIndex, Vector3Int position, int rotation) {
         removeTile(position);
 
         Vector3 halfTileOffset = new Vector3(-0.5f, 0, -0.5f);

@@ -13,3 +13,13 @@ public enum Directions3D
     LEFT
 }
 
+//clockwise starting from z plus axis (forward)
+[Serializable]
+public enum DirectionsXZ {
+    FORWARD,
+    RIGHT,
+    BACK,
+    LEFT
+}
+
+
