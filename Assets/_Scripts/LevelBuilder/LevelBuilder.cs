@@ -50,71 +50,41 @@ public class LevelBuilder : MonoBehaviour {
     }
 
     private void capOffTileEnds() {
-        int Xmax = fullDimensions.x;
-        int Ymax = fullDimensions.y;
-        int Zmax = fullDimensions.z;
-        int setX, setY, setZ;
-        Directions3D testDirection;
+        int[] capIndices = {
+            upTileCapIndex,
+            downTileCapIndex,
+            sideTileCapIndex
+        };
 
-        var tileIndices = levelGrid.tileIndices;
-        var tileRotations = levelGrid.tileRotations;
-        var connectionData = wfcRunner.samplerResult.connections;
+        Grid3D<int> tiles = levelGrid.tileIndices;
+        Grid3D<int> rotations = levelGrid.tileRotations;
+        ConnectionData[] connectionData = wfcRunner.samplerResult.connections;
 
-        setY = Ymax;
-        testDirection = Directions3D.UP;
-        for (int x = 1; x < Xmax - 1; x++) {
-            for (int z = 1; z < Zmax - 1; z++) {
-                int tileIndex = tileIndices.at(x, setY - 2, z);
-                int tileRotation = tileIndices.at(x, setY - 2, z);
-                if (connectionData[tileIndex].canConnectFromDirection(testDirection, tileRotation)) {
-                    levelGrid.placeTile(upTileCapIndex, new Vector3Int(x, setY - 1, z), TileGrid.NO_ROTATION);
+        tiles.forEach((position, tile) => {
+            if (tile != TileGrid.TILE_EMPTY && !capIndices.Contains(tile)) {
+                var possibleConnections = connectionData[tile];
+                foreach (Directions3D direction in SamplerUtils.allDirections) {
+                    bool isConnectionPossible = possibleConnections.canConnectFromDirection(direction, rotations.at(position));
+                    if (isConnectionPossible) {
+                        Vector3Int offset = SamplerUtils.DirectionsToVectors[direction];
+                        // Debug.Log(tiles.at(position) + " " + offset);
+                        if (tiles.at(position + offset) == TileGrid.TILE_EMPTY) {
+                            switch (direction) {
+                                case Directions3D.UP:
+                                    levelGrid.placeTile(upTileCapIndex, position + offset, TileGrid.NO_ROTATION);
+                                    break;
+                                case Directions3D.DOWN:
+                                    levelGrid.placeTile(downTileCapIndex, position + offset, TileGrid.NO_ROTATION);
+                                    break;
+                                default:
+                                    levelGrid.placeTile(sideTileCapIndex, position + offset, (int)direction - 2);
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
-        }
-
-        setY = 0;
-        testDirection = Directions3D.DOWN;
-        for (int x = 1; x < Xmax - 1; x++) {
-            for (int z = 1; z < Zmax - 1; z++) {
-                int tileIndex = tileIndices.at(x, setY + 1, z);
-                int tileRotation = tileIndices.at(x, setY + 1, z);
-                if (connectionData[tileIndex].canConnectFromDirection(testDirection, tileRotation)) {
-                    levelGrid.placeTile(downTileCapIndex, new Vector3Int(x, setY, z), TileGrid.NO_ROTATION);
-                }
-            }
-        }
-
-        setZ = Zmax;
-        testDirection = Directions3D.FORWARD;
-        for (int x = 1; x < Xmax - 1; x++) {
-            for (int y = 1; y < Ymax - 1; y++) {
-
-            }
-        }
-
-        setZ = 0;
-        testDirection = Directions3D.BACK;
-        for (int x = 1; x < Xmax - 1; x++) {
-            for (int y = 1; y < Ymax - 1; y++) {
-
-            }
-        }
-
-        setX = Xmax;
-        testDirection = Directions3D.RIGHT;
-        for (int y = 1; y < Ymax - 1; y++) {
-            for (int z = 1; z < Zmax - 1; z++) {
-
-            }
-        }
-
-        setX = 0;
-        testDirection = Directions3D.LEFT;
-        for (int y = 1; y < Ymax - 1; y++) {
-            for (int z = 1; z < Zmax - 1; z++) {
-
-            }
-        }
+        });
     }
 }
 

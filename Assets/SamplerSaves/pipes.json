@@ -3997,5 +3997,187 @@
         33,
         34,
         35
+    ],
+    "connections": [
+        {
+            "connections": [
+                true,
+                true,
+                true,
+                false,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                false,
+                true,
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                true,
+                false,
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                true,
+                true,
+                true,
+                false,
+                true,
+                false
+            ]
+        },
+        {
+            "connections": [
+                false,
+                false,
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                true,
+                false,
+                true,
+                false,
+                true,
+                false
+            ]
+        },
+        {
+            "connections": [
+                false,
+                true,
+                true,
+                false,
+                true,
+                false
+            ]
+        },
+        {
+            "connections": [
+                false,
+                false,
+                true,
+                false,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                false,
+                false,
+                false,
+                true,
+                false,
+                true
+            ]
+        },
+        {
+            "connections": [
+                false,
+                false,
+                false,
+                true,
+                true,
+                false
+            ]
+        },
+        {
+            "connections": [
+                false,
+                true,
+                false,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                true,
+                false,
+                false,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                true,
+                true,
+                true,
+                false,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+            ]
+        },
+        {
+            "connections": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+            ]
+        }
     ]
 }

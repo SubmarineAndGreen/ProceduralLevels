@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEditor;
 
-public class ModelSampler : MonoBehaviour {
+public class TileSampler : MonoBehaviour {
 
     public static string savePath;
     const string saveFolder = "SamplerSaves";
@@ -26,10 +26,10 @@ public class ModelSampler : MonoBehaviour {
 
         var rules = new HashSet<TileRule>();
         var tiles = new HashSet<int>();
-        var connections = new connectionData[inputGrid.tileSet.tiles.Count];
+        var connections = new ConnectionData[inputGrid.tileSet.tiles.Count];
 
         for (int i = 0; i < connections.Length; i++) {
-            connections[i] = new connectionData();
+            connections[i] = new ConnectionData();
             connections[i].setAllTrue();
         }
 
@@ -71,10 +71,6 @@ public class ModelSampler : MonoBehaviour {
                         }
                     }
 
-                    if(tileIndices.at(destination) == inputGrid.tileSet.emptyTileIndex) {
-                        banConnection(connections, tileIndices.at(source), tileRotations.at(source), direction);
-                    }
-
                     Tile sourceTile = inputGrid.tileSet.tiles[tileIndices.at(source)];
                     Tile destinationTile = inputGrid.tileSet.tiles[tileIndices.at(destination)];
 
@@ -87,6 +83,11 @@ public class ModelSampler : MonoBehaviour {
                     // up and down, rotates both tiles and samples up to 16 combinations
                     // example rotations Source Tile, Destination Tile: 0, 0; 0, 1; 1, 0; 1, 1; 2, 0; etc.
                     if (direction == Directions3D.UP || direction == Directions3D.DOWN) {
+
+                        if (tileIndices.at(destination) == inputGrid.tileSet.emptyTileIndex) {
+                            banConnection(connections, tileIndices.at(source), tileRotations.at(source), direction);
+                        }
+
                         int destStartingRotation = destinationRotation;
                         for (int i = 0; i < sides; i++) {
                             destinationRotation = destStartingRotation;
@@ -114,6 +115,11 @@ public class ModelSampler : MonoBehaviour {
                         //XXX  XXX  XXX  X0X  XXX
                         for (int i = 0; i < sides; i++) {
                             registerRule(source, sourceRotation, destination, destinationRotation, currentDirection);
+
+                            if (tileIndices.at(destination) == inputGrid.tileSet.emptyTileIndex) {
+                                banConnection(connections, tileIndices.at(source), sourceRotation, currentDirection);
+                            }
+
                             sourceRotation = getNextRotation(sourceTile, sourceRotation);
                             destinationRotation = getNextRotation(destinationTile, destinationRotation);
                             currentDirection = SamplerUtils.nextDirectionClockwise[currentDirection];
@@ -164,7 +170,7 @@ public class ModelSampler : MonoBehaviour {
             ));
         }
 
-        void banConnection(connectionData[] connections, int tileIndex, int tileRotation, Directions3D direction) {
+        void banConnection(ConnectionData[] connections, int tileIndex, int tileRotation, Directions3D direction) {
             connections[tileIndex].banConnection(direction, tileRotation);
         }
     }
@@ -174,12 +180,12 @@ public class ModelSampler : MonoBehaviour {
 
 
 
-[CustomEditor(typeof(ModelSampler))]
+[CustomEditor(typeof(TileSampler))]
 public class ModelSamplerEditor : Editor {
 
-    ModelSampler modelSampler;
+    TileSampler modelSampler;
     private void OnEnable() {
-        modelSampler = target as ModelSampler;
+        modelSampler = target as TileSampler;
     }
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();

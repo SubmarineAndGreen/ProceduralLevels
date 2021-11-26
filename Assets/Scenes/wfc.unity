@@ -313,7 +313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelGrid: {fileID: 633328298}
-  generatedGridDimensions: {x: 6, y: 6, z: 15}
+  generatedGridDimensions: {x: 6, y: 6, z: 30}
   upTileCapIndex: 16
   downTileCapIndex: 17
   sideTileCapIndex: 15
@@ -331,7 +331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 561711771}
   output: {fileID: 633328298}
-  modelFile: pipes2.json
+  modelFile: pipes5.json
   runTillSolved: 1
   maxRunTime: 30
   numberOfTries: 1
@@ -3205,7 +3205,7 @@ GameObject:
   - component: {fileID: 1269864547}
   - component: {fileID: 1269864548}
   m_Layer: 0
-  m_Name: ModelSampler
+  m_Name: TileSampler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3234,7 +3234,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1269864546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 667eabe19d418c94ca602757f40b20b7, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b53251019200cd4fb1f5dc916eed0a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputGrid: {fileID: 561711771}

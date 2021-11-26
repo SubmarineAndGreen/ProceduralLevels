@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1689858755545453776}
-  - component: {fileID: 2367853270205062005}
+  - component: {fileID: -3801893130819395856}
   - component: {fileID: 520369480426139583}
   m_Layer: 0
   m_Name: vault_door
@@ -32,14 +32,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &2367853270205062005
+--- !u!33 &-3801893130819395856
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033451343518010986}
-  m_Mesh: {fileID: 2921304397401492942, guid: ba71c24a3f518884386c61b298d8c00d, type: 3}
+  m_Mesh: {fileID: 5779197439840542771, guid: ba71c24a3f518884386c61b298d8c00d, type: 3}
 --- !u!23 &520369480426139583
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -64,4 +64,11 @@ public class SamplerUtils {
         // {Directions3D.UP, Directions3D.UP},
         // {Directions3D.DOWN, Directions3D.DOWN}
     };
+
+    public static Directions3D rotateDirection(Directions3D dir, int rotation) {
+        if(dir == Directions3D.UP || dir == Directions3D.DOWN) {
+            return dir;
+        }
+        return allDirections[MathUtils.mod(((int)dir - 2 + rotation), 4) + 2];
+    }
 }

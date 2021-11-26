@@ -36,7 +36,7 @@ public class WfcRunner : MonoBehaviour {
         List<TileRule> rules;
         List<int> tiles;
 
-        samplerResult = SamplerResult.loadFromFile($"{ModelSampler.savePath}/{modelFile}");
+        samplerResult = SamplerResult.loadFromFile($"{TileSampler.savePath}/{modelFile}");
         rules = samplerResult.rules;
         tiles = samplerResult.uniqueTiles;
 
@@ -199,7 +199,7 @@ public class WfcRunnerEditor : Editor {
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
         EditorGUILayout.Space(20);
-        EditorUtils.filePicker("Model File", wfc.modelFile, ModelSampler.savePath,
+        EditorUtils.filePicker("Model File", wfc.modelFile, TileSampler.savePath,
          fileName => wfc.modelFile = fileName as string);
 
         EditorUtils.guiButton("Run Adjacent Model", () => {

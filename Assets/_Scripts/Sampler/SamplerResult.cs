@@ -8,7 +8,7 @@ public struct SamplerResult {
     public string tileSet;
     public List<TileRule> rules;
     public List<int> uniqueTiles;
-    public connectionData[] connections;
+    public ConnectionData[] connections;
     public void saveToFile(string path) {
         File.WriteAllText(path, JsonUtility.ToJson(this));
     }

@@ -1,8 +1,9 @@
 
 using System;
+using UnityEngine;
 
 [Serializable]
-public class connectionData {
+public class ConnectionData {
     const int directionCount = 6;
     public bool[] connections;
 
@@ -22,7 +23,7 @@ public class connectionData {
                 connections[(int)dir] = false;
                 break;
             default:
-                connections[(((int)dir - 2 + rotation) % 4) + 2] = false;
+                connections[directionBeforeRotation(dir, rotation)] = false;
                 break;
         }
     }
@@ -31,8 +32,15 @@ public class connectionData {
         if (dir == Directions3D.UP || dir == Directions3D.DOWN) {
             return connections[(int)dir];
         } else {
-            return connections[(((int)dir - 2 + rotation) % 4) + 2];
+            return connections[directionBeforeRotation(dir, rotation)];
         }
     }
+
+    private int directionBeforeRotation(Directions3D dir, int rotation) {
+        return MathUtils.mod(((int)dir - 2 - rotation), 4) + 2;
+    }
 }
+
+
+
 
