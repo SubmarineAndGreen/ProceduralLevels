@@ -320,7 +320,7 @@ MonoBehaviour:
   upTileCapIndex: 1
   downTileCapIndex: 2
   sideTileCapIndex: 0
-  pipesSampleFileName: 
+  pipesSampleFileName: pipes6.json
 --- !u!114 &415501193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,12 +334,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 561711771}
-  modelFile: pipes5.json
+  modelFile: pipes6.json
   runTillSolved: 0
   maxRunTime: 30
   numberOfTries: 10
   backtrackDepth: 10
-  path: 0
+  path: 1
   stepTime: 0.1
   samplerResult:
     tileSet: SewerPipesHiddenEmpty
@@ -2777,7 +2777,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
   currentTilesetIndex: 0
   loadFromFileOnStart: 1
-  currentSaveFile: pipes.json
+  currentSaveFile: pipes3.json
   dimensions: {x: 50, y: 6, z: 50}
   areEditingControlsOn: 0
   cursorPosition: {x: 0, y: 0, z: 0}
