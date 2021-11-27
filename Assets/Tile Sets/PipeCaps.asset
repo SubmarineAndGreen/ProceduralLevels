@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce8459994ff0e23419d04dbec8d4b0a3, type: 3}
+  m_Name: PipeCaps
+  m_EditorClassIdentifier: 
+  emptyTileIndex: 0
+  tiles:
+  - tilePrefab: {fileID: 2033451343518010986, guid: 5bbd8cb282c660e45b99d6ba6f995ff0, type: 3}
+    symmetry: 0
+  - tilePrefab: {fileID: 372607143310449275, guid: 31bdd94bbd46e8445b7ed452d2d51105, type: 3}
+    symmetry: 2
+  - tilePrefab: {fileID: 601667017245618766, guid: d862e12c9341cb64290b02020b9a289b, type: 3}
+    symmetry: 2

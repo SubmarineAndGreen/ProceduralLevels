@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private float jetpackUsedTime;
 
     [Header("Keybinds")]
-    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+    // [SerializeField] private KeyCode jumpKey = KeyCode.Space;
 
     [Header("Drag")]
     [SerializeField] private float groundDrag = 6f;
@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
 
     RaycastHit slopeHit;
 
-    //na ziemi pod k¹tem
+    //na ziemi pod kï¿½tem
     private bool OnSlope()
     {
         if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight / 2 + 0.5f))
@@ -91,13 +91,13 @@ public class PlayerMovement : MonoBehaviour
             isJumping = true;
             Jump();
         }
-        //resetuj jetpack, jeœli na ziemi
+        //resetuj jetpack, jeï¿½li na ziemi
         if (isGrounded && jetpackUsedTime != 0)
         {
             if (jetpackUsedTime < 2) jetpackUsedTime = 0;
             jetpackUsedTime -= 2;
         }
-        //jeœli w powietrzu, zamiast skoku u¿yj jetpacka i zwiêksz zu¿ycie siê jetpacka
+        //jeï¿½li w powietrzu, zamiast skoku uï¿½yj jetpacka i zwiï¿½ksz zuï¿½ycie siï¿½ jetpacka
         if (inputs.Player.Jump.ReadValue<float>()==1 && !isGrounded && !isJumping && jetpackUsedTime<jetpackDuration)
         {
             var jetpack = Instantiate(jetpackVFX, groundCheck.position, Quaternion.identity) as GameObject;
@@ -131,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = orientation.forward * verticalMove + orientation.right * horizontalMove;
     }
 
-    //zmieñ opory jeœli na ziemi lub powietrzu
+    //zmieï¿½ opory jeï¿½li na ziemi lub powietrzu
     private void ControlDrag()
     {
         if(isGrounded)
@@ -147,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
-        //grawitacja zale¿na od masy, niezale¿na od oporów powietrza
+        //grawitacja zaleï¿½na od masy, niezaleï¿½na od oporï¿½w powietrza
         //rb.AddForce(Physics.gravity * rb.mass,ForceMode.Acceleration);
     }
     
@@ -159,7 +159,7 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(moveDirection.normalized * moveSpeed * moveMultiplier, ForceMode.Acceleration);
 
         }
-        //na ziemi pod k¹tem
+        //na ziemi pod kï¿½tem
         else if(isGrounded && OnSlope())
         {
             rb.AddForce(slopeMoveDirection.normalized * moveSpeed * moveMultiplier, ForceMode.Acceleration);

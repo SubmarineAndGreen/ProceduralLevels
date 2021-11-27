@@ -314,9 +314,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelGrid: {fileID: 633328298}
   generatedGridDimensions: {x: 12, y: 12, z: 12}
-  upTileCapIndex: 16
-  downTileCapIndex: 17
-  sideTileCapIndex: 15
+  tileSets:
+  - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
+  - {fileID: 11400000, guid: 23fd1281d831cca4d9c87f1f4bd0d21b, type: 2}
+  upTileCapIndex: 1
+  downTileCapIndex: 2
+  sideTileCapIndex: 0
+  pipesSampleFileName: 
 --- !u!114 &415501193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,13 +334,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 561711771}
-  output: {fileID: 633328298}
   modelFile: pipes5.json
   runTillSolved: 0
   maxRunTime: 30
   numberOfTries: 10
   backtrackDepth: 10
-  path: 1
+  path: 0
   stepTime: 0.1
   samplerResult:
     tileSet: SewerPipesHiddenEmpty
@@ -2769,7 +2772,10 @@ MonoBehaviour:
   selectedTileRotationText: {fileID: 1365138956}
   tileText: {fileID: 1389016780}
   cursorPrefab: {fileID: 6526753209231964760, guid: d182178f4c339c649ad5d066736aa3b6, type: 3}
-  tileSet: {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
+  defaultTileSet: {fileID: 0}
+  tileSets:
+  - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
+  currentTilesetIndex: 0
   loadFromFileOnStart: 1
   currentSaveFile: pipes.json
   dimensions: {x: 50, y: 6, z: 50}
@@ -2855,7 +2861,9 @@ MonoBehaviour:
   selectedTileRotationText: {fileID: 1365138956}
   tileText: {fileID: 1389016780}
   cursorPrefab: {fileID: 6526753209231964760, guid: d182178f4c339c649ad5d066736aa3b6, type: 3}
-  tileSet: {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
+  defaultTileSet: {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
+  tileSets: []
+  currentTilesetIndex: 0
   loadFromFileOnStart: 1
   currentSaveFile: 5x5x15.json
   dimensions: {x: 8, y: 8, z: 17}

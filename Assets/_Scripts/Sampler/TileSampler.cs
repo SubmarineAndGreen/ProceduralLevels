@@ -26,7 +26,7 @@ public class TileSampler : MonoBehaviour {
 
         var rules = new HashSet<TileRule>();
         var tiles = new HashSet<int>();
-        var connections = new ConnectionData[inputGrid.tileSet.tiles.Count];
+        var connections = new ConnectionData[inputGrid.tileSets[inputGrid.currentTilesetIndex].tiles.Count];
 
         for (int i = 0; i < connections.Length; i++) {
             connections[i] = new ConnectionData();
@@ -36,7 +36,7 @@ public class TileSampler : MonoBehaviour {
 
         tileIndices.forEach((position, tileIndex) => {
             if (!ignoreEmptyTiles || (tileIndex != TileGrid.TILE_EMPTY)) {
-                Tile tile = inputGrid.tileSet.tiles[tileIndex];
+                Tile tile = inputGrid.tileSets[inputGrid.currentTilesetIndex].tiles[tileIndex];
                 int rotations = Tile.symmetryToNumberOfRotations[tile.symmetry];
                 int currentRotation = tileRotations.at(position);
                 //save all unique tile indices (model indices with rotation coded in)
@@ -71,8 +71,8 @@ public class TileSampler : MonoBehaviour {
                         }
                     }
 
-                    Tile sourceTile = inputGrid.tileSet.tiles[tileIndices.at(source)];
-                    Tile destinationTile = inputGrid.tileSet.tiles[tileIndices.at(destination)];
+                    Tile sourceTile = inputGrid.tileSets[inputGrid.currentTilesetIndex].tiles[tileIndices.at(source)];
+                    Tile destinationTile = inputGrid.tileSets[inputGrid.currentTilesetIndex].tiles[tileIndices.at(destination)];
 
                     int sourceRotation = tileRotations.at(source);
                     int destinationRotation = tileRotations.at(destination);
@@ -84,7 +84,7 @@ public class TileSampler : MonoBehaviour {
                     // example rotations Source Tile, Destination Tile: 0, 0; 0, 1; 1, 0; 1, 1; 2, 0; etc.
                     if (direction == Directions3D.UP || direction == Directions3D.DOWN) {
 
-                        if (tileIndices.at(destination) == inputGrid.tileSet.emptyTileIndex) {
+                        if (tileIndices.at(destination) == inputGrid.tileSets[inputGrid.currentTilesetIndex].emptyTileIndex) {
                             banConnection(connections, tileIndices.at(source), tileRotations.at(source), direction);
                         }
 
@@ -116,7 +116,7 @@ public class TileSampler : MonoBehaviour {
                         for (int i = 0; i < sides; i++) {
                             registerRule(source, sourceRotation, destination, destinationRotation, currentDirection);
 
-                            if (tileIndices.at(destination) == inputGrid.tileSet.emptyTileIndex) {
+                            if (tileIndices.at(destination) == inputGrid.tileSets[inputGrid.currentTilesetIndex].emptyTileIndex) {
                                 banConnection(connections, tileIndices.at(source), sourceRotation, currentDirection);
                             }
 
@@ -130,7 +130,7 @@ public class TileSampler : MonoBehaviour {
         }
 
         var save = new SamplerResult() {
-            tileSet = inputGrid.tileSet.name,
+            tileSet = inputGrid.tileSets[inputGrid.currentTilesetIndex].name,
             rules = rules.ToList(),
             uniqueTiles = tiles.ToList(),
             connections = connections

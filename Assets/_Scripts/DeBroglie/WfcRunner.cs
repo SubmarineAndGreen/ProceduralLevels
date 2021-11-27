@@ -12,7 +12,7 @@ using Debug = UnityEngine.Debug;
 
 public class WfcRunner : MonoBehaviour {
     public TileGrid input;
-    public TileGrid output;
+    // public TileGrid output;
     [HideInInspector] public string modelFile;
     public bool runTillSolved = false;
     public long maxRunTime = 30;
@@ -31,7 +31,7 @@ public class WfcRunner : MonoBehaviour {
     public float stepTime = 0.1f;
     [HideInInspector] public SamplerResult samplerResult;
 
-    public bool runAdjacentModel(out int[,,] result, Vector3Int outputDimensions) {
+    public bool runAdjacentModel(out int[,,] result, string modelFileName, TileSet tileSet, Vector3Int outputDimensions) {
 
         List<TileRule> rules;
         List<int> tiles;
@@ -65,7 +65,7 @@ public class WfcRunner : MonoBehaviour {
 
         foreach (var item in tileObjects) {
             int tileIndex = TileUtils.modelIndexToTileIndex(item.Key);
-            int numberOfRotations = Tile.symmetryToNumberOfRotations[input.tileSet.tiles[tileIndex].symmetry];
+            int numberOfRotations = Tile.symmetryToNumberOfRotations[tileSet.tiles[tileIndex].symmetry];
             model.SetFrequency(item.Value, 1.0 / numberOfRotations);
         }
 
@@ -73,7 +73,7 @@ public class WfcRunner : MonoBehaviour {
         var propagator = new TilePropagator(model, outputGridTopo, new TilePropagatorOptions() {
             BackTrackDepth = backtrackDepth,
             Constraints = path ? new ITileConstraint[] {
-                new PathConstraint(tilesWithoutEmpty(tiles, tileObjects))
+                new PathConstraint(tilesWithoutEmpty(tiles, tileSet, tileObjects))
             } : null
         });
 
@@ -108,23 +108,23 @@ public class WfcRunner : MonoBehaviour {
         return success;
     }
 
-    public void runAndBuild() {
-        Vector3Int outputDimensions = output.dimensions;
-        int[,,] result;
-        bool success = runAdjacentModel(out result, output.dimensions);
-        if (success) {
-            for (int x = 0; x < outputDimensions.x; x++) {
-                for (int y = 0; y < outputDimensions.y; y++) {
-                    for (int z = 0; z < outputDimensions.z; z++) {
-                        output.tileIndices.set(new Vector3Int(x, y, z), TileUtils.modelIndexToTileIndex(result[x, y, z]));
-                        output.tileRotations.set(new Vector3Int(x, y, z), TileUtils.modelIndexToRotation(result[x, y, z]));
-                    }
-                }
-            }
+    // public void runAndBuild() {
+    //     Vector3Int outputDimensions = output.dimensions;
+    //     int[,,] result;
+    //     bool success = runAdjacentModel(out result, output.dimensions);
+    //     if (success) {
+    //         for (int x = 0; x < outputDimensions.x; x++) {
+    //             for (int y = 0; y < outputDimensions.y; y++) {
+    //                 for (int z = 0; z < outputDimensions.z; z++) {
+    //                     output.tileIndices.set(new Vector3Int(x, y, z), TileUtils.modelIndexToTileIndex(result[x, y, z]));
+    //                     output.tileRotations.set(new Vector3Int(x, y, z), TileUtils.modelIndexToRotation(result[x, y, z]));
+    //                 }
+    //             }
+    //         }
 
-            output.rebuildGrid();
-        }
-    }
+    //         output.rebuildGrid();
+    //     }
+    // }
 
     // public void runOverlapModel() {
     //     Vector3Int inputDimensions = input.dimensions;
@@ -172,9 +172,9 @@ public class WfcRunner : MonoBehaviour {
     //     output.rebuildGrid();
     // }
 
-    public HashSet<DeBroglie.Tile> tilesWithoutEmpty(List<int> uniqueTiles, Dictionary<int, DeBroglie.Tile> tileObjects) {
+    public HashSet<DeBroglie.Tile> tilesWithoutEmpty(List<int> uniqueTiles, TileSet tileSet, Dictionary<int, DeBroglie.Tile> tileObjects) {
         var result = new HashSet<DeBroglie.Tile>();
-        int emptyTile = TileUtils.tileIndexToModelIndex(output.tileSet.emptyTileIndex, TileGrid.NO_ROTATION);
+        int emptyTile = TileUtils.tileIndexToModelIndex(tileSet.emptyTileIndex, TileGrid.NO_ROTATION);
         foreach (int tileIndex in uniqueTiles)
         {
             if(tileIndex != emptyTile) {
@@ -198,16 +198,5 @@ public class WfcRunnerEditor : Editor {
 
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
-        EditorGUILayout.Space(20);
-        EditorUtils.filePicker("Model File", wfc.modelFile, TileSampler.savePath,
-         fileName => wfc.modelFile = fileName as string);
-
-        EditorUtils.guiButton("Run Adjacent Model", () => {
-            wfc.runAndBuild();
-        });
-
-        // EditorUtils.guiButton("Run Overlap Model", () => {
-        //     wfc.runOverlapModel();
-        // });
     }
 }

@@ -15,7 +15,9 @@ public class TileGrid : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI tileText;
     [SerializeField] private GameObject cursorPrefab;
     [Header("Editor Controls")]
-    public TileSet tileSet;
+    public TileSet defaultTileSet;
+    public TileSet[] tileSets;
+    [HideInInspector] public int currentTilesetIndex = 0;
     [SerializeField] private bool loadFromFileOnStart = false;
     [HideInInspector] public string currentSaveFile = "";
     private Vector3Int defaultDimensions = new Vector3Int(3, 3, 3);
@@ -23,6 +25,7 @@ public class TileGrid : MonoBehaviour {
     [HideInInspector] public bool areEditingControlsOn = false;
     [HideInInspector] public Grid3D<int> tileIndices;
     [HideInInspector] public Grid3D<int> tileRotations;
+    [HideInInspector] public Grid3D<int> tileSetIndices;
     private Grid3D<GameObject> tileObjects;
 
     private GameObject cursor;
@@ -35,7 +38,12 @@ public class TileGrid : MonoBehaviour {
 
 
     private void Awake() {
-        Boolean loadedFromFile;
+        bool loadedFromFile;
+
+        if (tileSets == null || tileSets.GetLength(0) == 0) {
+            tileSets = new TileSet[1];
+            tileSets[0] = defaultTileSet;
+        }
 
         if (!loadFromFileOnStart) {
             loadedFromFile = false;
@@ -47,6 +55,7 @@ public class TileGrid : MonoBehaviour {
             tileIndices = new Grid3D<int>(defaultDimensions);
             tileRotations = new Grid3D<int>(defaultDimensions);
             tileObjects = new Grid3D<GameObject>(defaultDimensions);
+            tileSetIndices = new Grid3D<int>(defaultDimensions);
             dimensions = defaultDimensions;
             clear();
         }
@@ -58,17 +67,7 @@ public class TileGrid : MonoBehaviour {
 
         cursor = Instantiate(cursorPrefab, transform.position, Quaternion.Euler(0, 90, 0));
         cursor.transform.SetParent(this.transform);
-
-        tilePreviews = new List<GameObject>();
-
-        foreach (Tile tile in tileSet.tiles) {
-            GameObject preview = Instantiate(tile.tilePrefab);
-            preview.SetActive(false);
-            preview.transform.SetParent(this.transform);
-            tilePreviews.Add(preview);
-        }
-
-        changeTilePreview();
+        reloadTilePreviews();
     }
 
     private void Update() {
@@ -82,7 +81,7 @@ public class TileGrid : MonoBehaviour {
     }
 
     public void saveToFile() {
-        GridSave save = new GridSave(dimensions, tileIndices, tileRotations);
+        GridSave save = new GridSave(dimensions, tileIndices, tileRotations, tileSetIndices);
         string jsonString = JsonUtility.ToJson(save);
         Debug.Log(jsonString);
         File.WriteAllText($"{Application.dataPath}/{SAVE_FOLDER}/{currentSaveFile}", jsonString);
@@ -102,6 +101,8 @@ public class TileGrid : MonoBehaviour {
             dimensions = loadedSave.dimensions;
             tileIndices = loadedSave.getTileIndices();
             tileRotations = loadedSave.getTileRotations();
+            tileSetIndices = loadedSave.getTileSetIndices();
+
             tileObjects = new Grid3D<GameObject>(dimensions);
 
             return true;
@@ -117,6 +118,7 @@ public class TileGrid : MonoBehaviour {
     public void clear() {
         tileIndices.updateEach(value => TILE_EMPTY);
         tileRotations.updateEach(value => NO_ROTATION);
+        tileSetIndices.updateEach(value => currentTilesetIndex);
         rebuildGrid();
     }
 
@@ -125,7 +127,7 @@ public class TileGrid : MonoBehaviour {
         destroyTileObjects();
 
         tileIndices.forEach((position, value) => {
-            placeTile(value, position, tileRotations.at(position));
+            placeTile(value, tileSetIndices.at(position), position, tileRotations.at(position));
         });
     }
 
@@ -191,7 +193,7 @@ public class TileGrid : MonoBehaviour {
         bool indexChanged = false;
         if (inputs.GridEditor.NextTile.triggered) {
             activeTileIndex++;
-            if (activeTileIndex > tileSet.tiles.Count - 1) {
+            if (activeTileIndex > tileSets[currentTilesetIndex].tiles.Count - 1) {
                 activeTileIndex = 0;
             }
             indexChanged = true;
@@ -199,7 +201,7 @@ public class TileGrid : MonoBehaviour {
         if (inputs.GridEditor.PreviousTile.triggered) {
             activeTileIndex--;
             if (activeTileIndex < 0) {
-                activeTileIndex = tileSet.tiles.Count - 1;
+                activeTileIndex = tileSets[currentTilesetIndex].tiles.Count - 1;
             }
             indexChanged = true;
         }
@@ -210,7 +212,7 @@ public class TileGrid : MonoBehaviour {
     }
 
     void rotationControls() {
-        RotationalSymmetry symmetry = tileSet.tiles[activeTileIndex].symmetry;
+        RotationalSymmetry symmetry = tileSets[currentTilesetIndex].tiles[activeTileIndex].symmetry;
         if (inputs.GridEditor.RotateTile.triggered) {
             activeTileRotation += 1;
             if (activeTileRotation >= Tile.symmetryToNumberOfRotations[symmetry]) {
@@ -223,34 +225,43 @@ public class TileGrid : MonoBehaviour {
 
     void placeAndRemoveControls() {
         if (inputs.GridEditor.PlaceTile.triggered) {
-            placeTile(activeTileIndex, cursorPosition, activeTileRotation);
+            placeTile(activeTileIndex, currentTilesetIndex, cursorPosition, activeTileRotation);
         }
         if (inputs.GridEditor.DeleteTile.triggered) {
             removeTile(cursorPosition);
         }
     }
 
-    public void placeTile(int tileSetIndex, Vector3Int position, int rotation) {
+    public void placeTile(int tileIndex, int tileSetIndex, Vector3Int position, int rotation) {
         removeTile(position);
 
         Vector3 halfTileOffset = new Vector3(-0.5f, 0, -0.5f);
 
-        if (tileSetIndex != TILE_EMPTY) {
-            GameObject newTileObject = Instantiate(tileSet.tiles[tileSetIndex].tilePrefab,
+        if (tileIndex != TILE_EMPTY) {
+            GameObject newTileObject = Instantiate(tileSets[tileSetIndex].tiles[tileIndex].tilePrefab,
                         transform.position + position + halfTileOffset,
                         Quaternion.Euler(0, rotation * 90, 0));
             newTileObject.transform.SetParent(this.transform, true);
             tileObjects.set(position, newTileObject);
         }
 
-        tileIndices.set(position, tileSetIndex);
+        tileIndices.set(position, tileIndex);
         tileRotations.set(position, rotation);
+        tileSetIndices.set(position, tileSetIndex);
+    }
+
+    public void placeTileDontInstantiate(int tileIndex, int tileSetIndex, Vector3Int position, int rotation) {
+        removeTile(position);
+        tileIndices.set(position, tileIndex);
+        tileRotations.set(position, rotation);
+        tileSetIndices.set(position, tileSetIndex);
     }
 
     void removeTile(Vector3Int position) {
         Destroy(tileObjects.at(position));
         tileRotations.set(position, NO_ROTATION);
         tileIndices.set(position, TILE_EMPTY);
+        tileSetIndices.set(position, currentTilesetIndex);
     }
 
     public void resize(Vector3Int newDimensions) {
@@ -261,6 +272,7 @@ public class TileGrid : MonoBehaviour {
 
         Grid3D<int> newTileIndices = new Grid3D<int>(newDimensions);
         Grid3D<int> newTileRotations = new Grid3D<int>(newDimensions);
+        Grid3D<int> newTileSetIndices = new Grid3D<int>(newDimensions);
         Grid3D<GameObject> newTileObjects = new Grid3D<GameObject>(newDimensions);
 
         //copy overlaping tiles their rotations and spawned prefabs
@@ -277,6 +289,14 @@ public class TileGrid : MonoBehaviour {
                 return tileRotations.at(x, y, z);
             } else {
                 return NO_ROTATION;
+            }
+        });
+
+        newTileSetIndices.updateEach((x, y, z, value) => {
+            if (x < dimensions.x && y < dimensions.y && z < dimensions.z) {
+                return tileSetIndices.at(x, y, z);
+            } else {
+                return currentTilesetIndex;
             }
         });
 
@@ -297,6 +317,7 @@ public class TileGrid : MonoBehaviour {
 
         tileIndices = newTileIndices;
         tileRotations = newTileRotations;
+        tileSetIndices = newTileSetIndices;
         tileObjects = newTileObjects;
         dimensions = newDimensions;
     }
@@ -308,7 +329,20 @@ public class TileGrid : MonoBehaviour {
 
         previewRotationText.text = text1 + activeTileRotation;
         selectedTileRotationText.text = text2 + tileRotations.at(cursorPosition);
-        tileText.text = string.Format(text3, activeTileIndex, tileSet.tiles[activeTileIndex].tilePrefab.name);
+        tileText.text = string.Format(text3, activeTileIndex, tileSets[tileSetIndices.at(cursorPosition)].tiles[activeTileIndex].tilePrefab.name);
+    }
+
+    void reloadTilePreviews() {
+        tilePreviews = new List<GameObject>();
+
+        foreach (Tile tile in tileSets[currentTilesetIndex].tiles) {
+            GameObject preview = Instantiate(tile.tilePrefab);
+            preview.SetActive(false);
+            preview.transform.SetParent(this.transform);
+            tilePreviews.Add(preview);
+        }
+
+        changeTilePreview();
     }
 }
 

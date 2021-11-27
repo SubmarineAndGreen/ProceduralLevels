@@ -3832,6 +3832,26 @@
             "directionAtoB": 2
         },
         {
+            "valueA": 56,
+            "valueB": 44,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 56,
+            "valueB": 45,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 56,
+            "valueB": 46,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 56,
+            "valueB": 47,
+            "directionAtoB": 2
+        },
+        {
             "valueA": 44,
             "valueB": 56,
             "directionAtoB": 0
@@ -3892,13 +3912,138 @@
             "directionAtoB": 3
         },
         {
+            "valueA": 44,
+            "valueB": 56,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 45,
+            "valueB": 56,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 46,
+            "valueB": 56,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 47,
+            "valueB": 56,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 44,
+            "valueB": 56,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 45,
+            "valueB": 56,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 46,
+            "valueB": 56,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 47,
+            "valueB": 56,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 52,
+            "valueB": 44,
+            "directionAtoB": 0
+        },
+        {
             "valueA": 56,
             "valueB": 44,
             "directionAtoB": 1
         },
         {
+            "valueA": 44,
+            "valueB": 52,
+            "directionAtoB": 1
+        },
+        {
+            "valueA": 45,
+            "valueB": 52,
+            "directionAtoB": 1
+        },
+        {
+            "valueA": 46,
+            "valueB": 52,
+            "directionAtoB": 1
+        },
+        {
+            "valueA": 47,
+            "valueB": 52,
+            "directionAtoB": 1
+        },
+        {
             "valueA": 56,
             "valueB": 48,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 56,
+            "valueB": 49,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 56,
+            "valueB": 50,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 56,
+            "valueB": 51,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 56,
+            "valueB": 44,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 56,
+            "valueB": 45,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 56,
+            "valueB": 46,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 56,
+            "valueB": 47,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 56,
+            "valueB": 48,
+            "directionAtoB": 0
+        },
+        {
+            "valueA": 48,
+            "valueB": 52,
+            "directionAtoB": 0
+        },
+        {
+            "valueA": 49,
+            "valueB": 52,
+            "directionAtoB": 0
+        },
+        {
+            "valueA": 50,
+            "valueB": 52,
+            "directionAtoB": 0
+        },
+        {
+            "valueA": 51,
+            "valueB": 52,
             "directionAtoB": 0
         },
         {
@@ -3960,6 +4105,71 @@
             "valueA": 56,
             "valueB": 51,
             "directionAtoB": 3
+        },
+        {
+            "valueA": 48,
+            "valueB": 56,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 49,
+            "valueB": 56,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 50,
+            "valueB": 56,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 51,
+            "valueB": 56,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 48,
+            "valueB": 56,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 49,
+            "valueB": 56,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 50,
+            "valueB": 56,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 51,
+            "valueB": 56,
+            "directionAtoB": 4
+        },
+        {
+            "valueA": 52,
+            "valueB": 48,
+            "directionAtoB": 1
+        },
+        {
+            "valueA": 56,
+            "valueB": 48,
+            "directionAtoB": 5
+        },
+        {
+            "valueA": 56,
+            "valueB": 49,
+            "directionAtoB": 2
+        },
+        {
+            "valueA": 56,
+            "valueB": 50,
+            "directionAtoB": 3
+        },
+        {
+            "valueA": 56,
+            "valueB": 51,
+            "directionAtoB": 4
         }
     ],
     "uniqueTiles": [
@@ -4006,7 +4216,7 @@
                 true,
                 false,
                 true,
-                false
+                true
             ]
         },
         {
@@ -4086,47 +4296,47 @@
                 true,
                 false,
                 true,
+                true
+            ]
+        },
+        {
+            "connections": [
+                false,
+                false,
+                false,
+                true,
+                false,
+                true
+            ]
+        },
+        {
+            "connections": [
+                false,
+                false,
+                false,
+                true,
+                true,
                 false
             ]
         },
         {
             "connections": [
                 false,
+                true,
                 false,
                 false,
                 true,
-                false,
-                true
-            ]
-        },
-        {
-            "connections": [
-                false,
-                false,
-                false,
-                false,
-                false,
                 false
             ]
         },
         {
             "connections": [
-                false,
-                true,
-                false,
-                true,
-                false,
-                true
-            ]
-        },
-        {
-            "connections": [
                 true,
                 false,
                 false,
-                true,
                 false,
-                true
+                true,
+                false
             ]
         },
         {
