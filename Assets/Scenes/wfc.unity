@@ -313,7 +313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelGrid: {fileID: 633328298}
-  generatedGridDimensions: {x: 6, y: 6, z: 30}
+  generatedGridDimensions: {x: 12, y: 12, z: 12}
   upTileCapIndex: 16
   downTileCapIndex: 17
   sideTileCapIndex: 15
@@ -332,9 +332,9 @@ MonoBehaviour:
   input: {fileID: 561711771}
   output: {fileID: 633328298}
   modelFile: pipes5.json
-  runTillSolved: 1
+  runTillSolved: 0
   maxRunTime: 30
-  numberOfTries: 1
+  numberOfTries: 10
   backtrackDepth: 10
   path: 1
   stepTime: 0.1
