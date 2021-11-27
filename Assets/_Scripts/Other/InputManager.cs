@@ -5,9 +5,10 @@ using UnityEngine;
 public class InputManager : MonoBehaviour {
     public static InputMap inputs;
 
-    private void Start() {
+    private void Awake() {
         inputs = new InputMap();
         inputs.Global.Enable();
+        inputs.Player.Enable();
     }
 
     private const int RMB = 1;
