@@ -166,19 +166,19 @@ public class Grid3D<T> : IEnumerable {
         return _values.GetEnumerator();
     }
 
-    // public void forEach(ValueAction3 action)
-    // {
-    //     for (int x = 0; x < _values.GetLength(0); x++)
-    //     {
-    //         for (int y = 0; y < _values.GetLength(1); y++)
-    //         {
-    //             for (int z = 0; z < _values.GetLength(2); z++)
-    //             {
-    //                 action(_values[x, y, z]);
-    //             }
-    //         }
-    //     }
-    // }
+    public void forEach(ValueAction3 action)
+    {
+        for (int x = 0; x < _values.GetLength(0); x++)
+        {
+            for (int y = 0; y < _values.GetLength(1); y++)
+            {
+                for (int z = 0; z < _values.GetLength(2); z++)
+                {
+                    action(_values[x, y, z]);
+                }
+            }
+        }
+    }
 
     public delegate T ValueFunction(Vector3Int position, T value);
     public delegate T ValueFunction2(int x, int y, int z, T value);
@@ -187,5 +187,5 @@ public class Grid3D<T> : IEnumerable {
     public delegate void IndexAction2(Vector3Int position);
     public delegate void ValueAction(Vector3Int position, T value);
     public delegate void ValueAction2(int x, int y, int z, T value);
-    // public delegate void ValueAction3(T value);
+    public delegate void ValueAction3(T value);
 }

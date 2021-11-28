@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce8459994ff0e23419d04dbec8d4b0a3, type: 3}
-  m_Name: PipeCaps
+  m_Name: NavigationTest
   m_EditorClassIdentifier: 
   emptyTileIndex: 0
   tiles:
-  - tilePrefab: {fileID: 6854935220512926651, guid: e59cc7f69b487af4da0926392af6e441, type: 3}
-    symmetry: 0
-  - tilePrefab: {fileID: 4182221914435979157, guid: 184fb4421e8a4ed479faa7e8574fe890, type: 3}
+  - tilePrefab: {fileID: 1560915695116879844, guid: e478461f0394cc3438168e56e341cdea, type: 3}
     symmetry: 2
-  - tilePrefab: {fileID: 7119750533951568090, guid: a03a10b5863d73e48923e6cafb459baf, type: 3}
+  - tilePrefab: {fileID: 5503320364104648810, guid: 787ffb7a9d68abe408bd7a9524069e21, type: 3}
     symmetry: 2

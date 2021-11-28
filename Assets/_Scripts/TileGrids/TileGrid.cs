@@ -10,6 +10,7 @@ public class TileGrid : MonoBehaviour {
     public const int TILE_EMPTY = -1;
     public const int NO_ROTATION = 0;
     public const string SAVE_FOLDER = "InputGrids";
+    public bool debugUI = true;
     [SerializeField] private TextMeshProUGUI previewRotationText;
     [SerializeField] private TextMeshProUGUI selectedTileRotationText;
     [SerializeField] private TextMeshProUGUI tileText;
@@ -26,7 +27,7 @@ public class TileGrid : MonoBehaviour {
     [HideInInspector] public Grid3D<int> tileIndices;
     [HideInInspector] public Grid3D<int> tileRotations;
     [HideInInspector] public Grid3D<int> tileSetIndices;
-    private Grid3D<GameObject> tileObjects;
+    [HideInInspector] public Grid3D<GameObject> tileObjects;
 
     private GameObject cursor;
     [HideInInspector] public Vector3Int cursorPosition;
@@ -76,7 +77,9 @@ public class TileGrid : MonoBehaviour {
             tileSelectionControls();
             rotationControls();
             placeAndRemoveControls();
-            updateUI();
+            if (debugUI) {
+                updateUI();
+            }
         }
     }
 
