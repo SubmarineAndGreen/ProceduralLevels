@@ -42,7 +42,7 @@ public class NavigationVisuals : MonoBehaviour {
         grid.tileObjects.forEach((x, y, z, value) => {
             if (vectorField[x, y, z] != -1) {
                 var arrow = Instantiate(arrowPrefab, value.transform.position, Quaternion.identity);
-                arrow.transform.LookAt(arrow.transform.position + Navigation.neighbourOffset[vectorField[x, y, z]]);
+                arrow.transform.LookAt(arrow.transform.position + Navigation.directionVectors[vectorField[x, y, z]]);
                 arrow.transform.SetParent(this.transform);
                 arrows.Add(arrow);
             }

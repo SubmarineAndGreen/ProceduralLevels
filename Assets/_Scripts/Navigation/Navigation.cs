@@ -13,7 +13,7 @@ public class Navigation : MonoBehaviour {
     private const int INIT_DISTANCE = 255;
     private const int NEIGHBOURS_COUNT = 6;
 
-    public static Vector3Int[] neighbourOffset = {
+    public static Vector3Int[] directionVectors = {
         Vector3Int.up,
         Vector3Int.down,
         Vector3Int.forward,
@@ -21,6 +21,8 @@ public class Navigation : MonoBehaviour {
         Vector3Int.back,
         Vector3Int.left
     };
+
+    public const int NO_VECTOR = -1;
 
     public TileGrid tileGrid;
     public Vector3Int sourceCell;
@@ -33,7 +35,7 @@ public class Navigation : MonoBehaviour {
     SimplePriorityQueue<Vector3Int, int> queue;
     public NavigationVisuals visuals;
 
-    public void intializeDijkstra() {
+    public void testIntializeDijkstra() {
         Grid3D<int> tiles = tileGrid.tileIndices;
         dimensions = new Vector3Int(tiles.dimensions.x, tiles.dimensions.y, tiles.dimensions.z);
         distanceField = new int[dimensions.x, dimensions.y, dimensions.z];
@@ -53,7 +55,7 @@ public class Navigation : MonoBehaviour {
         queue.Enqueue(sourceCell, 0);
     }
 
-    public bool stepDijkstra() {
+    public bool testStepDijkstra() {
         if (queue.Count == 0) {
             Debug.Log("Distance field finished");
             visuals.updateDistanceFieldVisuals(distanceField);
@@ -65,7 +67,7 @@ public class Navigation : MonoBehaviour {
         visitedNodes[currentCell.x, currentCell.y, currentCell.z] = true;
 
         for (int i = 0; i < NEIGHBOURS_COUNT; i++) {
-            Vector3Int neighbourCell = currentCell + neighbourOffset[i];
+            Vector3Int neighbourCell = currentCell + directionVectors[i];
             if (inBounds(neighbourCell.x, neighbourCell.y, neighbourCell.z, dimensions)) {
                 int neighbourDistance = distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z];
                 if (neighbourDistance == BLOCKED_CELL || visitedNodes[neighbourCell.x, neighbourCell.y, neighbourCell.z]) {
@@ -82,7 +84,7 @@ public class Navigation : MonoBehaviour {
         return false;
     }
 
-    public int[,,] vectorField() {
+    public int[,,] testVectorField() {
         int[,,] vectorField = new int[dimensions.x, dimensions.y, dimensions.z];
 
         for (int x = 0; x < dimensions.x; x++) {
@@ -95,7 +97,7 @@ public class Navigation : MonoBehaviour {
 
                     if (minDistance != BLOCKED_CELL) {
                         for (int i = 0; i < NEIGHBOURS_COUNT; i++) {
-                            Vector3Int neighbourCell = new Vector3Int(x, y, z) + neighbourOffset[i];
+                            Vector3Int neighbourCell = new Vector3Int(x, y, z) + directionVectors[i];
 
                             if (inBounds(neighbourCell.x, neighbourCell.y, neighbourCell.z, dimensions)) {
                                 int neighbourDistance = distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z];
@@ -116,8 +118,93 @@ public class Navigation : MonoBehaviour {
         return vectorField;
     }
 
+    public static int[,,] calculateDijkstraDistanceField(int[,,] inputGrid, int unwalkableWeight, Vector3Int goalCell) {
+        Vector3Int dimensions = new Vector3Int(inputGrid.GetLength(0), inputGrid.GetLength(1), inputGrid.GetLength(2));
+        //number of steps to reach the starting cell from each cell / manhattan distance????
+        int[,,] distanceField = new int[dimensions.x, dimensions.y, dimensions.z];
+        //have we already iterated over neighbours of some cell 
+        bool[,,] wasCellVisited = new bool[dimensions.x, dimensions.y, dimensions.z];
+        //queue of cells to iterate over neighbours of
+        SimplePriorityQueue<Vector3Int, int> cellsToVisit = new SimplePriorityQueue<Vector3Int, int>();
+        //initialize queue with starting cell with distance 0
+        cellsToVisit.Enqueue(goalCell, 0);
+        //distance to goal from goal is 0 :^)
+        distanceField[goalCell.x, goalCell.y, goalCell.z] = 0;
+
+        while (cellsToVisit.Count != 0) {
+            //from queue get cell with lowest distance to goal
+            Vector3Int currentCell = cellsToVisit.Dequeue();
+            int currentDistance = distanceField[currentCell.x, currentCell.y, currentCell.z];
+            wasCellVisited[currentCell.x, currentCell.y, currentCell.z] = true;
+
+            //go through all neighbours, if distance from this cell + step is less than already
+            //recorded distance make that the new distance for the neighbouring cell
+            for (int i = 0; i < NEIGHBOURS_COUNT; i++) {
+                Vector3Int neighbourCell = currentCell + directionVectors[i];
+                if (inBounds(neighbourCell, dimensions)) {
+                    int neighbourDistance = distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z];
+                    //skip neighbours that are blocked/unwalkable/walls or were already visited by algo
+                    if (neighbourDistance != unwalkableWeight && !wasCellVisited[neighbourCell.x, neighbourCell.y, neighbourCell.z]) {
+                        if (currentDistance + 1 < neighbourDistance) {
+                            distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z] = currentDistance + 1;
+                        }
+                        //add neighbour to queue
+                        cellsToVisit.Enqueue(neighbourCell, distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z]);
+                    }
+                }
+            }
+        }
+
+        return distanceField;
+    }
+
+    public static int[,,] calculateVectorField(int[,,] distanceField, int unwalkableWeight) {
+        Vector3Int dimensions = new Vector3Int(distanceField.GetLength(0), distanceField.GetLength(1), distanceField.GetLength(2));
+        int[,,] vectorField = new int[dimensions.x, dimensions.y, dimensions.z];
+
+        //iterate through all cells to find neighbour closest to goal in distance field
+        //assign to that cell int representing vector from tested cell to that neighbour
+        for (int x = 0; x < dimensions.x; x++) {
+            for (int y = 0; y < dimensions.y; y++) {
+                for (int z = 0; z < dimensions.z; z++) {
+
+                    int resultVector = NO_VECTOR;
+                    //min found distance initially set to origin cell / cell for which we are currently finding the vector
+                    int minDistance = distanceField[x, y, z];
+
+                    //if cell is blocked ignore / leave NO_VECTOR
+                    if (minDistance != unwalkableWeight) {
+                        for (int i = 0; i < NEIGHBOURS_COUNT; i++) {
+                            Vector3Int neighbourCell = new Vector3Int(x, y, z) + directionVectors[i];
+
+                            if(inBounds(neighbourCell, dimensions)) {
+                                int neighbourDistance = distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z];
+                                //if neighbour cell is walkable and distance to goal is less
+                                if(neighbourDistance != unwalkableWeight && neighbourDistance < minDistance) {
+                                    //record new lowest distance
+                                    minDistance = neighbourDistance;
+                                    //make vector leading to this cell new result vector
+                                    resultVector = i;
+                                }
+                            }
+                        }
+                    }
+
+                    vectorField[x,y,z] = resultVector;
+                }
+            }
+        }
+
+        return vectorField;
+    }
+
     private bool inBounds(int x, int y, int z, Vector3Int bounds) {
         return x >= 0 && y >= 0 && z >= 0 && x < bounds.x && y < bounds.y && z < bounds.z;
+    }
+
+    private static bool inBounds(Vector3Int coords, Vector3Int bounds) {
+        return coords.x >= 0 && coords.y >= 0 && coords.z >= 0 &&
+        coords.x < bounds.x && coords.y < bounds.y && coords.z < bounds.z;
     }
 }
 
@@ -133,17 +220,17 @@ public class NavigationEditor : Editor {
     bool toggle = false;
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
-        EditorUtils.guiButton("Initialize", navigation.intializeDijkstra);
+        EditorUtils.guiButton("Initialize", navigation.testIntializeDijkstra);
         // EditorUtils.guiButton("Step", () => navigation.stepDijkstra());
         EditorUtils.guiButton("Run Distance Field", () => {
-            while (!navigation.stepDijkstra()) ;
+            while (!navigation.testStepDijkstra()) ;
         });
         EditorUtils.guiButton("Show/Hide distance field", () => {
             navigation.visuals.showDistanceField(navigation.distanceField, toggle);
             toggle = !toggle;
         });
         EditorUtils.guiButton("Run Vector Field", () => {
-            int[,,] vectorField = navigation.vectorField();
+            int[,,] vectorField = navigation.testVectorField();
             navigation.visuals.updateVectorFieldVisuals(vectorField);
         });
     }
