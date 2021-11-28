@@ -19,8 +19,8 @@ public class NavigationVisuals : MonoBehaviour {
     public void updateDistanceFieldVisuals(int[,,] distanceField) {
         showDistanceField(distanceField, true);
         grid.tileIndices.forEach((x, y, z, value) => {
-            if (distanceField[x, y, z] != Navigation.BLOCKED_CELL) {
-                var node = grid.tileObjects.at(x, y, z).GetComponent<NavigationNode>();
+            if (distanceField[x, y, z] != NavigationTest.BLOCKED_CELL) {
+                var node = grid.tileObjects.at(x, y, z).GetComponent<NavigationVisualisationNode>();
                 node.setColor(new Color(0, Mathf.Max((maxDistance - distanceField[x, y, z]) / (float)maxDistance, 0), 0));
                 node.setText(distanceField[x, y, z].ToString());
             }
@@ -29,7 +29,7 @@ public class NavigationVisuals : MonoBehaviour {
 
     public void showDistanceField(int[,,] distanceField, bool toggle) {
         grid.tileIndices.forEach((x, y, z, value) => {
-            if (distanceField[x, y, z] != Navigation.BLOCKED_CELL) {
+            if (distanceField[x, y, z] != NavigationTest.BLOCKED_CELL) {
                 var node = grid.tileObjects.at(x, y, z);
                 node.SetActive(toggle);
             }
@@ -42,7 +42,7 @@ public class NavigationVisuals : MonoBehaviour {
         grid.tileObjects.forEach((x, y, z, value) => {
             if (vectorField[x, y, z] != -1) {
                 var arrow = Instantiate(arrowPrefab, value.transform.position, Quaternion.identity);
-                arrow.transform.LookAt(arrow.transform.position + Navigation.directionVectors[vectorField[x, y, z]]);
+                arrow.transform.LookAt(arrow.transform.position + NavigationTest.directionVectors[vectorField[x, y, z]]);
                 arrow.transform.SetParent(this.transform);
                 arrows.Add(arrow);
             }
