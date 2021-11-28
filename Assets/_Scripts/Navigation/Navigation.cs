@@ -18,7 +18,7 @@ public class Navigation : MonoBehaviour {
         Vector3Int.down,
         Vector3Int.forward,
         Vector3Int.right,
-        Vector3Int.down,
+        Vector3Int.back,
         Vector3Int.left
     };
 
@@ -28,7 +28,7 @@ public class Navigation : MonoBehaviour {
     const int wallTileIndex = 0;
     int[,,] inputGrid;
     Vector3Int dimensions;
-    int[,,] distanceField;
+    public int[,,] distanceField;
     bool[,,] visitedNodes;
     SimplePriorityQueue<Vector3Int, int> queue;
     public NavigationVisuals visuals;
@@ -84,23 +84,31 @@ public class Navigation : MonoBehaviour {
 
     public int[,,] vectorField() {
         int[,,] vectorField = new int[dimensions.x, dimensions.y, dimensions.z];
+
         for (int x = 0; x < dimensions.x; x++) {
             for (int y = 0; y < dimensions.y; y++) {
                 for (int z = 0; z < dimensions.z; z++) {
+
                     int vector = -1;
-                    int minDistance = distanceField[x,y,z];
-                    for (int i = 0; i < NEIGHBOURS_COUNT; i++) {
-                        Vector3Int neighbourCell = new Vector3Int(x, y, z) + neighbourOffset[i];
-                        if (inBounds(neighbourCell.x, neighbourCell.y, neighbourCell.z, dimensions) 
-                                && distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z] != BLOCKED_CELL) {
-                                    
-                            if(distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z] < minDistance) {
-                                minDistance = distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z];
-                                vector = i;
+                    //initially set minimum distance to origin cell
+                    int minDistance = distanceField[x, y, z];
+
+                    if (minDistance != BLOCKED_CELL) {
+                        for (int i = 0; i < NEIGHBOURS_COUNT; i++) {
+                            Vector3Int neighbourCell = new Vector3Int(x, y, z) + neighbourOffset[i];
+
+                            if (inBounds(neighbourCell.x, neighbourCell.y, neighbourCell.z, dimensions)) {
+                                int neighbourDistance = distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z];
+
+                                if (neighbourDistance != BLOCKED_CELL && neighbourDistance < minDistance) {
+                                    minDistance = neighbourDistance;
+                                    vector = i;
+                                }
                             }
                         }
                     }
-                    vectorField[x,y,z] = vector;
+
+                    vectorField[x, y, z] = vector;
                 }
             }
         }
@@ -122,13 +130,17 @@ public class NavigationEditor : Editor {
     private void OnEnable() {
         navigation = target as Navigation;
     }
-
+    bool toggle = false;
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
         EditorUtils.guiButton("Initialize", navigation.intializeDijkstra);
         // EditorUtils.guiButton("Step", () => navigation.stepDijkstra());
         EditorUtils.guiButton("Run Distance Field", () => {
             while (!navigation.stepDijkstra()) ;
+        });
+        EditorUtils.guiButton("Show/Hide distance field", () => {
+            navigation.visuals.showDistanceField(navigation.distanceField, toggle);
+            toggle = !toggle;
         });
         EditorUtils.guiButton("Run Vector Field", () => {
             int[,,] vectorField = navigation.vectorField();
