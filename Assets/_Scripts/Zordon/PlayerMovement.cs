@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static InputManager;
+using static InputManagerGameplay;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
         //zapewnienie prawie maksymalnego skoku przed uruchomieniem jetpacka
         if (jumpTime < Time.fixedTime) isJumping = false;
         //skok
-        if (inputs.Player.Jump.triggered && isGrounded)
+        if (inputGameplay.Player.Jump.triggered && isGrounded)
         {
             jumpTime = Time.fixedTime + timeBeforeJetpack;
             isJumping = true;
@@ -97,8 +97,13 @@ public class PlayerMovement : MonoBehaviour
             if (jetpackUsedTime < 2) jetpackUsedTime = 0;
             jetpackUsedTime -= 2;
         }
+<<<<<<< Updated upstream
         //jeï¿½li w powietrzu, zamiast skoku uï¿½yj jetpacka i zwiï¿½ksz zuï¿½ycie siï¿½ jetpacka
         if (inputs.Player.Jump.ReadValue<float>()==1 && !isGrounded && !isJumping && jetpackUsedTime<jetpackDuration)
+=======
+        //jeœli w powietrzu, zamiast skoku u¿yj jetpacka i zwiêksz zu¿ycie siê jetpacka
+        if (inputGameplay.Player.Jump.ReadValue<float>()==1 && !isGrounded && !isJumping && jetpackUsedTime<jetpackDuration)
+>>>>>>> Stashed changes
         {
             var jetpack = Instantiate(jetpackVFX, groundCheck.position, Quaternion.identity) as GameObject;
             Destroy(jetpack, 0.1f);
@@ -123,8 +128,8 @@ public class PlayerMovement : MonoBehaviour
     
     void MyInput()
     {
-        var input = inputs.Player.MovementAxes.ReadValue<Vector2>();
-        Debug.Log(input);
+        var input = inputGameplay.Player.MovementAxes.ReadValue<Vector2>();
+        //Debug.Log(input);
         horizontalMove = input.x;
         verticalMove = input.y;
 

@@ -49,6 +49,22 @@ public class @InputMap : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ChangeWeaponUP"",
+                    ""type"": ""Value"",
+                    ""id"": ""ae56a7f9-af2b-4dab-8965-832baaca76cc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ChangeWeaponDOWN"",
+                    ""type"": ""Button"",
+                    ""id"": ""de76b3ba-b2d1-4ff1-8c55-8af754ac7528"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -225,6 +241,50 @@ public class @InputMap : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""910d87a5-526d-4a2f-a3cf-1f483fbce444"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeWeaponUP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fede7c8d-c628-49f0-bcc5-331ac4a85f1c"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeWeaponUP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd07bb18-d2bb-44f7-a756-9be5fa068fa6"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeWeaponDOWN"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe272a83-b444-4017-9130-1471227d5d62"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeWeaponDOWN"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -651,6 +711,8 @@ public class @InputMap : IInputActionCollection, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
+        m_Player_ChangeWeaponUP = m_Player.FindAction("ChangeWeaponUP", throwIfNotFound: true);
+        m_Player_ChangeWeaponDOWN = m_Player.FindAction("ChangeWeaponDOWN", throwIfNotFound: true);
         // Grid Editor
         m_GridEditor = asset.FindActionMap("Grid Editor", throwIfNotFound: true);
         m_GridEditor_CursorMovement = m_GridEditor.FindAction("CursorMovement", throwIfNotFound: true);
@@ -720,6 +782,8 @@ public class @InputMap : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Shoot;
+    private readonly InputAction m_Player_ChangeWeaponUP;
+    private readonly InputAction m_Player_ChangeWeaponDOWN;
     public struct PlayerActions
     {
         private @InputMap m_Wrapper;
@@ -728,6 +792,8 @@ public class @InputMap : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
+        public InputAction @ChangeWeaponUP => m_Wrapper.m_Player_ChangeWeaponUP;
+        public InputAction @ChangeWeaponDOWN => m_Wrapper.m_Player_ChangeWeaponDOWN;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -749,6 +815,12 @@ public class @InputMap : IInputActionCollection, IDisposable
                 @Shoot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Shoot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Shoot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
+                @ChangeWeaponUP.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeWeaponUP;
+                @ChangeWeaponUP.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeWeaponUP;
+                @ChangeWeaponUP.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeWeaponUP;
+                @ChangeWeaponDOWN.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeWeaponDOWN;
+                @ChangeWeaponDOWN.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeWeaponDOWN;
+                @ChangeWeaponDOWN.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeWeaponDOWN;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -765,6 +837,12 @@ public class @InputMap : IInputActionCollection, IDisposable
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
+                @ChangeWeaponUP.started += instance.OnChangeWeaponUP;
+                @ChangeWeaponUP.performed += instance.OnChangeWeaponUP;
+                @ChangeWeaponUP.canceled += instance.OnChangeWeaponUP;
+                @ChangeWeaponDOWN.started += instance.OnChangeWeaponDOWN;
+                @ChangeWeaponDOWN.performed += instance.OnChangeWeaponDOWN;
+                @ChangeWeaponDOWN.canceled += instance.OnChangeWeaponDOWN;
             }
         }
     }
@@ -930,6 +1008,8 @@ public class @InputMap : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
+        void OnChangeWeaponUP(InputAction.CallbackContext context);
+        void OnChangeWeaponDOWN(InputAction.CallbackContext context);
     }
     public interface IGridEditorActions
     {
