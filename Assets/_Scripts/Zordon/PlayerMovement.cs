@@ -97,13 +97,10 @@ public class PlayerMovement : MonoBehaviour
             if (jetpackUsedTime < 2) jetpackUsedTime = 0;
             jetpackUsedTime -= 2;
         }
-<<<<<<< Updated upstream
-        //jeï¿½li w powietrzu, zamiast skoku uï¿½yj jetpacka i zwiï¿½ksz zuï¿½ycie siï¿½ jetpacka
-        if (inputs.Player.Jump.ReadValue<float>()==1 && !isGrounded && !isJumping && jetpackUsedTime<jetpackDuration)
-=======
+
         //jeœli w powietrzu, zamiast skoku u¿yj jetpacka i zwiêksz zu¿ycie siê jetpacka
         if (inputGameplay.Player.Jump.ReadValue<float>()==1 && !isGrounded && !isJumping && jetpackUsedTime<jetpackDuration)
->>>>>>> Stashed changes
+
         {
             var jetpack = Instantiate(jetpackVFX, groundCheck.position, Quaternion.identity) as GameObject;
             Destroy(jetpack, 0.1f);
