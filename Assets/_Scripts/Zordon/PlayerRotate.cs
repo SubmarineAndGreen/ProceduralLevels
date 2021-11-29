@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static InputManager;
+using static InputManagerGameplay;
 
 public class PlayerRotate : MonoBehaviour
 {
@@ -34,7 +34,7 @@ public class PlayerRotate : MonoBehaviour
 
     void MyInput()
     {
-        var mouseInput = inputs.Player.Look.ReadValue<Vector2>();
+        var mouseInput = inputGameplay.Player.Look.ReadValue<Vector2>();
         mouseX = mouseInput.x;
         mouseY = mouseInput.y;
 
