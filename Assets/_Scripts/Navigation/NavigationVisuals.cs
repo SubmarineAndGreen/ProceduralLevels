@@ -17,7 +17,15 @@ public class NavigationVisuals : MonoBehaviour {
     }
 
     public void updateDistanceFieldVisuals(int[,,] distanceField) {
-        showDistanceField(distanceField, true);
+        // showDistanceField(distanceField, true);
+        grid.tileIndices.updateEach((x, y, z, value) => {
+            if (distanceField[x, y, z] != NavigationTest.BLOCKED_CELL) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+        grid.rebuildGrid();
         grid.tileIndices.forEach((x, y, z, value) => {
             if (distanceField[x, y, z] != NavigationTest.BLOCKED_CELL) {
                 var node = grid.tileObjects.at(x, y, z).GetComponent<NavigationVisualisationNode>();

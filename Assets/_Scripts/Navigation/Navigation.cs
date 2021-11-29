@@ -40,30 +40,33 @@ public class Navigation {
         int[,,] distanceField = inputGrid;
         //have we already iterated over neighbours of some cell 
         bool[,,] wasCellVisited = new bool[dimensions.x, dimensions.y, dimensions.z];
+        bool[,,] wasCellEnqueued = new bool[dimensions.x, dimensions.y, dimensions.z];
         //queue of cells to iterate over neighbours of
-        SimplePriorityQueue<Vector3Int, int> cellsToVisit = new SimplePriorityQueue<Vector3Int, int>();
+        // SimplePriorityQueue<Vector3Int, int> cellsToVisit = new SimplePriorityQueue<Vector3Int, int>();
 
-        // CellNode[,,] nodes = new CellNode[dimensions.x, dimensions.y, dimensions.z];
-        // for (int x = 0; x < dimensions.x; x++) {
-        //     for (int y = 0; y < dimensions.y; y++) {
-        //         for (int z = 0; z < dimensions.z; z++) {
-        //             nodes[x,y,z] = new CellNode() {
-        //                 position = new Vector3Int(x,y,z)
-        //             };
-        //         }
-        //     }
-        // }
+        CellNode[,,] queueNodes = new CellNode[dimensions.x, dimensions.y, dimensions.z];
+        for (int x = 0; x < dimensions.x; x++) {
+            for (int y = 0; y < dimensions.y; y++) {
+                for (int z = 0; z < dimensions.z; z++) {
+                    queueNodes[x,y,z] = new CellNode() {
+                        position = new Vector3Int(x,y,z)
+                    };
+                }
+            }
+        }
 
-        // FastPriorityQueue<CellNode> fqueue = new FastPriorityQueue<CellNode>(dimensions.x * dimensions.y * dimensions.z);
+        FastPriorityQueue<CellNode> visitedCells = new FastPriorityQueue<CellNode>(dimensions.x * dimensions.y * dimensions.z);
 
         //initialize queue with starting cell with distance 0
-        cellsToVisit.Enqueue(goalCell, 0);
+        // cellsToVisit.Enqueue(goalCell, 0);
+        visitedCells.Enqueue(queueNodes[goalCell.x, goalCell.y, goalCell.z], 0);
         //distance to goal from goal is 0 :^)
         distanceField[goalCell.x, goalCell.y, goalCell.z] = 0;
 
-        while (cellsToVisit.Count != 0) {
+        while (visitedCells.Count != 0) {
+            // Debug.Log(visitedCells.Count);
             //from queue get cell with lowest distance to goal
-            Vector3Int currentCell = cellsToVisit.Dequeue();
+            Vector3Int currentCell = visitedCells.Dequeue().position;
             int currentDistance = distanceField[currentCell.x, currentCell.y, currentCell.z];
             wasCellVisited[currentCell.x, currentCell.y, currentCell.z] = true;
 
@@ -79,7 +82,10 @@ public class Navigation {
                             distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z] = currentDistance + 1;
                         }
                         //add neighbour to queue
-                        cellsToVisit.Enqueue(neighbourCell, distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z]);
+                        if(!wasCellEnqueued[neighbourCell.x, neighbourCell.y, neighbourCell.z]) {
+                            visitedCells.Enqueue(queueNodes[neighbourCell.x, neighbourCell.y, neighbourCell.z], distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z]);
+                            wasCellEnqueued[neighbourCell.x, neighbourCell.y, neighbourCell.z] = true;
+                        }
                     }
                 }
             }
@@ -134,6 +140,6 @@ public class Navigation {
     }
 }
 
-// public class CellNode : FastPriorityQueueNode {
-//     public Vector3Int position;
-// }
+public class CellNode : FastPriorityQueueNode {
+    public Vector3Int position;
+}
