@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Priority_Queue;
 using UnityEditor;
+using System.Diagnostics;
+using UnityEngine.InputSystem;
 
 public class NavigationTest : MonoBehaviour {
     // private int[] xOffset = { 0, 0, 0, 1, 0, -1 };
@@ -35,11 +37,16 @@ public class NavigationTest : MonoBehaviour {
     SimplePriorityQueue<Vector3Int, int> queue;
     public NavigationVisuals visuals;
 
-    public void testIntializeDijkstra() {
+    private void Update() {
+        if(Keyboard.current.spaceKey.wasPressedThisFrame) {
+            runOneDistanceField(sourceCell);
+        }
+    }
+
+    public void runAll() {
         Grid3D<int> tiles = tileGrid.tileIndices;
         dimensions = new Vector3Int(tiles.dimensions.x, tiles.dimensions.y, tiles.dimensions.z);
         distanceField = new int[dimensions.x, dimensions.y, dimensions.z];
-
         tiles.forEach((x, y, z, tileIndex) => {
             if (tileIndex == wallTileIndex) {
                 distanceField[x, y, z] = BLOCKED_CELL;
@@ -47,80 +54,121 @@ public class NavigationTest : MonoBehaviour {
                 distanceField[x, y, z] = INIT_DISTANCE;
             }
         });
-
-
-        visitedNodes = new bool[dimensions.x, dimensions.y, dimensions.z];
-        queue = new SimplePriorityQueue<Vector3Int, int>();
-        distanceField[sourceCell.x, sourceCell.y, sourceCell.z] = 0;
-        queue.Enqueue(sourceCell, 0);
+        Stopwatch timer = Stopwatch.StartNew();
+        Navigation.calculateVectorFieldForEachCell(distanceField, BLOCKED_CELL);
+        UnityEngine.Debug.Log(timer.ElapsedMilliseconds + "ms");
     }
 
-    public bool testStepDijkstra() {
-        if (queue.Count == 0) {
-            Debug.Log("Distance field finished");
-            visuals.updateDistanceFieldVisuals(distanceField);
-            return true;
-        }
-
-        Vector3Int currentCell = queue.Dequeue();
-        int currentDistance = distanceField[currentCell.x, currentCell.y, currentCell.z];
-        visitedNodes[currentCell.x, currentCell.y, currentCell.z] = true;
-
-        for (int i = 0; i < NEIGHBOURS_COUNT; i++) {
-            Vector3Int neighbourCell = currentCell + directionVectors[i];
-            if (inBounds(neighbourCell.x, neighbourCell.y, neighbourCell.z, dimensions)) {
-                int neighbourDistance = distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z];
-                if (neighbourDistance == BLOCKED_CELL || visitedNodes[neighbourCell.x, neighbourCell.y, neighbourCell.z]) {
-                    continue;
-                } else {
-                    if (currentDistance + 1 < neighbourDistance) {
-                        distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z] = currentDistance + 1;
-                    }
-                    queue.Enqueue(neighbourCell, distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z]);
-                }
+    public void runOneDistanceField(Vector3Int sourceCell) {
+        Grid3D<int> tiles = tileGrid.tileIndices;
+        dimensions = new Vector3Int(tiles.dimensions.x, tiles.dimensions.y, tiles.dimensions.z);
+        distanceField = new int[dimensions.x, dimensions.y, dimensions.z];
+        tiles.forEach((x, y, z, tileIndex) => {
+            if (tileIndex == wallTileIndex) {
+                distanceField[x, y, z] = BLOCKED_CELL;
+            } else {
+                distanceField[x, y, z] = INIT_DISTANCE;
             }
-        }
-
-        return false;
+        });
+        Stopwatch timer = Stopwatch.StartNew();
+        distanceField = Navigation.calculateDijkstraDistanceField(distanceField, BLOCKED_CELL, sourceCell);
+        UnityEngine.Debug.Log(timer.ElapsedMilliseconds + "ms");
+        visuals.updateDistanceFieldVisuals(distanceField);
     }
 
-    public int[,,] testVectorField() {
-        int[,,] vectorField = new int[dimensions.x, dimensions.y, dimensions.z];
-
-        for (int x = 0; x < dimensions.x; x++) {
-            for (int y = 0; y < dimensions.y; y++) {
-                for (int z = 0; z < dimensions.z; z++) {
-
-                    int vector = -1;
-                    //initially set minimum distance to origin cell
-                    int minDistance = distanceField[x, y, z];
-
-                    if (minDistance != BLOCKED_CELL) {
-                        for (int i = 0; i < NEIGHBOURS_COUNT; i++) {
-                            Vector3Int neighbourCell = new Vector3Int(x, y, z) + directionVectors[i];
-
-                            if (inBounds(neighbourCell.x, neighbourCell.y, neighbourCell.z, dimensions)) {
-                                int neighbourDistance = distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z];
-
-                                if (neighbourDistance != BLOCKED_CELL && neighbourDistance < minDistance) {
-                                    minDistance = neighbourDistance;
-                                    vector = i;
-                                }
-                            }
-                        }
-                    }
-
-                    vectorField[x, y, z] = vector;
-                }
-            }
-        }
-
-        return vectorField;
+    public void runOneVectorField() {
+        Stopwatch timer = Stopwatch.StartNew();
+        var res = Navigation.calculateVectorField(distanceField, BLOCKED_CELL);
+        UnityEngine.Debug.Log(timer.ElapsedMilliseconds + "ms");
+        visuals.updateVectorFieldVisuals(res);
     }
 
-    private bool inBounds(int x, int y, int z, Vector3Int bounds) {
-        return x >= 0 && y >= 0 && z >= 0 && x < bounds.x && y < bounds.y && z < bounds.z;
-    }
+    // public void testIntializeDijkstra() {
+    //     Grid3D<int> tiles = tileGrid.tileIndices;
+    //     dimensions = new Vector3Int(tiles.dimensions.x, tiles.dimensions.y, tiles.dimensions.z);
+    //     distanceField = new int[dimensions.x, dimensions.y, dimensions.z];
+
+    //     tiles.forEach((x, y, z, tileIndex) => {
+    //         if (tileIndex == wallTileIndex) {
+    //             distanceField[x, y, z] = BLOCKED_CELL;
+    //         } else {
+    //             distanceField[x, y, z] = INIT_DISTANCE;
+    //         }
+    //     });
+
+
+    //     visitedNodes = new bool[dimensions.x, dimensions.y, dimensions.z];
+    //     queue = new SimplePriorityQueue<Vector3Int, int>();
+    //     distanceField[sourceCell.x, sourceCell.y, sourceCell.z] = 0;
+    //     queue.Enqueue(sourceCell, 0);
+    // }
+
+    // public bool testStepDijkstra() {
+    //     if (queue.Count == 0) {
+    //         UnityEngine.Debug.Log("Distance field finished");
+    //         visuals.updateDistanceFieldVisuals(distanceField);
+    //         return true;
+    //     }
+
+    //     Vector3Int currentCell = queue.Dequeue();
+    //     int currentDistance = distanceField[currentCell.x, currentCell.y, currentCell.z];
+    //     visitedNodes[currentCell.x, currentCell.y, currentCell.z] = true;
+
+    //     for (int i = 0; i < NEIGHBOURS_COUNT; i++) {
+    //         Vector3Int neighbourCell = currentCell + directionVectors[i];
+    //         if (inBounds(neighbourCell.x, neighbourCell.y, neighbourCell.z, dimensions)) {
+    //             int neighbourDistance = distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z];
+    //             if (neighbourDistance == BLOCKED_CELL || visitedNodes[neighbourCell.x, neighbourCell.y, neighbourCell.z]) {
+    //                 continue;
+    //             } else {
+    //                 if (currentDistance + 1 < neighbourDistance) {
+    //                     distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z] = currentDistance + 1;
+    //                 }
+    //                 queue.Enqueue(neighbourCell, distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z]);
+    //             }
+    //         }
+    //     }
+
+    //     return false;
+    // }
+
+    // public int[,,] testVectorField() {
+    //     int[,,] vectorField = new int[dimensions.x, dimensions.y, dimensions.z];
+
+    //     for (int x = 0; x < dimensions.x; x++) {
+    //         for (int y = 0; y < dimensions.y; y++) {
+    //             for (int z = 0; z < dimensions.z; z++) {
+
+    //                 int vector = -1;
+    //                 //initially set minimum distance to origin cell
+    //                 int minDistance = distanceField[x, y, z];
+
+    //                 if (minDistance != BLOCKED_CELL) {
+    //                     for (int i = 0; i < NEIGHBOURS_COUNT; i++) {
+    //                         Vector3Int neighbourCell = new Vector3Int(x, y, z) + directionVectors[i];
+
+    //                         if (inBounds(neighbourCell.x, neighbourCell.y, neighbourCell.z, dimensions)) {
+    //                             int neighbourDistance = distanceField[neighbourCell.x, neighbourCell.y, neighbourCell.z];
+
+    //                             if (neighbourDistance != BLOCKED_CELL && neighbourDistance < minDistance) {
+    //                                 minDistance = neighbourDistance;
+    //                                 vector = i;
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+
+    //                 vectorField[x, y, z] = vector;
+    //             }
+    //         }
+    //     }
+
+    //     return vectorField;
+    // }
+
+    // private bool inBounds(int x, int y, int z, Vector3Int bounds) {
+    //     return x >= 0 && y >= 0 && z >= 0 && x < bounds.x && y < bounds.y && z < bounds.z;
+    // }
 }
 
 
@@ -135,18 +183,19 @@ public class NavigationEditor : Editor {
     bool toggle = false;
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
-        EditorUtils.guiButton("Initialize", navigation.testIntializeDijkstra);
-        // EditorUtils.guiButton("Step", () => navigation.stepDijkstra());
+
         EditorUtils.guiButton("Run Distance Field", () => {
-            while (!navigation.testStepDijkstra()) ;
+            navigation.runOneDistanceField(navigation.sourceCell);
+        });
+        EditorUtils.guiButton("Run Vector Field", () => {
+            navigation.runOneVectorField();
+        });
+        EditorUtils.guiButton("Run All For Each Cell", () => {
+            navigation.runAll();
         });
         EditorUtils.guiButton("Show/Hide distance field", () => {
             navigation.visuals.showDistanceField(navigation.distanceField, toggle);
             toggle = !toggle;
-        });
-        EditorUtils.guiButton("Run Vector Field", () => {
-            int[,,] vectorField = navigation.testVectorField();
-            navigation.visuals.updateVectorFieldVisuals(vectorField);
         });
     }
 }

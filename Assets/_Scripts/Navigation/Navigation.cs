@@ -16,14 +16,46 @@ public class Navigation {
         Vector3Int.left
     };
 
+    public static int[,,][,,] calculateVectorFieldForEachCell(int[,,] inputGrid, int unwalkableWeight) {
+        Vector3Int dimensions = new Vector3Int(inputGrid.GetLength(0), inputGrid.GetLength(1), inputGrid.GetLength(2));
+        int[,,][,,] vectorFields = new int[dimensions.x, dimensions.y, dimensions.z][,,];
+
+        for (int x = 0; x < dimensions.x; x++) {
+            for (int y = 0; y < dimensions.y; y++) {
+                for (int z = 0; z < dimensions.z; z++) {
+                    int[,,] distanceField = calculateDijkstraDistanceField(inputGrid, unwalkableWeight, new Vector3Int(x, y, z));
+                    vectorFields[x, y, z] = calculateVectorField(distanceField, unwalkableWeight);
+                }
+            }
+        }
+
+
+
+        return vectorFields;
+    }
+
     public static int[,,] calculateDijkstraDistanceField(int[,,] inputGrid, int unwalkableWeight, Vector3Int goalCell) {
         Vector3Int dimensions = new Vector3Int(inputGrid.GetLength(0), inputGrid.GetLength(1), inputGrid.GetLength(2));
-        //number of steps to reach the starting cell from each cell / manhattan distance????
-        int[,,] distanceField = new int[dimensions.x, dimensions.y, dimensions.z];
+        //number of steps to reach the starting cell from each cell / manhattan distance(?) to starting cell
+        int[,,] distanceField = inputGrid;
         //have we already iterated over neighbours of some cell 
         bool[,,] wasCellVisited = new bool[dimensions.x, dimensions.y, dimensions.z];
         //queue of cells to iterate over neighbours of
         SimplePriorityQueue<Vector3Int, int> cellsToVisit = new SimplePriorityQueue<Vector3Int, int>();
+
+        // CellNode[,,] nodes = new CellNode[dimensions.x, dimensions.y, dimensions.z];
+        // for (int x = 0; x < dimensions.x; x++) {
+        //     for (int y = 0; y < dimensions.y; y++) {
+        //         for (int z = 0; z < dimensions.z; z++) {
+        //             nodes[x,y,z] = new CellNode() {
+        //                 position = new Vector3Int(x,y,z)
+        //             };
+        //         }
+        //     }
+        // }
+
+        // FastPriorityQueue<CellNode> fqueue = new FastPriorityQueue<CellNode>(dimensions.x * dimensions.y * dimensions.z);
+
         //initialize queue with starting cell with distance 0
         cellsToVisit.Enqueue(goalCell, 0);
         //distance to goal from goal is 0 :^)
@@ -101,3 +133,7 @@ public class Navigation {
         coords.x < bounds.x && coords.y < bounds.y && coords.z < bounds.z;
     }
 }
+
+// public class CellNode : FastPriorityQueueNode {
+//     public Vector3Int position;
+// }
