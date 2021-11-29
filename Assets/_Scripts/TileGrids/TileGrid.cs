@@ -11,12 +11,13 @@ public class TileGrid : MonoBehaviour {
     public const int NO_ROTATION = 0;
     public const string SAVE_FOLDER = "InputGrids";
     public bool debugUI = true;
+        public bool cursorHidden = false;
     [SerializeField] private TextMeshProUGUI previewRotationText;
     [SerializeField] private TextMeshProUGUI selectedTileRotationText;
     [SerializeField] private TextMeshProUGUI tileText;
     [SerializeField] private GameObject cursorPrefab;
     [Header("Editor Controls")]
-    public TileSet defaultTileSet;
+    // public TileSet defaultTileSet;
     public TileSet[] tileSets;
     [HideInInspector] public int currentTilesetIndex = 0;
     [SerializeField] private bool loadFromFileOnStart = false;
@@ -39,12 +40,16 @@ public class TileGrid : MonoBehaviour {
 
 
     private void Awake() {
+        if(tileSets.GetLength(0) == 0) {
+            return;
+        }
+        
         bool loadedFromFile;
 
-        if (tileSets == null || tileSets.GetLength(0) == 0) {
-            tileSets = new TileSet[1];
-            tileSets[0] = defaultTileSet;
-        }
+        // if (tileSets == null || tileSets.GetLength(0) == 0) {
+        //     tileSets = new TileSet[1];
+        //     tileSets[0] = defaultTileSet;
+        // }
 
         if (!loadFromFileOnStart) {
             loadedFromFile = false;
@@ -69,6 +74,10 @@ public class TileGrid : MonoBehaviour {
         cursor = Instantiate(cursorPrefab, transform.position, Quaternion.Euler(0, 90, 0));
         cursor.transform.SetParent(this.transform);
         reloadTilePreviews();
+
+        if(cursorHidden) {
+            cursor.SetActive(false);
+        }
     }
 
     private void Update() {
@@ -127,10 +136,10 @@ public class TileGrid : MonoBehaviour {
 
     //przeladuj wszystkie plytki w przypadku np. ladowania z pliku
     public void rebuildGrid() {
-        destroyTileObjects();
+        // destroyTileObjects();
 
-        tileIndices.forEach((position, value) => {
-            placeTile(value, tileSetIndices.at(position), position, tileRotations.at(position));
+        tileIndices.forEach((position) => {
+            createTile(position);
         });
     }
 
@@ -236,7 +245,9 @@ public class TileGrid : MonoBehaviour {
     }
 
     public void placeTile(int tileIndex, int tileSetIndex, Vector3Int position, int rotation) {
-        removeTile(position);
+        if (tileObjects.at(position) != null) {
+            Destroy(tileObjects.at(position));
+        }
 
         Vector3 halfTileOffset = new Vector3(-0.5f, 0, -0.5f);
 
@@ -253,6 +264,26 @@ public class TileGrid : MonoBehaviour {
         tileSetIndices.set(position, tileSetIndex);
     }
 
+    public void createTile(Vector3Int position) {
+        if (tileObjects.at(position) != null) {
+            Destroy(tileObjects.at(position));
+        }
+
+        Vector3 halfTileOffset = new Vector3(-0.5f, 0, -0.5f);
+
+        int tileIndex = tileIndices.at(position);
+        int tileSetIndex = tileSetIndices.at(position);
+        int rotation = tileRotations.at(position);
+
+        if (tileIndex != TILE_EMPTY) {
+            GameObject newTileObject = Instantiate(tileSets[tileSetIndex].tiles[tileIndex].tilePrefab,
+            transform.position + position + halfTileOffset,
+            Quaternion.Euler(0, rotation * 90, 0));
+            newTileObject.transform.SetParent(this.transform, true);
+            tileObjects.set(position, newTileObject);
+        }
+    }
+
     public void placeTileDontInstantiate(int tileIndex, int tileSetIndex, Vector3Int position, int rotation) {
         removeTile(position);
         tileIndices.set(position, tileIndex);
@@ -267,7 +298,7 @@ public class TileGrid : MonoBehaviour {
         tileSetIndices.set(position, currentTilesetIndex);
     }
 
-    public void resize(Vector3Int newDimensions) {
+    public void resizePerserveTiles(Vector3Int newDimensions) {
         if (newDimensions.x <= 0 || newDimensions.y <= 0 || newDimensions.z <= 0) {
             Debug.LogError("Error resizing the grid: invalid dimensions");
             return;
@@ -346,6 +377,11 @@ public class TileGrid : MonoBehaviour {
         }
 
         changeTilePreview();
+    }
+
+    public void toggleCursor() {
+        cursorHidden = !cursorHidden;
+        cursor.SetActive(!cursorHidden);
     }
 }
 

@@ -27,7 +27,6 @@ public class LevelBuilder : MonoBehaviour {
         //leave 1 tile of margin on each side for ending hole blocking tiles
         Vector3Int oneTileMargin = Vector3Int.one * 2;
         fullDimensions = generatedGridDimensions + oneTileMargin;
-        levelGrid.resize(fullDimensions);
 
         int[,,] generatedTiles;
         bool generationSuccess = wfcRunner.runAdjacentModel(out generatedTiles, pipesSampleFileName, tileSets[TILESET_PIPES], generatedGridDimensions);
@@ -37,8 +36,12 @@ public class LevelBuilder : MonoBehaviour {
             return;
         }
 
-        Grid3D<int> tileIndices = levelGrid.tileIndices;
-        Grid3D<int> tileRotations = levelGrid.tileRotations;
+        levelGrid.dimensions = fullDimensions;
+        Grid3D<int> tileIndices = new Grid3D<int>(fullDimensions);
+        tileIndices.updateEach((int index) => TileGrid.TILE_EMPTY);
+        Grid3D<int> tileRotations = new Grid3D<int>(fullDimensions);
+        Grid3D<int> tileSetIndices = new Grid3D<int>(fullDimensions);
+        Grid3D<GameObject> tileObjects = new Grid3D<GameObject>(fullDimensions);
 
         //leave 1 empty tile border
         for (int x = 1; x < fullDimensions.x - 1; x++) {
@@ -46,23 +49,20 @@ public class LevelBuilder : MonoBehaviour {
                 for (int z = 1; z < fullDimensions.z - 1; z++) {
                     tileIndices.set(x, y, z, TileUtils.modelIndexToTileIndex(generatedTiles[x - 1, y - 1, z - 1]));
                     tileRotations.set(x, y, z, TileUtils.modelIndexToRotation(generatedTiles[x - 1, y - 1, z - 1]));
+                    tileSetIndices.set(x, y, z, TILESET_PIPES);
                 }
             }
         }
-        capOffTileEnds();
+        capOffTileEnds(tileIndices, tileRotations, tileSetIndices);
+        levelGrid.tileIndices = tileIndices;
+        levelGrid.tileRotations = tileRotations;
+        levelGrid.tileSetIndices = tileSetIndices;
+        levelGrid.tileObjects = tileObjects;
         levelGrid.rebuildGrid();
     }
 
-    private void capOffTileEnds() {
-        int[] capIndices = {
-            upTileCapIndex,
-            downTileCapIndex,
-            sideTileCapIndex
-        };
+    private void capOffTileEnds(Grid3D<int> tiles, Grid3D<int> rotations, Grid3D<int> tileSetIndices) {
 
-        Grid3D<int> tiles = levelGrid.tileIndices;
-        Grid3D<int> rotations = levelGrid.tileRotations;
-        Grid3D<int> tileSetIndices = levelGrid.tileSetIndices;
         ConnectionData[] connectionData = wfcRunner.samplerResult.connections;
 
         tiles.forEach((position, tile) => {
@@ -76,14 +76,22 @@ public class LevelBuilder : MonoBehaviour {
                         if (tiles.at(position + offset) == TileGrid.TILE_EMPTY) {
                             switch (direction) {
                                 case Directions3D.UP:
-                                    levelGrid.placeTileDontInstantiate(upTileCapIndex, TILESET_CAPS, position + offset, TileGrid.NO_ROTATION);
+                                    tileSetIndices.set(position + offset, TILESET_CAPS);
+                                    tiles.set(position + offset, upTileCapIndex);
+                                    rotations.set(position + offset, TileGrid.NO_ROTATION);
+                                    // levelGrid.placeTileDontInstantiate(upTileCapIndex, TILESET_CAPS, position + offset, TileGrid.NO_ROTATION);
                                     break;
                                 case Directions3D.DOWN:
-                                    levelGrid.placeTileDontInstantiate(downTileCapIndex, TILESET_CAPS, position + offset, TileGrid.NO_ROTATION);
+                                    tileSetIndices.set(position + offset, TILESET_CAPS);
+                                    tiles.set(position + offset, downTileCapIndex);
+                                    rotations.set(position + offset, TileGrid.NO_ROTATION);
                                     break;
                                 default:
-                                //direction - 2 gives correct rotation where FORWARD/Z+ is rotation 0
-                                    levelGrid.placeTileDontInstantiate(sideTileCapIndex, TILESET_CAPS, position + offset, (int)direction - 2);
+                                    tileSetIndices.set(position + offset, TILESET_CAPS);
+                                    tiles.set(position + offset, sideTileCapIndex);
+                                    rotations.set(position + offset, (int)direction - 2);
+                                    //direction - 2 gives correct rotation where FORWARD/Z+ is rotation 0
+                                    // levelGrid.placeTileDontInstantiate(sideTileCapIndex, TILESET_CAPS, position + offset, (int)direction - 2);
                                     break;
                             }
                         }
