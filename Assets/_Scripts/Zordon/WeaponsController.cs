@@ -45,11 +45,13 @@ public class WeaponsController : MonoBehaviour
                     break;
             }
         }
-        if(inputGameplay.Player.ChangeWeaponUP.ReadValue<float>() == 1) {
+        if(inputGameplay.Player.ChangeWeaponUP.ReadValue<float>() == 1 && Time.time >= timeToFire) {
+            timeToFire = Time.time + 1 * fireRate1;
             ChangeWeapon(true);
         }
-        if (inputGameplay.Player.ChangeWeaponDOWN.ReadValue<float>() == 1)
+        if (inputGameplay.Player.ChangeWeaponDOWN.ReadValue<float>() == 1 && Time.time >= timeToFire)
         {
+            timeToFire = Time.time + 1 * fireRate1;
             ChangeWeapon(false);
         }
     }
