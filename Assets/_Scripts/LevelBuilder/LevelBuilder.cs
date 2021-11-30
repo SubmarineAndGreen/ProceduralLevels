@@ -20,6 +20,8 @@ public class LevelBuilder : MonoBehaviour {
 
 
     void Start() {
+        System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
         wfcRunner = GetComponent<WfcRunner>();
 
         levelGrid.tileSets = tileSets;
@@ -54,11 +56,30 @@ public class LevelBuilder : MonoBehaviour {
             }
         }
         capOffTileEnds(tileIndices, tileRotations, tileSetIndices);
+
+        int[,,] inputDistanceField = new int[fullDimensions.x, fullDimensions.y, fullDimensions.z];
+        int blockedTile = -1;
+
+        tileIndices.forEach((x, y, z, tileIndex) => {
+            if(tileIndex == TileGrid.TILE_EMPTY || tileIndex == tileSets[TILESET_PIPES].emptyTileIndex) {
+                inputDistanceField[x,y,z] = blockedTile;
+            } else {
+                inputDistanceField[x,y,z] = int.MaxValue / 2;
+            }
+        });
+
+        NavigationManager navigation = NavigationManager.instance;
+        navigation.calculateVectorFields(inputDistanceField, blockedTile);
+
+
         levelGrid.tileIndices = tileIndices;
         levelGrid.tileRotations = tileRotations;
         levelGrid.tileSetIndices = tileSetIndices;
         levelGrid.tileObjects = tileObjects;
         levelGrid.rebuildGrid();
+
+        Debug.Log("Level created in: " + stopwatch.ElapsedMilliseconds + "ms");
+        stopwatch.Stop();
     }
 
     private void capOffTileEnds(Grid3D<int> tiles, Grid3D<int> rotations, Grid3D<int> tileSetIndices) {
@@ -114,7 +135,7 @@ public class LevelBuilderEditor : Editor {
 
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
-        EditorUtils.filePicker("Pipes model", builder.pipesSampleFileName, TileSampler.savePath, (fileName) => {
+        EditorUtils.filePicker("Pipes model", builder.pipesSampleFileName, $"{Application.dataPath}/SamplerSaves", (fileName) => {
             builder.pipesSampleFileName = fileName as string;
         });
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Navigation {
     const int NEIGHBOURS_COUNT = 6;
-    const int NO_VECTOR = -1;
+    public const int NO_VECTOR = -1;
 
     public static Vector3Int[] directionVectors = {
         Vector3Int.up,

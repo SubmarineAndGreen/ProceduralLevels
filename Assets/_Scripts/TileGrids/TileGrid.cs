@@ -11,7 +11,7 @@ public class TileGrid : MonoBehaviour {
     public const int NO_ROTATION = 0;
     public const string SAVE_FOLDER = "InputGrids";
     public bool debugUI = true;
-        public bool cursorHidden = false;
+    public bool cursorHidden = false;
     [SerializeField] private TextMeshProUGUI previewRotationText;
     [SerializeField] private TextMeshProUGUI selectedTileRotationText;
     [SerializeField] private TextMeshProUGUI tileText;
@@ -40,10 +40,13 @@ public class TileGrid : MonoBehaviour {
 
 
     private void Awake() {
-        if(tileSets.GetLength(0) == 0) {
+        cursor = Instantiate(cursorPrefab, transform.position, Quaternion.Euler(0, 90, 0));
+        cursor.transform.SetParent(this.transform);
+
+        if (tileSets.GetLength(0) == 0) {
             return;
         }
-        
+
         bool loadedFromFile;
 
         // if (tileSets == null || tileSets.GetLength(0) == 0) {
@@ -71,11 +74,9 @@ public class TileGrid : MonoBehaviour {
             rebuildGrid();
         }
 
-        cursor = Instantiate(cursorPrefab, transform.position, Quaternion.Euler(0, 90, 0));
-        cursor.transform.SetParent(this.transform);
         reloadTilePreviews();
 
-        if(cursorHidden) {
+        if (cursorHidden) {
             cursor.SetActive(false);
         }
     }
@@ -179,6 +180,8 @@ public class TileGrid : MonoBehaviour {
         cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, dimensions.x - 1);
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, dimensions.y - 1);
         cursorPosition.z = Mathf.Clamp(cursorPosition.z, 0, dimensions.z - 1);
+
+        Debug.Log(cursorPosition);
 
         cursor.transform.position = new Vector3(
             this.transform.position.x + cursorPosition.x * cursorStep,

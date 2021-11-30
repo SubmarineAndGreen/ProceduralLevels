@@ -29,7 +29,7 @@ public class WfcRunner : MonoBehaviour {
         List<TileRule> rules;
         List<int> tiles;
 
-        samplerResult = SamplerResult.loadFromFile($"{TileSampler.savePath}/{modelFile}");
+        samplerResult = SamplerResult.loadFromFile($"{Application.dataPath}/SamplerSaves/{modelFileName}");
         rules = samplerResult.rules;
         tiles = samplerResult.uniqueTiles;
 

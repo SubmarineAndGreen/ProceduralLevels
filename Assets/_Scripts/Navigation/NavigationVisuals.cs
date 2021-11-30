@@ -7,24 +7,36 @@ public class NavigationVisuals : MonoBehaviour {
     public int maxDistance = 20;
     public GameObject arrowPrefab;
     [HideInInspector] public List<GameObject> arrows;
+    public Vector3Int goalTile;
+    public NavigationManager navigationManager;
+
+    private void Start() {
+        navigationManager = NavigationManager.instance;
+    }
 
     private void Update() {
-        if (Keyboard.current.pKey.wasPressedThisFrame) {
+        if (Keyboard.current.rKey.wasPressedThisFrame) {
             var tiles = grid.tileIndices;
             tiles.updateEach(value => 1);
             grid.rebuildGrid();
+        }
+
+        if (Keyboard.current.tKey.wasPressedThisFrame) {
+            updateDistanceFieldVisuals(navigationManager.distanceFields[goalTile.x, goalTile.y, goalTile.z]);
+        }
+
+        if (Keyboard.current.yKey.wasPressedThisFrame) {
+            Debug.Log("Test");
+            updateVectorFieldVisuals(navigationManager.vectorFields[goalTile.x, goalTile.y, goalTile.z]);
         }
     }
 
     public void updateDistanceFieldVisuals(int[,,] distanceField) {
         // showDistanceField(distanceField, true);
         grid.tileIndices.updateEach((x, y, z, value) => {
-            if (distanceField[x, y, z] != NavigationTest.BLOCKED_CELL) {
-                return 1;
-            } else {
-                return 0;
-            }
+            return 1;
         });
+
         grid.rebuildGrid();
         grid.tileIndices.forEach((x, y, z, value) => {
             if (distanceField[x, y, z] != NavigationTest.BLOCKED_CELL) {
