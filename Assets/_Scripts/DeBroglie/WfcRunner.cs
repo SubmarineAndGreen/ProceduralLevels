@@ -11,24 +11,17 @@ using Resolution = DeBroglie.Resolution;
 using Debug = UnityEngine.Debug;
 
 public class WfcRunner : MonoBehaviour {
-    public TileGrid input;
-    // public TileGrid output;
+    
     [HideInInspector] public string modelFile;
     public bool runTillSolved = false;
     public long maxRunTime = 30;
     public int numberOfTries = 1;
     // -1 means backtracking off
     public int backtrackDepth = 0;
-    // [Header("Overlapping Model")]
-    // [Range(1, 5)]
-    // public int tileSize = 2;
-    // [Range(1, 4)]
-    // public int rotations = 1;
-    // public bool reflections = false;
+    
     [Header("Path")]
     public bool path = true;
-    [Header("Debug")]
-    public float stepTime = 0.1f;
+
     [HideInInspector] public SamplerResult samplerResult;
 
     public bool runAdjacentModel(out int[,,] result, string modelFileName, TileSet tileSet, Vector3Int outputDimensions) {
@@ -36,7 +29,7 @@ public class WfcRunner : MonoBehaviour {
         List<TileRule> rules;
         List<int> tiles;
 
-        samplerResult = SamplerResult.loadFromFile($"{TileSampler.savePath}/{modelFile}");
+        samplerResult = SamplerResult.loadFromFile($"{Application.dataPath}/SamplerSaves/{modelFileName}");
         rules = samplerResult.rules;
         tiles = samplerResult.uniqueTiles;
 
@@ -48,7 +41,7 @@ public class WfcRunner : MonoBehaviour {
 
 
 
-        Vector3Int inputDimensions = input.dimensions;
+        // Vector3Int inputDimensions = input.dimensions;
 
         int[,,] tilesOut = new int[outputDimensions.x, outputDimensions.y, outputDimensions.z];
 
@@ -107,70 +100,6 @@ public class WfcRunner : MonoBehaviour {
         result = propagator.ToValueArray<int>().ToArray3d<int>();
         return success;
     }
-
-    // public void runAndBuild() {
-    //     Vector3Int outputDimensions = output.dimensions;
-    //     int[,,] result;
-    //     bool success = runAdjacentModel(out result, output.dimensions);
-    //     if (success) {
-    //         for (int x = 0; x < outputDimensions.x; x++) {
-    //             for (int y = 0; y < outputDimensions.y; y++) {
-    //                 for (int z = 0; z < outputDimensions.z; z++) {
-    //                     output.tileIndices.set(new Vector3Int(x, y, z), TileUtils.modelIndexToTileIndex(result[x, y, z]));
-    //                     output.tileRotations.set(new Vector3Int(x, y, z), TileUtils.modelIndexToRotation(result[x, y, z]));
-    //                 }
-    //             }
-    //         }
-
-    //         output.rebuildGrid();
-    //     }
-    // }
-
-    // public void runOverlapModel() {
-    //     Vector3Int inputDimensions = input.dimensions;
-    //     Vector3Int outputDimensions = output.dimensions;
-
-    //     int[,,] tilesIn = new int[inputDimensions.x, inputDimensions.y, inputDimensions.z];
-    //     int[,,] tilesOut = new int[outputDimensions.x, outputDimensions.y, outputDimensions.z];
-
-    //     input.tileIndices.forEach((x, y, z, index) => {
-    //         tilesIn[x, y, z] = TileUtils.tileIndexToModelIndex(index, input.tileRotations.at(x, y, z));
-    //     });
-
-    //     GridTopology outputGridTopo = new GridTopology(outputDimensions.x, outputDimensions.y, outputDimensions.z, false);
-    //     ITopoArray<int> topoArray = TopoArray.Create(tilesIn, false);
-
-    //     // var model = new OverlappingModel(topoArray.ToTiles(), tileSize, rotations, reflections);
-    //     var model = new OverlappingModel(tileSize, 1, tileSize);
-    //     model.AddSample(topoArray.ToTiles(), new DeBroglie.Rot.TileRotation(rotations, reflections));
-
-    //     var propagator = new TilePropagator(model, outputGridTopo, new TilePropagatorOptions() {
-    //         BackTrackDepth = backtrackDepth
-    //     });
-
-    //     while (numberOfTries > 0) {
-    //         var status = propagator.Run();
-    //         if (status != Resolution.Decided) {
-    //             numberOfTries--;
-    //             Debug.Log("Undecided!");
-    //         } else {
-    //             break;
-    //         }
-    //     }
-
-    //     tilesOut = propagator.ToValueArray<int>().ToArray3d<int>();
-
-    //     for (int x = 0; x < outputDimensions.x; x++) {
-    //         for (int y = 0; y < outputDimensions.y; y++) {
-    //             for (int z = 0; z < outputDimensions.z; z++) {
-    //                 output.tileIndices.set(new Vector3Int(x, y, z), TileUtils.modelIndexToTileIndex(tilesOut[x, y, z]));
-    //                 output.tileRotations.set(new Vector3Int(x, y, z), TileUtils.modelIndexToRotation(tilesOut[x, y, z]));
-    //             }
-    //         }
-    //     }
-
-    //     output.rebuildGrid();
-    // }
 
     public HashSet<DeBroglie.Tile> tilesWithoutEmpty(List<int> uniqueTiles, TileSet tileSet, Dictionary<int, DeBroglie.Tile> tileObjects) {
         var result = new HashSet<DeBroglie.Tile>();

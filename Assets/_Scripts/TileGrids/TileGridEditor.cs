@@ -31,6 +31,7 @@ public class TileGridEditor : Editor
 
         EditorGUILayout.Space(10);
         EditorUtils.guiButton("Edit this grid", toggleEditingGrids);
+        EditorUtils.guiButton("Toggle cursor", editedGrid.toggleCursor);
         EditorGUILayout.Space(10);
 
         EditorUtils.filePicker("Grid Save File", editedGrid.currentSaveFile, saveDir, (object parameter) => {
@@ -53,7 +54,7 @@ public class TileGridEditor : Editor
         EditorUtils.guiButton("Clear Grid", editedGrid.clear);
         
         resizeDimensions = EditorGUILayout.Vector3IntField("New Dimensions", resizeDimensions);
-        EditorUtils.guiButton("Resize", () => editedGrid.resize(resizeDimensions));
+        EditorUtils.guiButton("Resize", () => editedGrid.resizePerserveTiles(resizeDimensions));
     }
 
     void newGrid()
