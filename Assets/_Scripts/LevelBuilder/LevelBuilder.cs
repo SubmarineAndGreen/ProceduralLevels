@@ -57,20 +57,8 @@ public class LevelBuilder : MonoBehaviour {
         }
         capOffTileEnds(tileIndices, tileRotations, tileSetIndices);
 
-        int[,,] inputDistanceField = new int[fullDimensions.x, fullDimensions.y, fullDimensions.z];
-        int blockedTile = -1;
-
-        tileIndices.forEach((x, y, z, tileIndex) => {
-            if(tileIndex == TileGrid.TILE_EMPTY || tileIndex == tileSets[TILESET_PIPES].emptyTileIndex) {
-                inputDistanceField[x,y,z] = blockedTile;
-            } else {
-                inputDistanceField[x,y,z] = int.MaxValue / 2;
-            }
-        });
-
-        NavigationManager navigation = NavigationManager.instance;
-        navigation.calculateVectorFields(inputDistanceField, blockedTile);
-
+        initializeNavigation(tileIndices);
+        initializeEnemyManager(tileIndices, tileSetIndices);
 
         levelGrid.tileIndices = tileIndices;
         levelGrid.tileRotations = tileRotations;
@@ -120,6 +108,39 @@ public class LevelBuilder : MonoBehaviour {
                 }
             }
         });
+    }
+
+    private void initializeNavigation(Grid3D<int> tileIndices) {
+        Vector3Int fullDimensions = tileIndices.dimensions;
+        int[,,] inputDistanceField = new int[fullDimensions.x, fullDimensions.y, fullDimensions.z];
+        int blockedTile = -1;
+
+        tileIndices.forEach((x, y, z, tileIndex) => {
+            if (tileIndex == TileGrid.TILE_EMPTY || tileIndex == tileSets[TILESET_PIPES].emptyTileIndex) {
+                inputDistanceField[x, y, z] = blockedTile;
+            } else {
+                inputDistanceField[x, y, z] = int.MaxValue / 2;
+            }
+        });
+
+        NavigationManager navigation = NavigationManager.instance;
+        navigation.calculateVectorFields(inputDistanceField, blockedTile);
+    }
+
+    private void initializeEnemyManager(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {
+
+        EnemyManager enemyManager = EnemyManager.instance;
+        List<Vector3Int> validSpawningTiles = new List<Vector3Int>();
+
+        tileIndices.forEach((x, y, z, tileIndex) => {
+            if (tileIndex != TileGrid.TILE_EMPTY 
+            && tileSetIndices.at(x, y, z) == TILESET_PIPES 
+            && tileIndex != tileSets[TILESET_PIPES].emptyTileIndex) {
+                validSpawningTiles.Add(new Vector3Int(x, y, z));
+            }
+        });
+
+        enemyManager.validSpawningTiles = validSpawningTiles;
     }
 }
 

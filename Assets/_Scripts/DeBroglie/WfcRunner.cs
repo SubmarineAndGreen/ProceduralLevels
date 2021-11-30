@@ -9,22 +9,31 @@ using DeBroglie.Topo;
 using DeBroglie.Constraints;
 using Resolution = DeBroglie.Resolution;
 using Debug = UnityEngine.Debug;
+using System;
 
 public class WfcRunner : MonoBehaviour {
-    
+
     [HideInInspector] public string modelFile;
+    public int seed;
+    const int NO_SEED = 0;
     public bool runTillSolved = false;
     public long maxRunTime = 30;
     public int numberOfTries = 1;
     // -1 means backtracking off
     public int backtrackDepth = 0;
-    
+
     [Header("Path")]
     public bool path = true;
 
     [HideInInspector] public SamplerResult samplerResult;
 
     public bool runAdjacentModel(out int[,,] result, string modelFileName, TileSet tileSet, Vector3Int outputDimensions) {
+        System.Random rng;
+        if (seed != NO_SEED) {
+            rng = new System.Random((int)DateTime.Now.Ticks);
+        } else {
+            rng = new System.Random(seed);
+        }
 
         List<TileRule> rules;
         List<int> tiles;
@@ -65,9 +74,9 @@ public class WfcRunner : MonoBehaviour {
 
         var propagator = new TilePropagator(model, outputGridTopo, new TilePropagatorOptions() {
             BackTrackDepth = backtrackDepth,
-            Constraints = path ? new ITileConstraint[] {
-                new PathConstraint(tilesWithoutEmpty(tiles, tileSet, tileObjects))
-            } : null
+            Constraints = 
+        path ? new ITileConstraint[] {new PathConstraint(tilesWithoutEmpty(tiles, tileSet, tileObjects))} : null,
+            RandomDouble = rng.NextDouble
         });
 
         int tries = numberOfTries;
@@ -79,7 +88,7 @@ public class WfcRunner : MonoBehaviour {
         bool success = false;
 
         while (tries > 0 || runTillSolved) {
-                tries--;
+            tries--;
             if (stopwatch.ElapsedMilliseconds > maxRunTimeMillis) {
                 Debug.Log("max wfc time reached");
                 break;
@@ -104,9 +113,8 @@ public class WfcRunner : MonoBehaviour {
     public HashSet<DeBroglie.Tile> tilesWithoutEmpty(List<int> uniqueTiles, TileSet tileSet, Dictionary<int, DeBroglie.Tile> tileObjects) {
         var result = new HashSet<DeBroglie.Tile>();
         int emptyTile = TileUtils.tileIndexToModelIndex(tileSet.emptyTileIndex, TileGrid.NO_ROTATION);
-        foreach (int tileIndex in uniqueTiles)
-        {
-            if(tileIndex != emptyTile) {
+        foreach (int tileIndex in uniqueTiles) {
+            if (tileIndex != emptyTile) {
                 result.Add(tileObjects[tileIndex]);
             }
         }
