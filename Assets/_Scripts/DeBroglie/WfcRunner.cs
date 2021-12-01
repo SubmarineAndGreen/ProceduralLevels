@@ -29,7 +29,7 @@ public class WfcRunner : MonoBehaviour {
 
     public bool runAdjacentModel(out int[,,] result, string modelFileName, TileSet tileSet, Vector3Int outputDimensions) {
         System.Random rng;
-        if (seed != NO_SEED) {
+        if (seed == NO_SEED) {
             rng = new System.Random((int)DateTime.Now.Ticks);
         } else {
             rng = new System.Random(seed);

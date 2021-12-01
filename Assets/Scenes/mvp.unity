@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 712251740}
   - component: {fileID: 712251739}
   m_Layer: 0
-  m_Name: StepTest
+  m_Name: PathDrawer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
