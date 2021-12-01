@@ -172,7 +172,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e716fa77392144f429f502f781e7f56b, type: 2}
+  - {fileID: 2100000, guid: 7fee107a72a684045ba2c45c0b75637b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -193,9 +193,7 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -298,12 +296,14 @@ MonoBehaviour:
   levelGrid: {fileID: 2056008011}
   generatedGridDimensions: {x: 5, y: 5, z: 5}
   tileSets:
-  - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
+  - {fileID: 11400000, guid: 456f8cd44ceaa54459dd5658ab10658d, type: 2}
   - {fileID: 11400000, guid: 23fd1281d831cca4d9c87f1f4bd0d21b, type: 2}
+  pathConstraint: 1
   upTileCapIndex: 1
   downTileCapIndex: 2
   sideTileCapIndex: 0
-  pipesSampleFileName: pipes6.json
+  structurePlaceholderIndex: 15
+  pipesSampleFileName: pipesStructures2.json
 --- !u!114 &924014583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,17 +317,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modelFile: 
-  seed: 1
+  seed: 2
   runTillSolved: 0
   maxRunTime: 30
   numberOfTries: 10
   backtrackDepth: 10
-  path: 1
-  samplerResult:
-    tileSet: 
-    rules: []
-    uniqueTiles: 
-    connections: []
 --- !u!4 &924014584
 Transform:
   m_ObjectHideFlags: 0
@@ -519,7 +513,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7ad9496ce26df9b46aa58ed3aa801db6, type: 2}
   currentTilesetIndex: 0
   loadFromFileOnStart: 1
-  currentSaveFile: 17x17x17.json
+  currentSaveFile: 15x15x15.json
   dimensions: {x: 0, y: 0, z: 0}
   areEditingControlsOn: 0
   cursorPosition: {x: 0, y: 0, z: 0}

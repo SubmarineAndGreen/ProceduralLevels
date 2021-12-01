@@ -181,7 +181,7 @@ public class TileGrid : MonoBehaviour {
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, dimensions.y - 1);
         cursorPosition.z = Mathf.Clamp(cursorPosition.z, 0, dimensions.z - 1);
 
-        Debug.Log(cursorPosition);
+        // Debug.Log(cursorPosition);
 
         cursor.transform.position = new Vector3(
             this.transform.position.x + cursorPosition.x * cursorStep,

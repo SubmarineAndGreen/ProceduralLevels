@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEditor;
+using DeBroglie;
+using DeBroglie.Constraints;
+using System;
 
 [RequireComponent(typeof(WfcRunner))]
 public class LevelBuilder : MonoBehaviour {
@@ -11,18 +14,20 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] Vector3Int generatedGridDimensions;
     Vector3Int fullDimensions;
     public TileSet[] tileSets;
+    [SerializeField] private bool pathConstraint = true;
     private const int TILESET_PIPES = 0;
     private const int TILESET_CAPS = 1;
+    [Header("Tile Caps")]
     [SerializeField] int upTileCapIndex;
     [SerializeField] int downTileCapIndex;
     [SerializeField] int sideTileCapIndex;
+    [Space(10)]
+    [SerializeField] int structurePlaceholderIndex;
     [HideInInspector] public string pipesSampleFileName;
 
 
     void Start() {
         System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
-
-        wfcRunner = GetComponent<WfcRunner>();
 
         levelGrid.tileSets = tileSets;
 
@@ -30,20 +35,42 @@ public class LevelBuilder : MonoBehaviour {
         Vector3Int oneTileMargin = Vector3Int.one * 2;
         fullDimensions = generatedGridDimensions + oneTileMargin;
 
-        int[,,] generatedTiles;
-        bool generationSuccess = wfcRunner.runAdjacentModel(out generatedTiles, pipesSampleFileName, tileSets[TILESET_PIPES], generatedGridDimensions);
-
-        if (!generationSuccess) {
-            Debug.LogError("WFC failed!");
-            return;
-        }
-
         levelGrid.dimensions = fullDimensions;
         Grid3D<int> tileIndices = new Grid3D<int>(fullDimensions);
-        tileIndices.updateEach((int index) => TileGrid.TILE_EMPTY);
+        tileIndices.updateEach(_ => TileGrid.TILE_EMPTY);
         Grid3D<int> tileRotations = new Grid3D<int>(fullDimensions);
         Grid3D<int> tileSetIndices = new Grid3D<int>(fullDimensions);
         Grid3D<GameObject> tileObjects = new Grid3D<GameObject>(fullDimensions);
+
+        wfcRunner = GetComponent<WfcRunner>();
+        SamplerResult pipesSample = SamplerResult.loadFromFile($"{Application.dataPath}/SamplerSaves/{pipesSampleFileName}");
+
+        var wfcTiles = createWfcTiles(pipesSample.uniqueTiles);
+
+        List<ITileConstraint> wfcConstraints = new List<ITileConstraint>();
+
+        if (pathConstraint) {
+            wfcConstraints.Add(new PathConstraint(tilesWithoutEmpty(pipesSample.uniqueTiles,
+                                                                    tileSets[TILESET_PIPES],
+                                                                    wfcTiles)));
+        }
+
+        addStructureConstraints(tileIndices, wfcConstraints, wfcTiles);
+
+
+        int[,,] generatedTiles;
+        bool generationSuccess = wfcRunner.runAdjacentModel(out generatedTiles,
+                                                            generatedGridDimensions,
+                                                            tileSets[TILESET_PIPES],
+                                                            pipesSample.uniqueTiles,
+                                                            pipesSample.rules,
+                                                            wfcTiles,
+                                                            wfcConstraints);
+
+        if (!generationSuccess) {
+            Debug.LogError("WFC failed!");
+            // return;
+        }
 
         //leave 1 empty tile border
         for (int x = 1; x < fullDimensions.x - 1; x++) {
@@ -55,9 +82,10 @@ public class LevelBuilder : MonoBehaviour {
                 }
             }
         }
-        capOffTileEnds(tileIndices, tileRotations, tileSetIndices);
 
-        initializeNavigation(tileIndices);
+        capOffTileEnds(tileIndices, tileRotations, tileSetIndices, pipesSample);
+
+        initializeNavigation(tileIndices, tileSetIndices);
         initializeEnemyManager(tileIndices, tileSetIndices);
 
         levelGrid.tileIndices = tileIndices;
@@ -70,9 +98,9 @@ public class LevelBuilder : MonoBehaviour {
         stopwatch.Stop();
     }
 
-    private void capOffTileEnds(Grid3D<int> tiles, Grid3D<int> rotations, Grid3D<int> tileSetIndices) {
+    private void capOffTileEnds(Grid3D<int> tiles, Grid3D<int> rotations, Grid3D<int> tileSetIndices, SamplerResult pipesSample) {
 
-        ConnectionData[] connectionData = wfcRunner.samplerResult.connections;
+        ConnectionData[] connectionData = pipesSample.connections;
 
         tiles.forEach((position, tile) => {
             if (tile != TileGrid.TILE_EMPTY && tileSetIndices.at(position) != TILESET_CAPS) {
@@ -110,13 +138,13 @@ public class LevelBuilder : MonoBehaviour {
         });
     }
 
-    private void initializeNavigation(Grid3D<int> tileIndices) {
+    private void initializeNavigation(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {
         Vector3Int fullDimensions = tileIndices.dimensions;
         int[,,] inputDistanceField = new int[fullDimensions.x, fullDimensions.y, fullDimensions.z];
         int blockedTile = -1;
 
         tileIndices.forEach((x, y, z, tileIndex) => {
-            if (tileIndex == TileGrid.TILE_EMPTY || tileIndex == tileSets[TILESET_PIPES].emptyTileIndex) {
+            if (tileIndex == TileGrid.TILE_EMPTY || tileSetIndices.at(x, y, z) != TILESET_PIPES || tileIndex == tileSets[TILESET_PIPES].emptyTileIndex) {
                 inputDistanceField[x, y, z] = blockedTile;
             } else {
                 inputDistanceField[x, y, z] = int.MaxValue / 2;
@@ -133,14 +161,67 @@ public class LevelBuilder : MonoBehaviour {
         List<Vector3Int> validSpawningTiles = new List<Vector3Int>();
 
         tileIndices.forEach((x, y, z, tileIndex) => {
-            if (tileIndex != TileGrid.TILE_EMPTY 
-            && tileSetIndices.at(x, y, z) == TILESET_PIPES 
+            if (tileIndex != TileGrid.TILE_EMPTY
+            && tileSetIndices.at(x, y, z) == TILESET_PIPES
             && tileIndex != tileSets[TILESET_PIPES].emptyTileIndex) {
                 validSpawningTiles.Add(new Vector3Int(x, y, z));
             }
         });
 
         enemyManager.validSpawningTiles = validSpawningTiles;
+    }
+
+    private Dictionary<int, DeBroglie.Tile> createWfcTiles(List<int> uniqueTiles) {
+        Dictionary<int, DeBroglie.Tile> tileObjects = new Dictionary<int, DeBroglie.Tile>();
+
+        foreach (int tileIndex in uniqueTiles) {
+            tileObjects[tileIndex] = new DeBroglie.Tile(tileIndex);
+        }
+
+        return tileObjects;
+    }
+
+    public HashSet<DeBroglie.Tile> tilesWithoutEmpty(List<int> uniqueTiles, TileSet tileSet, Dictionary<int, DeBroglie.Tile> tileObjects) {
+        var result = new HashSet<DeBroglie.Tile>();
+        int emptyTile = TileUtils.tileIndexToModelIndex(tileSet.emptyTileIndex, TileGrid.NO_ROTATION);
+        foreach (int tileIndex in uniqueTiles) {
+            if (tileIndex != emptyTile) {
+                result.Add(tileObjects[tileIndex]);
+            }
+        }
+        return result;
+    }
+
+    private int addRoomConstraints(Grid3D<int> tileIndices,
+                                   Vector3Int position,
+                                   Vector3Int dimensions,
+                                   List<ITileConstraint> wfcConstraints,
+                                   Dictionary<int, DeBroglie.Tile> wfcTiles) {
+        int constrainedTileCount = 0;
+        int structureTile = TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION);
+        for (int xOffset = 0; xOffset < dimensions.x; xOffset++) {
+            for (int yOffset = 0; yOffset < dimensions.y; yOffset++) {
+                for (int zOffset = 0; zOffset < dimensions.z; zOffset++) {
+                    wfcConstraints.Add(new FixedTileConstraint() {
+                        Tiles = new DeBroglie.Tile[] { wfcTiles[structureTile] },
+                        Point = new Point(position.x + xOffset, position.y + yOffset, position.z + zOffset)
+                    });
+                    constrainedTileCount++;
+                }
+            }
+        }
+        return constrainedTileCount;
+    }
+
+    private void addStructureConstraints(Grid3D<int> tileIndices, List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
+        int structureTileCount = 0;
+        structureTileCount += addRoomConstraints(tileIndices, new Vector3Int(0, 0, 0), new Vector3Int(3, 3, 3), wfcConstraints, wfcTiles);
+
+        wfcConstraints.Add(new CountConstraint() {
+            Comparison = CountComparison.Exactly,
+            Count = structureTileCount,
+            Tiles = new HashSet<DeBroglie.Tile>() { wfcTiles[TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION)] }
+        });
     }
 }
 

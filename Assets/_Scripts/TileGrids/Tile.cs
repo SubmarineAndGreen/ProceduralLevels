@@ -6,6 +6,7 @@ using UnityEngine;
 public class Tile {
     public GameObject tilePrefab;
     public RotationalSymmetry symmetry;
+    // public bool excludeFromGeneration = false;
     // const int numberOfDirections = 6;
     // public bool[] possibleConnections = new bool[numberOfDirections];
     public static Dictionary<RotationalSymmetry, int> symmetryToNumberOfRotations = new Dictionary<RotationalSymmetry, int>() {

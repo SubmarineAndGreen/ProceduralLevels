@@ -10,37 +10,55 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce8459994ff0e23419d04dbec8d4b0a3, type: 3}
-  m_Name: SewerPipesHiddenEmpty
+  m_Name: SewerPipesDebug
   m_EditorClassIdentifier: 
   emptyTileIndex: 14
   tiles:
   - tilePrefab: {fileID: 4898314855677709670, guid: a8ba6abb23e82a84a9dfa1200f9f63a2, type: 3}
     symmetry: 0
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 8191791034808052039, guid: eee06b66b4ea8c44b9f6cc5667172ccd, type: 3}
     symmetry: 2
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 2493512749664066611, guid: 2b246a3b95d29e148a24f925931788d5, type: 3}
     symmetry: 2
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 7672600972993412334, guid: 13347f2c873f3a144a4bdd6fc93193fa, type: 3}
     symmetry: 2
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 8617081930367404044, guid: 20e8224a0d7ad6241893c35c90edf98b, type: 3}
     symmetry: 1
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 250625941489892936, guid: 8dc6ac332f190904985c48122b5f8612, type: 3}
     symmetry: 2
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 7340627557243110141, guid: ae8647f9f9a12424ab7fd01e4d8fd6c4, type: 3}
     symmetry: 1
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 5094646244255340547, guid: 7e102e9035f3bba428f85b3c499e3d13, type: 3}
     symmetry: 1
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 450416570225439525, guid: bd40f9563ca85644fbe33553e111cd99, type: 3}
     symmetry: 0
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 7310053125493134836, guid: 1c2a7b356c986a84da3abeb5a4165021, type: 3}
     symmetry: 1
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 3368794720080963805, guid: 0d07d04b211629d4185f5a706fa360fc, type: 3}
     symmetry: 0
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 859057947058939483, guid: 3f48abfa4c5235f4f91815f9ddc59106, type: 3}
     symmetry: 0
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 7615892455732193924, guid: e6f3d1c47e96b7248b5c068be7c55fc1, type: 3}
     symmetry: 0
+    excludeFromGeneration: 0
   - tilePrefab: {fileID: 1368563383191857753, guid: 419d5748391316648ada14569868732f, type: 3}
     symmetry: 2
-  - tilePrefab: {fileID: 2450690623008994218, guid: 94405b788e6596946b9af8eca592d710, type: 3}
+    excludeFromGeneration: 0
+  - tilePrefab: {fileID: 4422873590863240213, guid: 46c046b3b47c8c14096feddab66d3d87, type: 3}
     symmetry: 2
+    excludeFromGeneration: 0
+  - tilePrefab: {fileID: 2291799654254613062, guid: 8a8193c0c1fa15f4b8715a36de20eca8, type: 3}
+    symmetry: 2
+    excludeFromGeneration: 1

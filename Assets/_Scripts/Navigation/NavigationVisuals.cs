@@ -26,7 +26,7 @@ public class NavigationVisuals : MonoBehaviour {
         }
 
         if (Keyboard.current.yKey.wasPressedThisFrame) {
-            Debug.Log("Test");
+            // Debug.Log("Test");
             updateVectorFieldVisuals(navigationManager.vectorFields[goalTile.x, goalTile.y, goalTile.z]);
         }
     }

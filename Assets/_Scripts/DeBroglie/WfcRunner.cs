@@ -22,35 +22,24 @@ public class WfcRunner : MonoBehaviour {
     // -1 means backtracking off
     public int backtrackDepth = 0;
 
-    [Header("Path")]
-    public bool path = true;
+    // [Header("Path")]
+    // public bool path = true;
 
-    [HideInInspector] public SamplerResult samplerResult;
+    // [HideInInspector] public SamplerResult samplerResult;
 
-    public bool runAdjacentModel(out int[,,] result, string modelFileName, TileSet tileSet, Vector3Int outputDimensions) {
+    public bool runAdjacentModel(out int[,,] result,
+                                 Vector3Int outputDimensions,
+                                 TileSet tileSet,
+                                 List<int> tiles,
+                                 List<TileRule> rules,
+                                 Dictionary<int, DeBroglie.Tile> tileObjects,
+                                 List<ITileConstraint> constraints) {
         System.Random rng;
         if (seed == NO_SEED) {
             rng = new System.Random((int)DateTime.Now.Ticks);
         } else {
             rng = new System.Random(seed);
         }
-
-        List<TileRule> rules;
-        List<int> tiles;
-
-        samplerResult = SamplerResult.loadFromFile($"{Application.dataPath}/SamplerSaves/{modelFileName}");
-        rules = samplerResult.rules;
-        tiles = samplerResult.uniqueTiles;
-
-        Dictionary<int, DeBroglie.Tile> tileObjects = new Dictionary<int, DeBroglie.Tile>();
-
-        foreach (int tile in tiles) {
-            tileObjects[tile] = new DeBroglie.Tile(tile);
-        }
-
-
-
-        // Vector3Int inputDimensions = input.dimensions;
 
         int[,,] tilesOut = new int[outputDimensions.x, outputDimensions.y, outputDimensions.z];
 
@@ -74,8 +63,7 @@ public class WfcRunner : MonoBehaviour {
 
         var propagator = new TilePropagator(model, outputGridTopo, new TilePropagatorOptions() {
             BackTrackDepth = backtrackDepth,
-            Constraints = 
-        path ? new ITileConstraint[] {new PathConstraint(tilesWithoutEmpty(tiles, tileSet, tileObjects))} : null,
+            Constraints = constraints.ToArray(),
             RandomDouble = rng.NextDouble
         });
 
@@ -109,31 +97,20 @@ public class WfcRunner : MonoBehaviour {
         result = propagator.ToValueArray<int>().ToArray3d<int>();
         return success;
     }
-
-    public HashSet<DeBroglie.Tile> tilesWithoutEmpty(List<int> uniqueTiles, TileSet tileSet, Dictionary<int, DeBroglie.Tile> tileObjects) {
-        var result = new HashSet<DeBroglie.Tile>();
-        int emptyTile = TileUtils.tileIndexToModelIndex(tileSet.emptyTileIndex, TileGrid.NO_ROTATION);
-        foreach (int tileIndex in uniqueTiles) {
-            if (tileIndex != emptyTile) {
-                result.Add(tileObjects[tileIndex]);
-            }
-        }
-        return result;
-    }
 }
 
 
 
 
-[CustomEditor(typeof(WfcRunner))]
-public class WfcRunnerEditor : Editor {
+// [CustomEditor(typeof(WfcRunner))]
+// public class WfcRunnerEditor : Editor {
 
-    WfcRunner wfc;
-    private void OnEnable() {
-        wfc = target as WfcRunner;
-    }
+//     WfcRunner wfc;
+//     private void OnEnable() {
+//         wfc = target as WfcRunner;
+//     }
 
-    public override void OnInspectorGUI() {
-        base.OnInspectorGUI();
-    }
-}
+//     public override void OnInspectorGUI() {
+//         base.OnInspectorGUI();
+//     }
+// }
