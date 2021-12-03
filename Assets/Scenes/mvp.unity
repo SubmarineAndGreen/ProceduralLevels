@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelGrid: {fileID: 2056008011}
-  generatedGridDimensions: {x: 5, y: 5, z: 5}
+  generatedGridDimensions: {x: 10, y: 10, z: 10}
   tileSets:
   - {fileID: 11400000, guid: 456f8cd44ceaa54459dd5658ab10658d, type: 2}
   - {fileID: 11400000, guid: 23fd1281d831cca4d9c87f1f4bd0d21b, type: 2}
@@ -303,6 +303,11 @@ MonoBehaviour:
   downTileCapIndex: 2
   sideTileCapIndex: 0
   structurePlaceholderIndex: 15
+  fixedRooms:
+  - dimensions: {x: 2, y: 2, z: 2}
+    position: {x: 0, y: 0, z: 0}
+  - dimensions: {x: 3, y: 3, z: 3}
+    position: {x: 5, y: 5, z: 5}
   pipesSampleFileName: pipesStructures2.json
 --- !u!114 &924014583
 MonoBehaviour:

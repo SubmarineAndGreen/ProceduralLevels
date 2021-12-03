@@ -23,6 +23,8 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] int sideTileCapIndex;
     [Space(10)]
     [SerializeField] int structurePlaceholderIndex;
+    [SerializeField] private CuboidStructure[] fixedRooms;
+    [SerializeField] private FullLengthTunnel[] fixedTunnels;
     [HideInInspector] public string pipesSampleFileName;
 
 
@@ -144,7 +146,9 @@ public class LevelBuilder : MonoBehaviour {
         int blockedTile = -1;
 
         tileIndices.forEach((x, y, z, tileIndex) => {
-            if (tileIndex == TileGrid.TILE_EMPTY || tileSetIndices.at(x, y, z) != TILESET_PIPES || tileIndex == tileSets[TILESET_PIPES].emptyTileIndex) {
+            if (tileIndex == TileGrid.TILE_EMPTY
+                || tileSetIndices.at(x, y, z) != TILESET_PIPES
+                || tileIndex == tileSets[TILESET_PIPES].emptyTileIndex) {
                 inputDistanceField[x, y, z] = blockedTile;
             } else {
                 inputDistanceField[x, y, z] = int.MaxValue / 2;
@@ -192,36 +196,102 @@ public class LevelBuilder : MonoBehaviour {
         return result;
     }
 
-    private int addRoomConstraints(Grid3D<int> tileIndices,
-                                   Vector3Int position,
-                                   Vector3Int dimensions,
+    private int addCuboidStructureConstraints(Grid3D<int> tileIndices,
+                                   CuboidStructure structure,
                                    List<ITileConstraint> wfcConstraints,
-                                   Dictionary<int, DeBroglie.Tile> wfcTiles) {
+                                   Dictionary<int, DeBroglie.Tile> wfcTiles,
+                                   HashSet<Vector3Int> fixedTiles) {
         int constrainedTileCount = 0;
         int structureTile = TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION);
-        for (int xOffset = 0; xOffset < dimensions.x; xOffset++) {
-            for (int yOffset = 0; yOffset < dimensions.y; yOffset++) {
-                for (int zOffset = 0; zOffset < dimensions.z; zOffset++) {
-                    wfcConstraints.Add(new FixedTileConstraint() {
-                        Tiles = new DeBroglie.Tile[] { wfcTiles[structureTile] },
-                        Point = new Point(position.x + xOffset, position.y + yOffset, position.z + zOffset)
-                    });
-                    constrainedTileCount++;
+        for (int xOffset = 0; xOffset < structure.dimensions.x; xOffset++) {
+            for (int yOffset = 0; yOffset < structure.dimensions.y; yOffset++) {
+                for (int zOffset = 0; zOffset < structure.dimensions.z; zOffset++) {
+                    Vector3Int currentTile = new Vector3Int(structure.position.x + xOffset,
+                                                            structure.position.y + yOffset,
+                                                            structure.position.z + zOffset);
+                    if (!fixedTiles.Contains(currentTile)) {
+                        fixedTiles.Add(currentTile);
+
+                        wfcConstraints.Add(new FixedTileConstraint() {
+                            Tiles = new DeBroglie.Tile[] { wfcTiles[structureTile] },
+                            Point = new Point(currentTile.x, currentTile.y, currentTile.z)
+                        });
+
+                        constrainedTileCount++;
+                    }
                 }
             }
         }
         return constrainedTileCount;
     }
 
-    private void addStructureConstraints(Grid3D<int> tileIndices, List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
+    private void addStructureConstraints(Grid3D<int> tileIndices,
+                                         List<ITileConstraint> wfcConstraints,
+                                         Dictionary<int, DeBroglie.Tile> wfcTiles) {
+        //data structure to check for existing fixed tile constraints and avoid duplicates
+        HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
         int structureTileCount = 0;
-        structureTileCount += addRoomConstraints(tileIndices, new Vector3Int(0, 0, 0), new Vector3Int(3, 3, 3), wfcConstraints, wfcTiles);
+
+        foreach (CuboidStructure structure in fixedRooms) {
+            structureTileCount += addCuboidStructureConstraints(tileIndices,
+                                                                structure,
+                                                                wfcConstraints,
+                                                                wfcTiles,
+                                                                fixedTiles);
+        }
+
+        foreach (FullLengthTunnel tunnel in fixedTunnels) {
+            structureTileCount += addCuboidStructureConstraints(tileIndices,
+                                                                tunnel.toCuboidStructure(tileIndices.dimensions),
+                                                                wfcConstraints,
+                                                                wfcTiles,
+                                                                fixedTiles);
+        }
 
         wfcConstraints.Add(new CountConstraint() {
             Comparison = CountComparison.Exactly,
             Count = structureTileCount,
-            Tiles = new HashSet<DeBroglie.Tile>() { wfcTiles[TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION)] }
+            Tiles = new HashSet<DeBroglie.Tile>() {
+                 wfcTiles[TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION)]
+            }
         });
+    }
+}
+
+[Serializable]
+public struct CuboidStructure {
+    public Vector3Int dimensions;
+    public Vector3Int position;
+}
+
+
+[Serializable]
+public struct FullLengthTunnel {
+    public Vector3Int pointInTunnel;
+    public Vector2Int dimensions;
+    public TunnelDirection direction;
+    public CuboidStructure toCuboidStructure(Vector3Int levelDimensions) {
+        if (direction == TunnelDirection.Vertical) {
+            return new CuboidStructure() {
+                dimensions = new Vector3Int(dimensions.x, levelDimensions.y - 2, dimensions.y),
+                position = new Vector3Int(pointInTunnel.x, 0, pointInTunnel.z)
+            };
+        } else if (direction == TunnelDirection.HorizontalX) {
+            return new CuboidStructure() {
+                dimensions = new Vector3Int(levelDimensions.x - 2, dimensions.y, dimensions.x),
+                position = new Vector3Int(0, pointInTunnel.y, pointInTunnel.z)
+            };
+        } else {
+            return new CuboidStructure() {
+                dimensions = new Vector3Int(dimensions.x, dimensions.y, levelDimensions.z - 2),
+                position = new Vector3Int(pointInTunnel.x, pointInTunnel.y, 0)
+            };
+        }
+    }
+    public enum TunnelDirection {
+        Vertical,
+        HorizontalX,
+        HorizontalZ
     }
 }
 

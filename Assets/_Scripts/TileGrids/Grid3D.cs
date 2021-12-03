@@ -44,7 +44,7 @@ public class Grid3D<T> : IEnumerable {
     }
 
     public void set(int x, int y, int z, T newValue) {
-         _values[x, y, z] = newValue;
+        _values[x, y, z] = newValue;
     }
 
     public bool inBounds(Vector3Int position) {
@@ -53,7 +53,7 @@ public class Grid3D<T> : IEnumerable {
                position.z >= 0 && position.z < _values.GetLength(2);
     }
 
-    public T[,,] getValuesAsArray() {
+    public T[,,] toArray() {
         return _values;
     }
 
@@ -166,14 +166,10 @@ public class Grid3D<T> : IEnumerable {
         return _values.GetEnumerator();
     }
 
-    public void forEach(ValueAction3 action)
-    {
-        for (int x = 0; x < _values.GetLength(0); x++)
-        {
-            for (int y = 0; y < _values.GetLength(1); y++)
-            {
-                for (int z = 0; z < _values.GetLength(2); z++)
-                {
+    public void forEach(ValueAction3 action) {
+        for (int x = 0; x < _values.GetLength(0); x++) {
+            for (int y = 0; y < _values.GetLength(1); y++) {
+                for (int z = 0; z < _values.GetLength(2); z++) {
                     action(_values[x, y, z]);
                 }
             }
