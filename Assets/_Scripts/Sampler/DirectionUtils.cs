@@ -1,19 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SamplerUtils {
-    public static bool isInBounds(Vector3Int dimensions, Vector3Int position) {
-        if (position.x >= dimensions.x || position.y >= dimensions.y || position.z >= dimensions.z) {
-            return false;
-        }
-        if (position.x < 0 || position.y < 0 || position.z < 0) {
-            return false;
-        }
-        return true;
-    }
-
-
-
+public class DirectionUtils {
 
     public const int nOfDirections = 6;
     public static Directions3D[] allDirections = {
@@ -66,7 +54,7 @@ public class SamplerUtils {
     };
 
     public static Directions3D rotateDirection(Directions3D dir, int rotation) {
-        if(dir == Directions3D.UP || dir == Directions3D.DOWN) {
+        if (dir == Directions3D.UP || dir == Directions3D.DOWN) {
             return dir;
         }
         return allDirections[MathUtils.mod(((int)dir - 2 + rotation), 4) + 2];

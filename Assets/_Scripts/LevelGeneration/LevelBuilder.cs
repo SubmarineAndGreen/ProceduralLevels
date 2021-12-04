@@ -22,7 +22,7 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] int downTileCapIndex;
     [SerializeField] int sideTileCapIndex;
     [Space(10)]
-    [SerializeField] int structurePlaceholderIndex;
+    [SerializeField] int roomTileIndex;
     [SerializeField] private CuboidStructure[] fixedRooms;
     [SerializeField] private FullLengthTunnel[] fixedTunnels;
     [HideInInspector] public string pipesSampleFileName;
@@ -38,8 +38,10 @@ public class LevelBuilder : MonoBehaviour {
         fullDimensions = generatedGridDimensions + oneTileMargin;
 
         levelGrid.dimensions = fullDimensions;
+
         Grid3D<int> tileIndices = new Grid3D<int>(fullDimensions);
         tileIndices.updateEach(_ => TileGrid.TILE_EMPTY);
+
         Grid3D<int> tileRotations = new Grid3D<int>(fullDimensions);
         Grid3D<int> tileSetIndices = new Grid3D<int>(fullDimensions);
         Grid3D<GameObject> tileObjects = new Grid3D<GameObject>(fullDimensions);
@@ -58,7 +60,8 @@ public class LevelBuilder : MonoBehaviour {
                                                                     wfcTiles)));
         }
 
-        addStructureConstraints(tileIndices, wfcConstraints, wfcTiles);
+        Vector3Int[] roomTilePositions = addStructureConstraints(tileIndices, wfcConstraints, wfcTiles);
+
 
 
         int[,,] generatedTiles;
@@ -87,12 +90,8 @@ public class LevelBuilder : MonoBehaviour {
             }
         }
 
-        capOffTileEnds(tileIndices, tileRotations, tileSetIndices, pipesSample);
 
-        System.Diagnostics.Stopwatch navigationStopwatch = System.Diagnostics.Stopwatch.StartNew();
-        initializeNavigation(tileIndices, tileSetIndices);
-        navigationStopwatch.Stop();
-        initializeEnemyManager(tileIndices, tileSetIndices);
+        capOffTileEnds(tileIndices, tileRotations, tileSetIndices, pipesSample);
 
         levelGrid.tileIndices = tileIndices;
         levelGrid.tileRotations = tileRotations;
@@ -100,8 +99,17 @@ public class LevelBuilder : MonoBehaviour {
         levelGrid.tileObjects = tileObjects;
         levelGrid.rebuildGrid();
 
+        createRoomTileWalls(roomTilePositions, tileIndices, tileObjects);
+
+        System.Diagnostics.Stopwatch navigationStopwatch = System.Diagnostics.Stopwatch.StartNew();
+        initializeNavigation(tileIndices, tileSetIndices);
+        navigationStopwatch.Stop();
+
+        initializeEnemyManager(tileIndices, tileSetIndices);
+
+
         allStopwatch.Stop();
-        Debug.Log($"Level created in: {allStopwatch.ElapsedMilliseconds}ms, wfc:{wfcStopwatch.ElapsedMilliseconds}ms, navigation:{navigationStopwatch.ElapsedMilliseconds}ms");
+        Debug.Log($"Level created in: {allStopwatch.ElapsedMilliseconds}ms, wfc/constraints:{wfcStopwatch.ElapsedMilliseconds}ms, navigation:{navigationStopwatch.ElapsedMilliseconds}ms");
     }
 
     private void capOffTileEnds(Grid3D<int> tiles, Grid3D<int> rotations, Grid3D<int> tileSetIndices, SamplerResult pipesSample) {
@@ -111,10 +119,10 @@ public class LevelBuilder : MonoBehaviour {
         tiles.forEach((position, tile) => {
             if (tile != TileGrid.TILE_EMPTY && tileSetIndices.at(position) != TILESET_CAPS) {
                 var possibleConnections = connectionData[tile];
-                foreach (Directions3D direction in SamplerUtils.allDirections) {
+                foreach (Directions3D direction in DirectionUtils.allDirections) {
                     bool isConnectionPossible = possibleConnections.canConnectFromDirection(direction, rotations.at(position));
                     if (isConnectionPossible) {
-                        Vector3Int offset = SamplerUtils.DirectionsToVectors[direction];
+                        Vector3Int offset = DirectionUtils.DirectionsToVectors[direction];
                         // Debug.Log(tiles.at(position) + " " + offset);
                         if (tiles.at(position + offset) == TileGrid.TILE_EMPTY) {
                             switch (direction) {
@@ -206,7 +214,7 @@ public class LevelBuilder : MonoBehaviour {
                                    Dictionary<int, DeBroglie.Tile> wfcTiles,
                                    HashSet<Vector3Int> fixedTiles) {
         int constrainedTileCount = 0;
-        int structureTile = TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION);
+        int structureTile = TileUtils.tileIndexToModelIndex(roomTileIndex, TileGrid.NO_ROTATION);
         for (int xOffset = 0; xOffset < structure.dimensions.x; xOffset++) {
             for (int yOffset = 0; yOffset < structure.dimensions.y; yOffset++) {
                 for (int zOffset = 0; zOffset < structure.dimensions.z; zOffset++) {
@@ -229,7 +237,7 @@ public class LevelBuilder : MonoBehaviour {
         return constrainedTileCount;
     }
 
-    private void addStructureConstraints(Grid3D<int> tileIndices,
+    private Vector3Int[] addStructureConstraints(Grid3D<int> tileIndices,
                                          List<ITileConstraint> wfcConstraints,
                                          Dictionary<int, DeBroglie.Tile> wfcTiles) {
         //data structure to check for existing fixed tile constraints and avoid duplicates
@@ -256,9 +264,31 @@ public class LevelBuilder : MonoBehaviour {
             Comparison = CountComparison.Exactly,
             Count = structureTileCount,
             Tiles = new HashSet<DeBroglie.Tile>() {
-                 wfcTiles[TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION)]
+                 wfcTiles[TileUtils.tileIndexToModelIndex(roomTileIndex, TileGrid.NO_ROTATION)]
             }
         });
+
+        return fixedTiles.ToArray();
+    }
+
+    private void createRoomTileWalls(Vector3Int[] roomTilePositions, Grid3D<int> tileIndices, Grid3D<GameObject> tileObjects) {
+        //room tile positions are offset due to 1 tile border containing tile caps
+        Vector3Int borderOffset = Vector3Int.one;
+        int emptyPipeTileIndex = tileSets[TILESET_PIPES].emptyTileIndex;
+        foreach (Vector3Int position in roomTilePositions) {
+            RoomTile roomTile = tileObjects.at(position + borderOffset).GetComponent<RoomTile>();
+            foreach (Directions3D direction in DirectionUtils.allDirections) {
+                Vector3Int neighbourOffset = DirectionUtils.DirectionsToVectors[direction];
+                int neighbourTileIndex = tileIndices.at(position + neighbourOffset + borderOffset);
+                if (neighbourTileIndex != roomTileIndex) {
+                    if (neighbourTileIndex == TileGrid.TILE_EMPTY || neighbourTileIndex == emptyPipeTileIndex) {
+                        roomTile.instantiateWall(direction, RoomTile.WallType.SOLID);
+                    } else {
+                        roomTile.instantiateWall(direction, RoomTile.WallType.OPEN);
+                    }
+                }
+            }
+        }
     }
 }
 

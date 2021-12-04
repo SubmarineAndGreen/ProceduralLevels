@@ -11,7 +11,7 @@ Shader "Custom/Cull Off"
     {
         Tags { "RenderType"="Opaque" }
         LOD 200
-        Cull Off
+        // Cull Off
 
         CGPROGRAM
         // Physically based Standard lighting model, and enable shadows on all light types

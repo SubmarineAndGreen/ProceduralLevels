@@ -48,7 +48,7 @@ public class WfcRunner : MonoBehaviour {
         var model = new AdjacentModel(DirectionSet.Cartesian3d);
         foreach (TileRule rule in rules) {
             Directions3D direction = rule.directionAtoB;
-            Vector3Int v = SamplerUtils.DirectionsToVectors[direction];
+            Vector3Int v = DirectionUtils.DirectionsToVectors[direction];
 
             model.AddAdjacency(tileObjects[rule.valueA], tileObjects[rule.valueB], v.x, v.y, v.z);
 

@@ -44,3 +44,5 @@ MonoBehaviour:
     symmetry: 2
   - tilePrefab: {fileID: 2450690623008994218, guid: 94405b788e6596946b9af8eca592d710, type: 3}
     symmetry: 2
+  - tilePrefab: {fileID: 4228669143516170250, guid: 7326a304b6892914e9513cea58c17be6, type: 3}
+    symmetry: 2

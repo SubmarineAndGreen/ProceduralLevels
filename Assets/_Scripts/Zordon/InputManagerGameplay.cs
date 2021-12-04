@@ -20,12 +20,3 @@ public class InputManagerGameplay : MonoBehaviour
     }
 }
 
-
-/*public static class VecUtils
-{
-    public static Vector2Int toVector2Int(this Vector2 v)
-    {
-        return new Vector2Int((int)v.x, (int)v.y);
-    }
-}*/
-

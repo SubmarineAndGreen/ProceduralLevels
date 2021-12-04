@@ -57,13 +57,13 @@ public class TileSampler : MonoBehaviour {
             Grid3D<int> tileIndices = inputGrid.tileIndices;
             Grid3D<int> tileRotations = inputGrid.tileRotations;
 
-            foreach (var item in SamplerUtils.DirectionsToVectors) {
+            foreach (var item in DirectionUtils.DirectionsToVectors) {
                 Vector3Int offset = item.Value;
                 Directions3D direction = item.Key;
 
                 Vector3Int destination = source + offset;
 
-                if (SamplerUtils.isInBounds(dimensions, destination)) {
+                if (inBounds(dimensions, destination)) {
                     //skip creating rules where some tile is an empty tile
                     if (ignoreEmptyTiles) {
                         if (tileIndices.at(source) == TileGrid.TILE_EMPTY || tileIndices.at(destination) == TileGrid.TILE_EMPTY) {
@@ -122,7 +122,7 @@ public class TileSampler : MonoBehaviour {
 
                             sourceRotation = getNextRotation(sourceTile, sourceRotation);
                             destinationRotation = getNextRotation(destinationTile, destinationRotation);
-                            currentDirection = SamplerUtils.nextDirectionClockwise[currentDirection];
+                            currentDirection = DirectionUtils.nextDirectionClockwise[currentDirection];
                         }
                     }
                 }
@@ -173,6 +173,16 @@ public class TileSampler : MonoBehaviour {
         void banConnection(ConnectionData[] connections, int tileIndex, int tileRotation, Directions3D direction) {
             connections[tileIndex].banConnection(direction, tileRotation);
         }
+    }
+
+    public bool inBounds(Vector3Int dimensions, Vector3Int position) {
+        if (position.x >= dimensions.x || position.y >= dimensions.y || position.z >= dimensions.z) {
+            return false;
+        }
+        if (position.x < 0 || position.y < 0 || position.z < 0) {
+            return false;
+        }
+        return true;
     }
 
 

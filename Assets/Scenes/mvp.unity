@@ -303,11 +303,14 @@ MonoBehaviour:
   downTileCapIndex: 2
   sideTileCapIndex: 0
   structurePlaceholderIndex: 15
-  fixedRooms:
-  - dimensions: {x: 2, y: 2, z: 2}
-    position: {x: 0, y: 0, z: 0}
-  - dimensions: {x: 3, y: 3, z: 3}
-    position: {x: 5, y: 5, z: 5}
+  fixedRooms: []
+  fixedTunnels:
+  - pointInTunnel: {x: 3, y: 0, z: 3}
+    dimensions: {x: 1, y: 1}
+    direction: 0
+  - pointInTunnel: {x: 0, y: 2, z: 5}
+    dimensions: {x: 1, y: 1}
+    direction: 1
   pipesSampleFileName: pipesStructures2.json
 --- !u!114 &924014583
 MonoBehaviour:
