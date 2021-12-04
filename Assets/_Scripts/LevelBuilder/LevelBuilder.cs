@@ -29,7 +29,7 @@ public class LevelBuilder : MonoBehaviour {
 
 
     void Start() {
-        System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        System.Diagnostics.Stopwatch allStopwatch = System.Diagnostics.Stopwatch.StartNew();
 
         levelGrid.tileSets = tileSets;
 
@@ -44,6 +44,7 @@ public class LevelBuilder : MonoBehaviour {
         Grid3D<int> tileSetIndices = new Grid3D<int>(fullDimensions);
         Grid3D<GameObject> tileObjects = new Grid3D<GameObject>(fullDimensions);
 
+        System.Diagnostics.Stopwatch wfcStopwatch = System.Diagnostics.Stopwatch.StartNew();
         wfcRunner = GetComponent<WfcRunner>();
         SamplerResult pipesSample = SamplerResult.loadFromFile($"{Application.dataPath}/SamplerSaves/{pipesSampleFileName}");
 
@@ -69,9 +70,10 @@ public class LevelBuilder : MonoBehaviour {
                                                             wfcTiles,
                                                             wfcConstraints);
 
+        wfcStopwatch.Stop();
+
         if (!generationSuccess) {
             Debug.LogError("WFC failed!");
-            // return;
         }
 
         //leave 1 empty tile border
@@ -87,7 +89,9 @@ public class LevelBuilder : MonoBehaviour {
 
         capOffTileEnds(tileIndices, tileRotations, tileSetIndices, pipesSample);
 
+        System.Diagnostics.Stopwatch navigationStopwatch = System.Diagnostics.Stopwatch.StartNew();
         initializeNavigation(tileIndices, tileSetIndices);
+        navigationStopwatch.Stop();
         initializeEnemyManager(tileIndices, tileSetIndices);
 
         levelGrid.tileIndices = tileIndices;
@@ -96,8 +100,8 @@ public class LevelBuilder : MonoBehaviour {
         levelGrid.tileObjects = tileObjects;
         levelGrid.rebuildGrid();
 
-        Debug.Log("Level created in: " + stopwatch.ElapsedMilliseconds + "ms");
-        stopwatch.Stop();
+        allStopwatch.Stop();
+        Debug.Log($"Level created in: {allStopwatch.ElapsedMilliseconds}ms, wfc:{wfcStopwatch.ElapsedMilliseconds}ms, navigation:{navigationStopwatch.ElapsedMilliseconds}ms");
     }
 
     private void capOffTileEnds(Grid3D<int> tiles, Grid3D<int> rotations, Grid3D<int> tileSetIndices, SamplerResult pipesSample) {
