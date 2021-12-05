@@ -293,14 +293,14 @@ public class LevelBuilder : MonoBehaviour {
 }
 
 [Serializable]
-public struct CuboidStructure {
+public class CuboidStructure {
     public Vector3Int dimensions;
     public Vector3Int position;
 }
 
 
 [Serializable]
-public struct FullLengthTunnel {
+public class FullLengthTunnel {
     public Vector3Int pointInTunnel;
     public Vector2Int dimensions;
     public TunnelDirection direction;

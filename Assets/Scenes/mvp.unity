@@ -296,19 +296,21 @@ MonoBehaviour:
   levelGrid: {fileID: 2056008011}
   generatedGridDimensions: {x: 10, y: 10, z: 10}
   tileSets:
-  - {fileID: 11400000, guid: 456f8cd44ceaa54459dd5658ab10658d, type: 2}
+  - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
   - {fileID: 11400000, guid: 23fd1281d831cca4d9c87f1f4bd0d21b, type: 2}
   pathConstraint: 1
   upTileCapIndex: 1
   downTileCapIndex: 2
   sideTileCapIndex: 0
-  structurePlaceholderIndex: 15
-  fixedRooms: []
+  roomTileIndex: 15
+  fixedRooms:
+  - dimensions: {x: 3, y: 3, z: 3}
+    position: {x: 6, y: 6, z: 6}
   fixedTunnels:
   - pointInTunnel: {x: 3, y: 0, z: 3}
     dimensions: {x: 1, y: 1}
     direction: 0
-  - pointInTunnel: {x: 0, y: 2, z: 5}
+  - pointInTunnel: {x: 0, y: 2, z: 4}
     dimensions: {x: 1, y: 1}
     direction: 1
   pipesSampleFileName: pipesStructures2.json
