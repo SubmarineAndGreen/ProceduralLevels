@@ -6,6 +6,9 @@ public class NavigationManager : MonoBehaviour {
     public static NavigationManager instance;
     public TileGrid levelGrid;
     private Vector3 gridOrigin;
+    public Vector3Int tileGridDimensions;
+    public float tileSize;
+    [SerializeField] private Transform playerTransform;
     private void Awake() {
         instance = this;
         gridOrigin = levelGrid.transform.position;
@@ -23,6 +26,10 @@ public class NavigationManager : MonoBehaviour {
             Debug.Log("Navigation returned invalid vector");
             return Vector3.zero;
         }
+    }
+
+    public Vector3 getPathVectorToPlayer(Vector3 currentPosition) {
+        return getPathVector(worldPositionToGridPosition(playerTransform.position), worldPositionToGridPosition(currentPosition));
     }
 
     public void calculateVectorFields(int[,,] inputDistanceField, int unwalkableTileValue) {
@@ -55,12 +62,8 @@ public class NavigationManager : MonoBehaviour {
         // vectorFields = Navigation.calculateVectorFieldForEachCell(inputDistanceField, unwalkableTileValue);
     }
 
-    public Vector3Int worldPositionToGridCell(Vector3 worldPosition) {
+    public Vector3Int worldPositionToGridPosition(Vector3 worldPosition) {
         Vector3 worldOffset = gridOrigin - worldPosition;
-        return (new Vector3Int(
-            (int)Mathf.Floor(worldOffset.x),
-            (int)Mathf.Floor(worldOffset.y),
-            (int)Mathf.Floor(worldOffset.z)
-        ));
+        return Vector3Int.FloorToInt(worldOffset / tileSize);
     }
 }

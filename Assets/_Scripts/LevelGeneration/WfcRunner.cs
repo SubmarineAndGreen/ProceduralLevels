@@ -14,8 +14,6 @@ using System;
 public class WfcRunner : MonoBehaviour {
 
     [HideInInspector] public string modelFile;
-    public int seed;
-    const int NO_SEED = 0;
     public bool runTillSolved = false;
     public long maxRunTime = 30;
     public int numberOfTries = 1;
@@ -33,12 +31,13 @@ public class WfcRunner : MonoBehaviour {
                                  List<int> tiles,
                                  List<TileRule> rules,
                                  Dictionary<int, DeBroglie.Tile> tileObjects,
-                                 List<ITileConstraint> constraints) {
+                                 List<ITileConstraint> constraints,
+                                 int rngSeed = LevelBuilder.NO_SEED) {
         System.Random rng;
-        if (seed == NO_SEED) {
+        if (rngSeed == LevelBuilder.NO_SEED) {
             rng = new System.Random((int)DateTime.Now.Ticks);
         } else {
-            rng = new System.Random(seed);
+            rng = new System.Random(rngSeed);
         }
 
         int[,,] tilesOut = new int[outputDimensions.x, outputDimensions.y, outputDimensions.z];

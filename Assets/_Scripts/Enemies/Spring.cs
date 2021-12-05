@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestEnemy : MonoBehaviour {
+public class Spring : MonoBehaviour {
     public float gravity = 9.8f;
     public float springMaxForceDistance = 0f;
     public float springMinForceDistance = 0.5f;

@@ -9,10 +9,15 @@ using System;
 
 [RequireComponent(typeof(WfcRunner))]
 public class LevelBuilder : MonoBehaviour {
+
+    public int seed;
+    public const int NO_SEED = -1;
     private WfcRunner wfcRunner;
     [SerializeField] private TileGrid levelGrid;
     [SerializeField] Vector3Int generatedGridDimensions;
     Vector3Int fullDimensions;
+    [SerializeField] bool scaleAfterGeneration;
+    [SerializeField] float scaleFactor;
     public TileSet[] tileSets;
     [SerializeField] private bool pathConstraint = true;
     private const int TILESET_PIPES = 0;
@@ -23,6 +28,7 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] int sideTileCapIndex;
     [Space(10)]
     [SerializeField] int roomTileIndex;
+    [SerializeField] private RandomRoom[] randomRooms;
     [SerializeField] private CuboidStructure[] fixedRooms;
     [SerializeField] private FullLengthTunnel[] fixedTunnels;
     [HideInInspector] public string pipesSampleFileName;
@@ -30,6 +36,10 @@ public class LevelBuilder : MonoBehaviour {
 
     void Start() {
         System.Diagnostics.Stopwatch allStopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+        if (seed != NO_SEED) {
+            UnityEngine.Random.InitState(seed);
+        }
 
         levelGrid.tileSets = tileSets;
 
@@ -71,7 +81,8 @@ public class LevelBuilder : MonoBehaviour {
                                                             pipesSample.uniqueTiles,
                                                             pipesSample.rules,
                                                             wfcTiles,
-                                                            wfcConstraints);
+                                                            wfcConstraints,
+                                                            seed);
 
         wfcStopwatch.Stop();
 
@@ -107,6 +118,9 @@ public class LevelBuilder : MonoBehaviour {
 
         initializeEnemyManager(tileIndices, tileSetIndices);
 
+        if (scaleAfterGeneration) {
+            levelGrid.transform.localScale = Vector3.one * scaleFactor;
+        }
 
         allStopwatch.Stop();
         Debug.Log($"Level created in: {allStopwatch.ElapsedMilliseconds}ms, wfc/constraints:{wfcStopwatch.ElapsedMilliseconds}ms, navigation:{navigationStopwatch.ElapsedMilliseconds}ms");
@@ -169,6 +183,9 @@ public class LevelBuilder : MonoBehaviour {
 
         NavigationManager navigation = NavigationManager.instance;
         navigation.calculateVectorFields(inputDistanceField, blockedTile);
+
+        navigation.tileSize = scaleFactor;
+        navigation.tileGridDimensions = fullDimensions;
     }
 
     private void initializeEnemyManager(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {
@@ -244,6 +261,14 @@ public class LevelBuilder : MonoBehaviour {
         HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
         int structureTileCount = 0;
 
+        foreach (CuboidStructure room in createRoomsWithRandomPosition(randomRooms)) {
+            structureTileCount += addCuboidStructureConstraints(tileIndices,
+                                                                room,
+                                                                wfcConstraints,
+                                                                wfcTiles,
+                                                                fixedTiles);
+        }
+
         foreach (CuboidStructure structure in fixedRooms) {
             structureTileCount += addCuboidStructureConstraints(tileIndices,
                                                                 structure,
@@ -290,14 +315,53 @@ public class LevelBuilder : MonoBehaviour {
             }
         }
     }
+
+    private List<CuboidStructure> createRoomsWithRandomPosition(RandomRoom[] roomCounts, bool dontOverlap = false) {
+        List<CuboidStructure> rooms = new List<CuboidStructure>();
+        foreach (var room in roomCounts) {
+            for (int i = 0; i < room.count; i++) {
+                rooms.Add(new CuboidStructure() {
+                    dimensions = room.dimensions,
+                    position = randomVector3Int(Vector3Int.zero, generatedGridDimensions - room.dimensions)
+                });
+            }
+        }
+        return rooms;
+    }
+
+    private Vector3Int randomVector3Int(Vector3Int min, Vector3Int max) {
+        return new Vector3Int(
+            UnityEngine.Random.Range(min.x, max.x),
+            UnityEngine.Random.Range(min.y, max.y),
+            UnityEngine.Random.Range(min.z, max.z)
+        );
+    }
 }
 
 [Serializable]
 public class CuboidStructure {
     public Vector3Int dimensions;
     public Vector3Int position;
+
+    private bool inStructureBounds(Vector3Int point) {
+        if (point.x < position.x + dimensions.x
+            || point.y < position.y + dimensions.y
+            || point.z < position.z + dimensions.z
+            || point.x >= position.x
+            || point.y >= position.y
+            || point.z >= position.z) {
+            return false;
+        }
+
+        return true;
+    }
 }
 
+[Serializable]
+public class RandomRoom {
+    public Vector3Int dimensions;
+    public int count;
+}
 
 [Serializable]
 public class FullLengthTunnel {

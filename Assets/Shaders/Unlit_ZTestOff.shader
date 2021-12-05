@@ -1,4 +1,4 @@
-Shader "Unlit/Cursor"
+Shader "Unlit/ZTestOff"
 {
     Properties
     {

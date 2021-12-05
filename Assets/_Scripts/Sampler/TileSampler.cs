@@ -184,8 +184,6 @@ public class TileSampler : MonoBehaviour {
         }
         return true;
     }
-
-
 }
 
 
