@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4860669922257688111}
   - component: {fileID: 2272647900180524830}
   - component: {fileID: 203536012678139319}
+  - component: {fileID: 1650916575454061570}
   m_Layer: 0
   m_Name: 5crossing_2
   m_TagString: Untagged
@@ -81,3 +82,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1650916575454061570
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8191791034808052039}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4116814893353651837, guid: 19dbbbf39f223164fa60b9b80ce3b9cf, type: 3}

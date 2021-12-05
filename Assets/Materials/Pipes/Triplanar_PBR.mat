@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PBR_test
+  m_Name: Triplanar_PBR
   m_Shader: {fileID: -6465566751694194690, guid: 97d58a79a11fdf044b9ac417a1c5df74, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -88,6 +88,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_4aef1b72d5284090bbf80ad695b8b428: 1
+    - Vector1_81c1d598a0094ff9a92938ba8f015834: 0
+    - Vector1_90fde06456ec43d590cc37019467475c: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1

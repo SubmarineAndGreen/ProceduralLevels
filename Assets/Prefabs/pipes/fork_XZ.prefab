@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1745035847159818235}
   - component: {fileID: 8724766203595307326}
   - component: {fileID: 5608161953992683691}
+  - component: {fileID: 7684875887855621472}
   m_Layer: 0
   m_Name: fork_XZ
   m_TagString: Untagged
@@ -81,3 +82,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7684875887855621472
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450416570225439525}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6781934982854833820, guid: 19dbbbf39f223164fa60b9b80ce3b9cf, type: 3}
