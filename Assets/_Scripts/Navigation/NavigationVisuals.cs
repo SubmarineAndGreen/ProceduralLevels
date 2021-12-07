@@ -4,30 +4,37 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class NavigationVisuals : MonoBehaviour {
     public TileGrid grid;
+    public LevelBuilder levelBuilder;
     public int maxDistance = 20;
     public GameObject arrowPrefab;
     [HideInInspector] public List<GameObject> arrows;
     public Vector3Int goalTile;
     public NavigationManager navigationManager;
+    
+    private bool showToggle = true;
 
     private void Start() {
         navigationManager = NavigationManager.instance;
     }
 
     private void Update() {
-        if (Keyboard.current.rKey.wasPressedThisFrame) {
-            var tiles = grid.tileIndices;
-            tiles.updateEach(value => 1);
-            grid.rebuildGrid();
-        }
+        // if (Keyboard.current.rKey.wasPressedThisFrame) {
+        //     var tiles = grid.tileIndices;
+        //     tiles.updateEach(value => 1);
+        //     grid.rebuildGrid();
+        // }
 
         if (Keyboard.current.tKey.wasPressedThisFrame) {
+            grid.resizePerserveTiles(levelBuilder.fullDimensions);
             updateDistanceFieldVisuals(navigationManager.distanceFields[goalTile.x, goalTile.y, goalTile.z]);
+            updateVectorFieldVisuals(navigationManager.vectorFields[goalTile.x, goalTile.y, goalTile.z]);
+            grid.transform.localScale = new Vector3(levelBuilder.scaleFactor,levelBuilder.scaleFactor,levelBuilder.scaleFactor);
+            // grid.transform.position += new Vector3(levelBuilder.scaleFactor,levelBuilder.scaleFactor,levelBuilder.scaleFactor);
         }
 
         if (Keyboard.current.yKey.wasPressedThisFrame) {
-            // Debug.Log("Test");
-            updateVectorFieldVisuals(navigationManager.vectorFields[goalTile.x, goalTile.y, goalTile.z]);
+            showToggle = !showToggle; 
+            showDistanceField(navigationManager.distanceFields[goalTile.x, goalTile.y, goalTile.z], showToggle);
         }
     }
 

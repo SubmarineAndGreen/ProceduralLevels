@@ -8,7 +8,7 @@ public class NavigationManager : MonoBehaviour {
     private Vector3 gridOrigin;
     public Vector3Int tileGridDimensions;
     public float tileSize;
-    [SerializeField] private Transform playerTransform;
+    [SerializeField] public Transform playerTransform;
     private void Awake() {
         instance = this;
         gridOrigin = levelGrid.transform.position;
@@ -23,7 +23,7 @@ public class NavigationManager : MonoBehaviour {
         if (vector != Navigation.NO_VECTOR) {
             return Navigation.directionVectors[vector];
         } else {
-            Debug.Log("Navigation returned invalid vector");
+            // Debug.Log("Navigation returned Vector3.zero");
             return Vector3.zero;
         }
     }
@@ -55,7 +55,7 @@ public class NavigationManager : MonoBehaviour {
                     }
 
                     distanceFields[x, y, z] = Navigation.calculateDijkstraDistanceField(input, unwalkableTileValue, new Vector3Int(x, y, z));
-                    vectorFields[x, y, z] = Navigation.calculateVectorField(distanceFields[x,y,z] , unwalkableTileValue);
+                    vectorFields[x, y, z] = Navigation.calculateVectorField(distanceFields[x, y, z], unwalkableTileValue);
                 }
             }
         }
@@ -63,7 +63,15 @@ public class NavigationManager : MonoBehaviour {
     }
 
     public Vector3Int worldPositionToGridPosition(Vector3 worldPosition) {
-        Vector3 worldOffset = gridOrigin - worldPosition;
-        return Vector3Int.FloorToInt(worldOffset / tileSize);
+        Vector3 tileCenterOffset = new Vector3(0, tileSize / 2f, 0);
+        Vector3 worldOffset = worldPosition - gridOrigin;
+        Vector3Int result = Vector3Int.CeilToInt((worldOffset - tileCenterOffset) / tileSize);
+        // Debug.Log(result);
+        return result;
+    }
+
+    public Vector3 gridPositionToWorldPosition(Vector3Int gridPosition) {
+        Vector3 tileCenterOffset = new Vector3(tileSize / 2, 0, tileSize / 2);
+        return gridOrigin + gridPosition.toVector3() * tileSize - tileCenterOffset;
     }
 }

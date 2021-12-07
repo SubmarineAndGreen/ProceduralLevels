@@ -9,15 +9,15 @@ using System;
 
 [RequireComponent(typeof(WfcRunner))]
 public class LevelBuilder : MonoBehaviour {
-
+    [SerializeField] GameLoop gameLoop;
     public int seed;
     public const int NO_SEED = -1;
     private WfcRunner wfcRunner;
     [SerializeField] private TileGrid levelGrid;
     [SerializeField] Vector3Int generatedGridDimensions;
-    Vector3Int fullDimensions;
+    [HideInInspector] public Vector3Int fullDimensions;
     [SerializeField] bool scaleAfterGeneration;
-    [SerializeField] float scaleFactor;
+    public float scaleFactor;
     public TileSet[] tileSets;
     [SerializeField] private bool pathConstraint = true;
     private const int TILESET_PIPES = 0;
@@ -33,8 +33,12 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] private FullLengthTunnel[] fixedTunnels;
     [HideInInspector] public string pipesSampleFileName;
 
+    private void Start() {
+        generate();
+        gameLoop.enabled = true;
+    }
 
-    void Start() {
+    void generate() {
         System.Diagnostics.Stopwatch allStopwatch = System.Diagnostics.Stopwatch.StartNew();
 
         if (seed != NO_SEED) {
