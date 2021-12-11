@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 4522705356490961461, guid: 77d0985e814071942bbf1098bf10b32b, type: 3}
-  spawningPeriod: 3
+  spawningPeriod: 4
   minSpawningDistance: 0.2
   maxSpawningDistance: 0.5

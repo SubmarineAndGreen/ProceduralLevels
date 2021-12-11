@@ -7,6 +7,7 @@ public class GameLoop : MonoBehaviour
     SpawnerPlacer spawnerPlacer;
     NavigationManager navigationManager;
     EnemyManager enemyManager;
+    [SerializeField] GameObject playerPrefab;
 
     private void Awake() {
         spawnerPlacer = GetComponent<SpawnerPlacer>();
@@ -16,12 +17,11 @@ public class GameLoop : MonoBehaviour
         navigationManager = NavigationManager.instance;
         enemyManager = EnemyManager.instance;
 
-        GameObject dummyPlayer = new GameObject("dummyPlayer");
-        Vector3Int playerTile = enemyManager.getRandomValidSpawningTile();
-        dummyPlayer.transform.position = navigationManager.gridPositionToWorldPosition(playerTile);
-        Debug.Log(playerTile);
+        Vector3Int playerSpawnTile = enemyManager.getRandomValidSpawningTile();
+        Vector3 playerSpawn = navigationManager.gridPositionToWorldPosition(playerSpawnTile);
+        GameObject player = Instantiate(playerPrefab, playerSpawn, Quaternion.identity);
 
-        navigationManager.playerTransform = dummyPlayer.transform;
+        navigationManager.playerTransform = player.transform.GetChild(0);
         
         spawnerPlacer.enabled = true;
     }

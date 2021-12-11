@@ -294,12 +294,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameLoop: {fileID: 1903047125}
-  seed: 0
+  seed: -1
   levelGrid: {fileID: 2056008011}
   generatedGridDimensions: {x: 10, y: 10, z: 10}
   fullDimensions: {x: 0, y: 0, z: 0}
   scaleAfterGeneration: 1
-  scaleFactor: 5
+  scaleFactor: 10
   tileSets:
   - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
   - {fileID: 11400000, guid: 23fd1281d831cca4d9c87f1f4bd0d21b, type: 2}
@@ -576,13 +576,14 @@ GameObject:
   - component: {fileID: 1403971904}
   - component: {fileID: 1403971903}
   - component: {fileID: 1403971906}
+  - component: {fileID: 1403971907}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1403971903
 AudioListener:
   m_ObjectHideFlags: 0
@@ -662,6 +663,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraSpeed: 30
   mouseSensitivity: 20
+--- !u!114 &1403971907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403971902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &1430830181
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,7 +719,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1430830181}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c451141dfcfea1499466fb0cced0eeb, type: 3}
   m_Name: 
@@ -793,6 +826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66fc66c6e23f1c54694bc40ec1193e9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 5231489966705550095, guid: fc0730db6bb540a428557cd88e44756d, type: 3}
 --- !u!4 &1903047126
 Transform:
   m_ObjectHideFlags: 0
