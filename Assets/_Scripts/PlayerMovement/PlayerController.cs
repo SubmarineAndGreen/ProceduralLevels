@@ -86,17 +86,17 @@ public class PlayerController : MonoBehaviour {
     }
 
     void updateHorizontalVelocity() {
-        // Debug.Log(grounded + " " + rb.velocity.y);
+        Debug.Log(grounded);
+        Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, groundNormal);
+        Vector3 projectedRight = Vector3.ProjectOnPlane(transform.right, groundNormal);
+        
         Vector3 movementPlaneNormal = grounded ? groundNormal : Vector3.up;
         Vector3 wishDirection = Vector3.ProjectOnPlane(transform.TransformDirection(playerInput.movementAxes), movementPlaneNormal);
         // Debug.Log(playerInput.movementAxes);
 
         Vector3 oldVelocity = rb.velocity;
-        Vector3 oldHorizontalVelocity = oldVelocity;
-
-        oldHorizontalVelocity.y = 0;
-        oldHorizontalVelocity = Vector3.ProjectOnPlane(oldHorizontalVelocity, groundNormal);
-        
+        Vector3 verticalComponent = Vector3.Dot(oldVelocity, groundNormal) * groundNormal;
+        oldVelocity -= verticalComponent;
 
         float acceleration = grounded ? groundAcceleration : airAcceleration;
         float drag = grounded ? groundDrag : airDrag;
@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour {
         float speedFromAcceleration = acceleration * Time.fixedDeltaTime;
         float speedFromDrag = -drag * Time.fixedDeltaTime;
 
-        Vector3 maxNewVelocity = oldHorizontalVelocity + wishDirection * speedFromAcceleration;
+        Vector3 maxNewVelocity = oldVelocity + wishDirection * speedFromAcceleration;
 
         if (maxNewVelocity.magnitude + speedFromDrag < 0) {
             speedFromDrag = -maxNewVelocity.magnitude;
@@ -114,15 +114,14 @@ public class PlayerController : MonoBehaviour {
         Vector3 newVelocityWithDrag = maxNewVelocity + dragVelocity;
 
         if (newVelocityWithDrag.magnitude > maxSpeed) {
-            newVelocityWithDrag = Vector3.ClampMagnitude(newVelocityWithDrag, oldHorizontalVelocity.magnitude);
+            newVelocityWithDrag = Vector3.ClampMagnitude(newVelocityWithDrag, oldVelocity.magnitude);
         }
 
         if (!grounded || jumpedLastUpdate) {
             jumpedLastUpdate = false;
-            newVelocityWithDrag.y = oldVelocity.y;
         }
 
-        rb.velocity = newVelocityWithDrag;
+        rb.velocity = newVelocityWithDrag + verticalComponent;
     }
 
     private void applyGravity() {
@@ -141,7 +140,7 @@ public class PlayerController : MonoBehaviour {
             playerInput.jumpQueued = false;
             jumpedLastUpdate = true;
             float jumpSpeed = Mathf.Sqrt(2 * gravity * jumpHeight);
-            Debug.Log(jumpSpeed);
+            // Debug.Log(jumpSpeed);
             rb.velocity += groundNormal * jumpSpeed;
         }
     }
