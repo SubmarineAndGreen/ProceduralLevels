@@ -47,4 +47,8 @@ public class Timer {
     public bool isRunning() {
         return running;
     }
+
+    public float getTimeRunning() {
+        return time;
+    }
 }

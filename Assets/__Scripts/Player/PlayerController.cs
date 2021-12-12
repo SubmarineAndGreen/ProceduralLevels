@@ -8,12 +8,12 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour {
     InputMap inputMap;
     Rigidbody rb;
-    // RaycastHit rbSweepTestInfo;
-    SphereCollider feetCollider;
+    RaycastHit groundCheckInfo;
     PlayerInput playerInput;
     Vector3 groundNormal;
     int groundContactCount;
-    bool grounded => groundContactCount > 0;
+    bool grounded;
+    [SerializeField] float groundCheckDistanceFromOrigin = 1.25f;
     [SerializeField] float maxGroundAngle;
     float minNormalY;
     [SerializeField] float maxSpeed;
@@ -40,28 +40,31 @@ public class PlayerController : MonoBehaviour {
         cameraOffest = playerCameraTransform.position - transform.position;
 
         rb = GetComponent<Rigidbody>();
-        feetCollider = GetComponent<SphereCollider>();
+        // feetCollider = GetComponent<SphereCollider>();
 
         inputMap = new InputMap();
         inputMap.Player.Enable();
         playerInput = new PlayerInput();
 
-        // rbSweepTestInfo = new RaycastHit();
+        groundCheckInfo = new RaycastHit();
     }
 
     private void FixedUpdate() {
-        updateState();
+        // updateState();
+        groundCheck();
         updateRbRotation();
         updateHorizontalVelocity();
         handleJump();
         applyGravity();
         // Debug.Log(groundContactCount);
-        clearState();
+        // clearState();
     }
 
     void Update() {
         readInput();
         updateRotationValues();
+        // Debug.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistanceFromOrigin);
+        // Debug.Log(grounded);
         // Debug.Log(playerInput.jump);
 
     }
@@ -88,6 +91,25 @@ public class PlayerController : MonoBehaviour {
 
     void udpateCameraPosition() {
         playerCameraTransform.position = transform.position + cameraOffest;
+    }
+
+    void groundCheck() {
+        Ray groundCheckRay = new Ray(transform.position, Vector3.down);
+        if (Physics.Raycast(groundCheckRay, out groundCheckInfo, groundCheckDistanceFromOrigin)) {
+            // Debug.Log("ray hit");
+            if (groundCheckInfo.normal.y >= minNormalY) {
+                // Debug.Log("ground");
+                grounded = true;
+                groundNormal = groundCheckInfo.normal;
+            } else {
+                // Debug.Log("not ground");
+                grounded = false;
+                groundNormal = Vector3.up;
+            }
+        } else {
+            grounded = false;
+            groundNormal = Vector3.up;
+        }
     }
 
     void updateHorizontalVelocity() {
@@ -172,44 +194,5 @@ public class PlayerController : MonoBehaviour {
         playerInput.lookAxes = inputMap.Player.Look.ReadValue<Vector2>();
         playerInput.lookAxes.x *= mouseSensitivity.x;
         playerInput.lookAxes.y *= mouseSensitivity.y;
-    }
-
-    private void OnCollisionEnter(Collision other) {
-        updateContactData(other);
-    }
-
-    private void OnCollisionStay(Collision other) {
-        updateContactData(other);
-    }
-
-    void updateContactData(Collision other) {
-
-        ContactPoint[] contacts = new ContactPoint[other.contactCount];
-        other.GetContacts(contacts);
-
-        foreach (ContactPoint contact in contacts) {
-            if (contact.thisCollider == feetCollider) {
-                if (contact.normal.y >= minNormalY) {
-                    groundContactCount += 1;
-                    groundNormal += contact.normal;
-                }
-            }
-        }
-
-        groundNormal.Normalize();
-    }
-
-
-    void updateState() {
-        if (grounded) {
-            groundNormal.Normalize();
-        } else {
-            groundNormal = Vector3.up;
-        }
-    }
-
-    void clearState() {
-        groundContactCount = 0;
-        groundNormal = Vector3.zero;
     }
 }
