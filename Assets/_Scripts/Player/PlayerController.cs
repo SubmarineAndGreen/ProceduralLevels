@@ -8,8 +8,8 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour {
     InputMap inputMap;
     Rigidbody rb;
-    RaycastHit rbSweepTestInfo;
-    CapsuleCollider playerCollider;
+    // RaycastHit rbSweepTestInfo;
+    SphereCollider feetCollider;
     PlayerInput playerInput;
     Vector3 groundNormal;
     int groundContactCount;
@@ -40,13 +40,13 @@ public class PlayerController : MonoBehaviour {
         cameraOffest = playerCameraTransform.position - transform.position;
 
         rb = GetComponent<Rigidbody>();
-        playerCollider = GetComponent<CapsuleCollider>();
+        feetCollider = GetComponent<SphereCollider>();
 
         inputMap = new InputMap();
         inputMap.Player.Enable();
         playerInput = new PlayerInput();
 
-        rbSweepTestInfo = new RaycastHit();
+        // rbSweepTestInfo = new RaycastHit();
     }
 
     private void FixedUpdate() {
@@ -128,18 +128,6 @@ public class PlayerController : MonoBehaviour {
 
         Vector3 totalVelocity = newVelocityWithDrag + verticalComponent;
 
-        // const float eps = 0.01f;
-
-        // while(rb.SweepTest(totalVelocity, out rbSweepTestInfo, totalVelocity.magnitude)) {
-
-        // }
-
-        // //prevent sticking to walls
-        // if(rb.SweepTest(totalVelocity, out rbSweepTestInfo, totalVelocity.magnitude)) {
-        //     if(rbSweepTestInfo.normal.y > minNormalY) {
-        //         totalVelocity = Vector3.ClampMagnitude(totalVelocity, rbSweepTestInfo.distance);
-        //     }
-        // }
 
         rb.velocity = totalVelocity;
     }
@@ -188,39 +176,27 @@ public class PlayerController : MonoBehaviour {
 
     private void OnCollisionEnter(Collision other) {
         updateContactData(other);
-        // preventStickingToWalls(other);
     }
 
     private void OnCollisionStay(Collision other) {
         updateContactData(other);
-        // preventStickingToWalls(other);
     }
 
     void updateContactData(Collision other) {
+
         ContactPoint[] contacts = new ContactPoint[other.contactCount];
         other.GetContacts(contacts);
 
         foreach (ContactPoint contact in contacts) {
-            if (contact.normal.y >= minNormalY) {
-                groundContactCount += 1;
-                groundNormal += contact.normal;
+            if (contact.thisCollider == feetCollider) {
+                if (contact.normal.y >= minNormalY) {
+                    groundContactCount += 1;
+                    groundNormal += contact.normal;
+                }
             }
         }
 
         groundNormal.Normalize();
-    }
-
-    void preventStickingToWalls(Collision other) {
-        ContactPoint[] contacts = new ContactPoint[other.contactCount];
-        other.GetContacts(contacts);
-
-        const float eps = 1f;
-
-        foreach (ContactPoint contact in contacts) {
-            if (contact.normal.y < minNormalY) {
-                rb.position += contact.normal * eps;
-            }
-        }
     }
 
 
