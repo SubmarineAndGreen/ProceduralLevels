@@ -8,6 +8,8 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour {
     InputMap inputMap;
     Rigidbody rb;
+    RaycastHit rbSweepTestInfo;
+    CapsuleCollider playerCollider;
     PlayerInput playerInput;
     Vector3 groundNormal;
     int groundContactCount;
@@ -38,10 +40,13 @@ public class PlayerController : MonoBehaviour {
         cameraOffest = playerCameraTransform.position - transform.position;
 
         rb = GetComponent<Rigidbody>();
+        playerCollider = GetComponent<CapsuleCollider>();
 
         inputMap = new InputMap();
         inputMap.Player.Enable();
         playerInput = new PlayerInput();
+
+        rbSweepTestInfo = new RaycastHit();
     }
 
     private void FixedUpdate() {
@@ -86,10 +91,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     void updateHorizontalVelocity() {
-        Debug.Log(grounded);
+        // Debug.Log(grounded);
         Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, groundNormal);
         Vector3 projectedRight = Vector3.ProjectOnPlane(transform.right, groundNormal);
-        
+
         Vector3 movementPlaneNormal = grounded ? groundNormal : Vector3.up;
         Vector3 wishDirection = Vector3.ProjectOnPlane(transform.TransformDirection(playerInput.movementAxes), movementPlaneNormal);
         // Debug.Log(playerInput.movementAxes);
@@ -121,7 +126,22 @@ public class PlayerController : MonoBehaviour {
             jumpedLastUpdate = false;
         }
 
-        rb.velocity = newVelocityWithDrag + verticalComponent;
+        Vector3 totalVelocity = newVelocityWithDrag + verticalComponent;
+
+        // const float eps = 0.01f;
+
+        // while(rb.SweepTest(totalVelocity, out rbSweepTestInfo, totalVelocity.magnitude)) {
+
+        // }
+
+        // //prevent sticking to walls
+        // if(rb.SweepTest(totalVelocity, out rbSweepTestInfo, totalVelocity.magnitude)) {
+        //     if(rbSweepTestInfo.normal.y > minNormalY) {
+        //         totalVelocity = Vector3.ClampMagnitude(totalVelocity, rbSweepTestInfo.distance);
+        //     }
+        // }
+
+        rb.velocity = totalVelocity;
     }
 
     private void applyGravity() {
@@ -141,7 +161,9 @@ public class PlayerController : MonoBehaviour {
             jumpedLastUpdate = true;
             float jumpSpeed = Mathf.Sqrt(2 * gravity * jumpHeight);
             // Debug.Log(jumpSpeed);
-            rb.velocity += groundNormal * jumpSpeed;
+            rb.velocity += Vector3.up * jumpSpeed;
+            //jump along normal / nie dziala bez zmian w kontroli predkosci
+            // rb.velocity += groundNormal * jumpSpeed;
         }
     }
 
@@ -166,10 +188,12 @@ public class PlayerController : MonoBehaviour {
 
     private void OnCollisionEnter(Collision other) {
         updateContactData(other);
+        // preventStickingToWalls(other);
     }
 
     private void OnCollisionStay(Collision other) {
         updateContactData(other);
+        // preventStickingToWalls(other);
     }
 
     void updateContactData(Collision other) {
@@ -185,6 +209,20 @@ public class PlayerController : MonoBehaviour {
 
         groundNormal.Normalize();
     }
+
+    void preventStickingToWalls(Collision other) {
+        ContactPoint[] contacts = new ContactPoint[other.contactCount];
+        other.GetContacts(contacts);
+
+        const float eps = 1f;
+
+        foreach (ContactPoint contact in contacts) {
+            if (contact.normal.y < minNormalY) {
+                rb.position += contact.normal * eps;
+            }
+        }
+    }
+
 
     void updateState() {
         if (grounded) {

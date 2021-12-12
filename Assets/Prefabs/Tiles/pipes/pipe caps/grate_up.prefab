@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5054866085012000264}
   - component: {fileID: 4849243139962649634}
   - component: {fileID: 8630577541736351602}
-  - component: {fileID: -374813812915709804}
+  - component: {fileID: 2945941417170432020}
   m_Layer: 0
   m_Name: grate_up
   m_TagString: Untagged
@@ -82,17 +82,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &-374813812915709804
-MeshCollider:
+--- !u!65 &2945941417170432020
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4182221914435979157}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 9910b2bddb661b14dbea369d63de8304, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -7338261827330969277, guid: 19dbbbf39f223164fa60b9b80ce3b9cf, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.8000001, y: 0.038835794, z: 0.7999999}
+  m_Center: {x: 0.000000044703484, y: -0.50535727, z: 0.00000011920929}

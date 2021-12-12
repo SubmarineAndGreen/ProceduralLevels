@@ -19,6 +19,9 @@ public class NavigationManager : MonoBehaviour {
 
     public Vector3 getPathVector(Vector3Int goalTile, Vector3Int currentTile) {
         var map = vectorFields[goalTile.x, goalTile.y, goalTile.z];
+        if (map == null) {
+            return Vector3.zero;
+        }
         int vector = map[currentTile.x, currentTile.y, currentTile.z];
         if (vector != Navigation.NO_VECTOR) {
             return Navigation.directionVectors[vector];
