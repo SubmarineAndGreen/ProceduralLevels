@@ -18,10 +18,15 @@ public class NavigationManager : MonoBehaviour {
     public int[,,][,,] distanceFields;
 
     public Vector3 getPathVector(Vector3Int goalTile, Vector3Int currentTile) {
+        if(!Navigation.inBounds(goalTile, tileGridDimensions) || !Navigation.inBounds(currentTile, tileGridDimensions)) {
+            return Vector3.zero;
+        }
         var map = vectorFields[goalTile.x, goalTile.y, goalTile.z];
+
         if (map == null) {
             return Vector3.zero;
         }
+
         int vector = map[currentTile.x, currentTile.y, currentTile.z];
         if (vector != Navigation.NO_VECTOR) {
             return Navigation.directionVectors[vector];

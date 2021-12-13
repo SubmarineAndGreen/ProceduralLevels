@@ -134,7 +134,7 @@ public class Navigation {
         return vectorField;
     }
 
-    private static bool inBounds(Vector3Int coords, Vector3Int bounds) {
+    public static bool inBounds(Vector3Int coords, Vector3Int bounds) {
         return coords.x >= 0 && coords.y >= 0 && coords.z >= 0 &&
         coords.x < bounds.x && coords.y < bounds.y && coords.z < bounds.z;
     }
