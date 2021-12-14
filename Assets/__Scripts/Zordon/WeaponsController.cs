@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static InputManagerGameplay;
+using UnityEngine.InputSystem;
 
 public class WeaponsController : MonoBehaviour
 {
+    [SerializeField] public UI_Display ui;
     [SerializeField] GameObject sword;
     public SwordController swordController;
 
     public Camera cam;
     public GameObject projectile;
+    [SerializeField] public GameObject energyExplossionFBX;
     public GameObject leftHandObject, rightHandObject;
     public Transform leftHandFirePoint, rightHandFirePoint;
     public float projectileSpeed = 30;
@@ -28,6 +31,7 @@ public class WeaponsController : MonoBehaviour
         weapon = 0;
         swordController = sword.GetComponent<SwordController>();
         sword.SetActive(false);
+        ui.UpdateWeapon(0);
     }
 
     void Update()
@@ -48,11 +52,28 @@ public class WeaponsController : MonoBehaviour
         if(inputGameplay.Player.ChangeWeaponUP.ReadValue<float>() == 1 && Time.time >= timeToFire) {
             timeToFire = Time.time + 1 * fireRate1;
             ChangeWeapon(true);
+            ui.UpdateWeapon(weapon);
         }
         if (inputGameplay.Player.ChangeWeaponDOWN.ReadValue<float>() == 1 && Time.time >= timeToFire)
         {
             timeToFire = Time.time + 1 * fireRate1;
             ChangeWeapon(false);
+            ui.UpdateWeapon(weapon);
+        }
+        if(Keyboard.current.fKey.wasPressedThisFrame&&ui.energySlider.value==100)
+        {
+            ui.energySlider.value = 0;
+            var energyExplossion = Instantiate(energyExplossionFBX, transform.position, Quaternion.identity) as GameObject;
+            Destroy(energyExplossion,3);
+            Collider[] colliders = Physics.OverlapSphere(transform.position, 10f);
+            foreach(Collider c in colliders)
+            {
+                if(c.tag=="Enemy")
+                {
+                    c.GetComponent<EnemyStatus>().TakeDamage(100);
+                }
+            }
+            
         }
     }
 

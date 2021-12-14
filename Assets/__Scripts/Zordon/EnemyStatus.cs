@@ -4,72 +4,32 @@ using UnityEngine;
 
 public class EnemyStatus : MonoBehaviour
 {
-    [SerializeField] public int enemyMaxHP=3;
-    public int enemyCurrentHP;
-    [SerializeField] public int damageOfEnemy;
-    [SerializeField] public Transform player;
-    [SerializeField] public GameObject projectile;
-    public float projectileSpeed;
-    public float fireRate = 1f;
-    private float timeToFire;
-    public bool isAbleToShoot;
-    public float speed;
-    [SerializeField] LayerMask layerMask;
-    // Start is called before the first frame update
+    private int enemy;
+    [SerializeField] ConstructStatus constructStatus;
+    [SerializeField] SpikeBoiStatus spikeBoiStatus;
 
-    void Start()
+    private void Start()
     {
-        SetMaxHP();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(Vector3.Distance(transform.position, player.position) < 20)
-        if (Physics.Linecast(transform.position, player.position, layerMask))
+        if(spikeBoiStatus ?? false)
         {
-            //Debug.Log("blocked");
+            enemy = 0;
         }
-        else
+        if(constructStatus ?? false)
         {
-            //Debug.Log("targeting");
-            if(isAbleToShoot && Time.time >= timeToFire)
-            {
-                timeToFire = Time.time + 1 * fireRate;
-                InstantiateMagicMissile(transform);
-            }
+            enemy = 1;
         }
     }
 
     public void TakeDamage(int damage)
     {
-        enemyCurrentHP -= damage;
-        Debug.Log("Enemy took " + damage + " damage");
-        if (enemyCurrentHP<=0)
+        switch (enemy)
         {
-            //gameObject.SetActive(false);
-            Destroy(gameObject);
+            case 0:
+                spikeBoiStatus.TakeDamage(damage);
+                break;
+            case 1:
+                constructStatus.TakeDamage(damage);
+                break;
         }
-    }
-
-    public void SetMaxHP()
-    {
-        enemyCurrentHP = enemyMaxHP;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        //Debug.Log("test");
-        if (collision.gameObject.tag == "Player")
-        {
-            Debug.Log("Took "+damageOfEnemy+" damage!");
-            collision.gameObject.GetComponent<PlayerStatus>().TakeDamage(1);
-        }
-    }
-
-    void InstantiateMagicMissile(Transform firePoint)
-    {
-        var projectileObj = Instantiate(projectile, firePoint.position, Quaternion.identity) as GameObject;
-        projectileObj.GetComponent<Rigidbody>().velocity = (player.position - firePoint.position).normalized * projectileSpeed;
     }
 }
