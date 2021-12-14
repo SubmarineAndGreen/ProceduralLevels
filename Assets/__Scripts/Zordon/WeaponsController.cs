@@ -36,7 +36,7 @@ public class WeaponsController : MonoBehaviour
 
     void Update()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame && Time.time >= timeToFire) {
+        if (Mouse.current.leftButton.isPressed && Time.time >= timeToFire) {
             switch (weapon)
             {
                 case 0:
