@@ -7,16 +7,21 @@ public class EnemyStatus : MonoBehaviour
     private int enemy;
     [SerializeField] ConstructStatus constructStatus;
     [SerializeField] SpikeBoiStatus spikeBoiStatus;
+    [SerializeField] Floater floaterStatus;
 
     private void Start()
     {
-        if(spikeBoiStatus ?? false)
+        if (floaterStatus ?? false)
         {
-            enemy = 0;
+            enemy = 2;
         }
-        if(constructStatus ?? false)
+        if (constructStatus ?? false)
         {
             enemy = 1;
+        }
+        if (spikeBoiStatus ?? false)
+        {
+            enemy = 0;
         }
     }
 
@@ -29,6 +34,9 @@ public class EnemyStatus : MonoBehaviour
                 break;
             case 1:
                 constructStatus.TakeDamage(damage);
+                break;
+            case 2:
+                floaterStatus.TakeDamage(damage);
                 break;
         }
     }

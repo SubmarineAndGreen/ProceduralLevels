@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 4522705356490961463}
   - component: {fileID: 4522705356490961460}
   - component: {fileID: 8357207732114629207}
+  - component: {fileID: 5500583261088511507}
   m_Layer: 0
   m_Name: Floater
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,3 +129,19 @@ MonoBehaviour:
   navigationForce: 275
   followForce: 200
   followDistance: 50
+  ui: {fileID: 0}
+--- !u!114 &5500583261088511507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4522705356490961461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe578df8669d4f49a65ca3b3367a4c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  constructStatus: {fileID: 0}
+  spikeBoiStatus: {fileID: 0}
+  floaterStatus: {fileID: 8357207732114629207}

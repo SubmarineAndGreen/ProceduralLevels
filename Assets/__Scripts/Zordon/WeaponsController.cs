@@ -63,9 +63,9 @@ public class WeaponsController : MonoBehaviour
         if(Keyboard.current.fKey.wasPressedThisFrame&&ui.energySlider.value==100)
         {
             ui.energySlider.value = 0;
-            var energyExplossion = Instantiate(energyExplossionFBX, transform.position, Quaternion.identity) as GameObject;
+            var energyExplossion = Instantiate(energyExplossionFBX, cam.transform.position, Quaternion.identity) as GameObject;
             Destroy(energyExplossion,3);
-            Collider[] colliders = Physics.OverlapSphere(transform.position, 10f);
+            Collider[] colliders = Physics.OverlapSphere(cam.transform.position, 50f);
             foreach(Collider c in colliders)
             {
                 if(c.tag=="Enemy")
@@ -73,7 +73,7 @@ public class WeaponsController : MonoBehaviour
                     c.GetComponent<EnemyStatus>().TakeDamage(100);
                 }
             }
-            
+            ui.energySlider.value = 0;
         }
     }
 
