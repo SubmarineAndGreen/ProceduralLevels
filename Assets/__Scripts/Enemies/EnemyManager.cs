@@ -5,10 +5,13 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance;
+    [HideInInspector] public Transform playerTransform;
+    [HideInInspector] public int playerLayer;
     [HideInInspector] public List<Vector3Int> validSpawningTiles;
     private void Awake() {
         instance = this;
         validSpawningTiles = new List<Vector3Int>();
+        playerLayer = LayerMask.NameToLayer("Player");
     }
 
     public Vector3Int getRandomValidSpawningTile() {
