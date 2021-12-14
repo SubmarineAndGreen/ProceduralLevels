@@ -36,12 +36,11 @@ public class SpikeBoiStatus : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(transform.position, (player.position - transform.position), out hit, 20, layerMask))
             {
-                if(hit.rigidbody)
-                {
+                
                     Debug.Log("MOVING");
                     transform.LookAt(player.position);
                     rb.AddForce(transform.forward, ForceMode.Force);
-                }
+                
                 
             }
         }

@@ -36,7 +36,7 @@ public class WeaponsController : MonoBehaviour
 
     void Update()
     {
-        if (inputGameplay.Player.Shoot.ReadValue<float>() == 1 && Time.time >= timeToFire) {
+        if (Mouse.current.leftButton.wasPressedThisFrame && Time.time >= timeToFire) {
             switch (weapon)
             {
                 case 0:
@@ -49,14 +49,14 @@ public class WeaponsController : MonoBehaviour
                     break;
             }
         }
-        if(inputGameplay.Player.ChangeWeaponUP.ReadValue<float>() == 1 && Time.time >= timeToFire) {
-            timeToFire = Time.time + 1 * fireRate1;
+        if(Keyboard.current.eKey.wasPressedThisFrame) {
+            //timeToFire = Time.time + 1 * fireRate1;
             ChangeWeapon(true);
             ui.UpdateWeapon(weapon);
         }
-        if (inputGameplay.Player.ChangeWeaponDOWN.ReadValue<float>() == 1 && Time.time >= timeToFire)
+        if (Keyboard.current.qKey.wasPressedThisFrame)
         {
-            timeToFire = Time.time + 1 * fireRate1;
+            //timeToFire = Time.time + 1 * fireRate1;
             ChangeWeapon(false);
             ui.UpdateWeapon(weapon);
         }

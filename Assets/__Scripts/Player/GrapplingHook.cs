@@ -36,7 +36,7 @@ public class GrapplingHook : MonoBehaviour {
         // bool timerOffCd = cooldownTimer.getTimeRunning() == 0;
         // Debug.Log("on cd: " + !timerOffCd);
         // Debug.Log((transform.position - aiming.aimingHit).magnitude);
-        if (cooldownReady && Mouse.current.leftButton.wasPressedThisFrame) {
+        if (cooldownReady && Mouse.current.rightButton.wasPressedThisFrame) {
             if ((transform.position - aiming.aimingHit).magnitude <= maxGrappleDistance) {
                 startCooldown();
 
@@ -53,7 +53,7 @@ public class GrapplingHook : MonoBehaviour {
             grapplingActive = false;
         }
 
-        if (!Mouse.current.leftButton.isPressed) {
+        if (!Mouse.current.rightButton.isPressed) {
             grapplingActive = false;
         }
 
