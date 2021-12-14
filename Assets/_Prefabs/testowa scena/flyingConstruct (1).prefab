@@ -91,6 +91,8 @@ GameObject:
   m_Component:
   - component: {fileID: 967093699951693087}
   - component: {fileID: 784039639271795446}
+  - component: {fileID: -7875011940948715045}
+  - component: {fileID: 7081888495566805552}
   m_Layer: 0
   m_Name: flyingConstruct (1)
   m_TagString: Untagged
@@ -126,13 +128,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbe578df8669d4f49a65ca3b3367a4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  constructStatus: {fileID: -7875011940948715045}
+  spikeBoiStatus: {fileID: 0}
+--- !u!114 &-7875011940948715045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441385973118654373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d8c9b13ec7645409a1ec17b11165d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 0}
   enemyMaxHP: 3
   enemyCurrentHP: 0
-  damageOfEnemy: 2
+  damageOfEnemy: 0
   player: {fileID: 0}
-  projectile: {fileID: 5665776408401065656, guid: 4d364d683b44df7449dd84007893afbe, type: 3}
-  projectileSpeed: 50
-  isAbleToShoot: 1
+  projectile: {fileID: 0}
+  projectileSpeed: 0
+  fireRate: 1
+  isAbleToShoot: 0
+  speed: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &7081888495566805552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441385973118654373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d8c9b13ec7645409a1ec17b11165d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 0}
+  enemyMaxHP: 3
+  enemyCurrentHP: 0
+  damageOfEnemy: 0
+  player: {fileID: 0}
+  projectile: {fileID: 0}
+  projectileSpeed: 0
+  fireRate: 1
+  isAbleToShoot: 0
+  speed: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &8230051668013198052
 GameObject:
   m_ObjectHideFlags: 0

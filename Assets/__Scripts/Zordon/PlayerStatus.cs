@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
+    [SerializeField] public UI_Display ui;
     public int playerHP;
     public int playerMaxHP=10;
 
@@ -11,6 +12,7 @@ public class PlayerStatus : MonoBehaviour
     void Start()
     {
         playerHP = playerMaxHP;
+        ui.UpdateHealth(playerMaxHP);
     }
 
     // Update is called once per frame
@@ -27,5 +29,6 @@ public class PlayerStatus : MonoBehaviour
         {
             Debug.Log("You Died");
         }
+        ui.UpdateHealth(playerHP);
     }
 }
