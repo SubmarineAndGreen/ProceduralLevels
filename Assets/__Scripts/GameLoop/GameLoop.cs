@@ -20,9 +20,9 @@ public class GameLoop : MonoBehaviour
         Vector3Int playerSpawnTile = enemyManager.getRandomValidSpawningTile();
         Vector3 playerSpawn = navigationManager.gridPositionToWorldPosition(playerSpawnTile);
         GameObject player = Instantiate(playerPrefab, playerSpawn, Quaternion.identity);
-        enemyManager.playerTransform = player.transform;
 
         navigationManager.playerTransform = player.transform.GetChild(0);
+        enemyManager.playerTransform = player.transform.GetChild(0);
         
         spawnerPlacer.enabled = true;
     }

@@ -21,13 +21,13 @@ public class NavigationManager : MonoBehaviour {
         if(!Navigation.inBounds(goalTile, tileGridDimensions) || !Navigation.inBounds(currentTile, tileGridDimensions)) {
             return Vector3.zero;
         }
-        var map = vectorFields[goalTile.x, goalTile.y, goalTile.z];
+        var vectorField = vectorFields[goalTile.x, goalTile.y, goalTile.z];
 
-        if (map == null) {
+        if (vectorField == null) {
             return Vector3.zero;
         }
 
-        int vector = map[currentTile.x, currentTile.y, currentTile.z];
+        int vector = vectorField[currentTile.x, currentTile.y, currentTile.z];
         if (vector != Navigation.NO_VECTOR) {
             return Navigation.directionVectors[vector];
         } else {
@@ -36,8 +36,28 @@ public class NavigationManager : MonoBehaviour {
         }
     }
 
+    public int getGridDistance(Vector3Int goalTile, Vector3Int sourceTile) {
+        if(!Navigation.inBounds(goalTile, tileGridDimensions) || !Navigation.inBounds(sourceTile, tileGridDimensions)) {
+            return int.MaxValue;
+        }
+
+        var distanceField = vectorFields[goalTile.x, goalTile.y, goalTile.z];
+
+        if (distanceField == null) {
+            return int.MaxValue;
+        }
+
+        int distance = distanceField[sourceTile.x, sourceTile.y, sourceTile.z];
+
+        return distance;
+    }
+
     public Vector3 getPathVectorToPlayer(Vector3 currentPosition) {
         return getPathVector(worldPositionToGridPosition(playerTransform.position), worldPositionToGridPosition(currentPosition));
+    }
+
+    public int getGridDistanceToPlayer(Vector3 currentPosition) {
+        return getGridDistance(worldPositionToGridPosition(playerTransform.position), worldPositionToGridPosition(currentPosition));
     }
 
     public void calculateVectorFields(int[,,] inputDistanceField, int unwalkableTileValue) {

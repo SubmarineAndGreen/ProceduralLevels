@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4522705356490961460}
   - component: {fileID: 8357207732114629207}
   - component: {fileID: 5500583261088511507}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Floater
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -126,6 +126,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6f28041079e26a4f8ef2463a6de0db2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineOfSightMask:
+    serializedVersion: 2
+    m_Bits: 375
   navigationForce: 275
   followForce: 200
   followDistance: 50
