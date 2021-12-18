@@ -34,9 +34,6 @@ public class Floater : MonoBehaviour {
 
     private void FixedUpdate() {
         if(playerInFollowRange() && playerInLineOfSight()) {
-            if(state == FloaterState.NAVIGATING) {
-                Debug.Log("switching to following");
-            }
             state = FloaterState.FOLLOWING;
         } else {
             state = FloaterState.NAVIGATING;
@@ -78,9 +75,9 @@ public class Floater : MonoBehaviour {
         return false;
     }
 
-    private void OnDrawGizmos() {
-        Gizmos.DrawLine(transform.position, transform.position + (enemyManager.playerTransform.position - transform.position) * 10);
-    }
+    // private void OnDrawGizmos() {
+    //     Gizmos.DrawLine(transform.position, transform.position + (enemyManager.playerTransform.position - transform.position) * lineOfSightDistance);
+    // }
 
     private enum FloaterState {
         NAVIGATING,

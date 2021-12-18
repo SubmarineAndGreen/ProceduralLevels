@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour {
     public GameObject enemyPrefab;
-    public float spawningPeriod;
+    private float spawningPeriod;
     public float minSpawningDistance;
     public float maxSpawningDistance;
     Timer spawnTimer;
@@ -19,5 +19,9 @@ public class EnemySpawner : MonoBehaviour {
 
     private void OnDisable() {
         spawnTimer.stop();
+    }
+
+    public void setSpawningPeriod(float time) {
+        spawningPeriod = time;
     }
 }

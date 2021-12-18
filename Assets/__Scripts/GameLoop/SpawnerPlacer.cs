@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpawnerPlacer : MonoBehaviour {
     [SerializeField] GameObject spawnerPrefab;
     [SerializeField] int spawnerCount;
+    [SerializeField] float enemySpawningPeriod;
     EnemyManager enemyManager;
     NavigationManager navigationManager;
     HashSet<Vector3Int> spawnerTiles;
@@ -21,9 +22,11 @@ public class SpawnerPlacer : MonoBehaviour {
             Vector3Int validSpawnerTile = enemyManager.getRandomValidSpawningTile();
             if (!spawnerTiles.Contains(validSpawnerTile)) {
                 spawnerTiles.Add(validSpawnerTile);
-                Instantiate(spawnerPrefab,
-                            navigationManager.gridPositionToWorldPosition(validSpawnerTile),
-                            Quaternion.identity);
+                GameObject spawnerObject = Instantiate(spawnerPrefab,
+                                                       navigationManager.gridPositionToWorldPosition(validSpawnerTile),
+                                                       Quaternion.identity);
+                EnemySpawner spawner = spawnerObject.GetComponent<EnemySpawner>();
+                spawner.setSpawningPeriod(enemySpawningPeriod); 
                 createdSpawners++;
             }
         }
