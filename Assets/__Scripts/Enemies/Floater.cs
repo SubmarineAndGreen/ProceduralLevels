@@ -68,9 +68,10 @@ public class Floater : MonoBehaviour {
     }
 
     private bool playerInLineOfSight() {
-        Ray lineOfSightRay = new Ray(transform.position, transform.position - enemyManager.playerTransform.position); 
+        Ray lineOfSightRay = new Ray(transform.position, enemyManager.playerTransform.position - transform.position); 
         if(Physics.Raycast(lineOfSightRay, out lineOfSightInfo, lineOfSightDistance, lineOfSightMask)) {
-            // Debug.Log(lineOfSightInfo.collider.gameObject.layer);
+            // Debug.Log(LayerMask.LayerToName(lineOfSightInfo.collider.gameObject.layer));
+            // Debug.Log(lineOfSightInfo.collider.gameObject.name);
             return lineOfSightInfo.collider.gameObject.layer == enemyManager.playerLayer;
         }
 
@@ -78,7 +79,7 @@ public class Floater : MonoBehaviour {
     }
 
     private void OnDrawGizmos() {
-        Gizmos.DrawLine(transform.position, (enemyManager.playerTransform.position - transform.position) * lineOfSightDistance);
+        Gizmos.DrawLine(transform.position, transform.position + (enemyManager.playerTransform.position - transform.position) * 10);
     }
 
     private enum FloaterState {
