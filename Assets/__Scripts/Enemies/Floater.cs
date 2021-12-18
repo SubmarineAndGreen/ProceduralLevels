@@ -44,7 +44,7 @@ public class Floater : MonoBehaviour {
                 rb.AddForce(navigationManager.getPathVectorToPlayer(transform.position) * navigationForce * Time.fixedDeltaTime, ForceMode.Force);
                 break;
             case FloaterState.FOLLOWING:
-                rb.AddForce((enemyManager.playerTransform.position - transform.position) * followForce * Time.fixedDeltaTime, ForceMode.Force);
+                rb.AddForce((enemyManager.playerTransform.position - transform.position).normalized * followForce * Time.fixedDeltaTime, ForceMode.Force);
                 break;
         }
     }
