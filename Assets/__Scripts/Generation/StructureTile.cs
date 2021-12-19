@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[System.Serializable]
 public class StructureTile {
     public Vector3Int position;
     public uint openSidesMask;
