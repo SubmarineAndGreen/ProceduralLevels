@@ -17,8 +17,9 @@ public class SpawnerPlacer : MonoBehaviour {
 
     void instantiateSpawnersInRandomTiles() {
         int createdSpawners = 0;
+        int tries = 100;
         spawnerTiles = new HashSet<Vector3Int>();
-        while (createdSpawners < spawnerCount) {
+        while (createdSpawners < spawnerCount && tries-- > 0) {
             Vector3Int validSpawnerTile = enemyManager.getRandomValidSpawningTile();
             if (!spawnerTiles.Contains(validSpawnerTile)) {
                 spawnerTiles.Add(validSpawnerTile);
