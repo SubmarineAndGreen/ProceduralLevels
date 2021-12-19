@@ -32,13 +32,13 @@ RenderSettings:
   m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
-  m_DefaultReflectionMode: 0
+  m_DefaultReflectionMode: 1
   m_DefaultReflectionResolution: 128
-  m_ReflectionBounces: 1
+  m_ReflectionBounces: 2
   m_ReflectionIntensity: 1
-  m_CustomReflection: {fileID: 0}
+  m_CustomReflection: {fileID: 8900000, guid: ef86bdc3c65918e45b55db2ce87bdc7f, type: 2}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.091101654, g: 0.43796113, b: 0.58389586, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -407,15 +407,7 @@ MonoBehaviour:
   upTileCapIndex: 1
   downTileCapIndex: 2
   sideTileCapIndex: 0
-  roomTileIndex: 15
-  randomRooms:
-  - dimensions: {x: 3, y: 3, z: 3}
-    count: 0
-  - dimensions: {x: 2, y: 2, z: 2}
-    count: 0
-  fixedRooms: []
-  fixedTunnels: []
-  pipesSampleFileName: pipesStructures2.json
+  pipesSampleFileName: PipesNew.json
 --- !u!114 &924014583
 MonoBehaviour:
   m_ObjectHideFlags: 0

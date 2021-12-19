@@ -27,10 +27,10 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] int downTileCapIndex;
     [SerializeField] int sideTileCapIndex;
     [Space(10)]
-    [SerializeField] int roomTileIndex;
-    [SerializeField] private RandomRoom[] randomRooms;
-    [SerializeField] private CuboidStructure[] fixedRooms;
-    [SerializeField] private FullLengthTunnel[] fixedTunnels;
+    // [SerializeField] int roomTileIndex;
+    // [SerializeField] private RandomRoom[] randomRooms;
+    // [SerializeField] private CuboidStructure[] fixedRooms;
+    // [SerializeField] private FullLengthTunnel[] fixedTunnels;
     [HideInInspector] public string pipesSampleFileName;
 
     private void Start() {
@@ -74,7 +74,7 @@ public class LevelBuilder : MonoBehaviour {
                                                                     wfcTiles)));
         }
 
-        Vector3Int[] roomTilePositions = addStructureConstraints(tileIndices, wfcConstraints, wfcTiles);
+        // Vector3Int[] roomTilePositions = addStructureConstraints(tileIndices, wfcConstraints, wfcTiles);
 
 
 
@@ -114,7 +114,7 @@ public class LevelBuilder : MonoBehaviour {
         levelGrid.tileObjects = tileObjects;
         levelGrid.rebuildGrid();
 
-        createRoomTileWalls(roomTilePositions, tileIndices, tileObjects);
+        // createRoomTileWalls(roomTilePositions, tileIndices, tileObjects);
 
         System.Diagnostics.Stopwatch navigationStopwatch = System.Diagnostics.Stopwatch.StartNew();
         initializeNavigation(tileIndices, tileSetIndices);
@@ -229,109 +229,109 @@ public class LevelBuilder : MonoBehaviour {
         return result;
     }
 
-    private int addCuboidStructureConstraints(Grid3D<int> tileIndices,
-                                   CuboidStructure structure,
-                                   List<ITileConstraint> wfcConstraints,
-                                   Dictionary<int, DeBroglie.Tile> wfcTiles,
-                                   HashSet<Vector3Int> fixedTiles) {
-        int constrainedTileCount = 0;
-        int structureTile = TileUtils.tileIndexToModelIndex(roomTileIndex, TileGrid.NO_ROTATION);
-        for (int xOffset = 0; xOffset < structure.dimensions.x; xOffset++) {
-            for (int yOffset = 0; yOffset < structure.dimensions.y; yOffset++) {
-                for (int zOffset = 0; zOffset < structure.dimensions.z; zOffset++) {
-                    Vector3Int currentTile = new Vector3Int(structure.position.x + xOffset,
-                                                            structure.position.y + yOffset,
-                                                            structure.position.z + zOffset);
-                    if (!fixedTiles.Contains(currentTile)) {
-                        fixedTiles.Add(currentTile);
+    // private int addCuboidStructureConstraints(Grid3D<int> tileIndices,
+    //                                CuboidStructure structure,
+    //                                List<ITileConstraint> wfcConstraints,
+    //                                Dictionary<int, DeBroglie.Tile> wfcTiles,
+    //                                HashSet<Vector3Int> fixedTiles) {
+    //     int constrainedTileCount = 0;
+    //     int structureTile = TileUtils.tileIndexToModelIndex(roomTileIndex, TileGrid.NO_ROTATION);
+    //     for (int xOffset = 0; xOffset < structure.dimensions.x; xOffset++) {
+    //         for (int yOffset = 0; yOffset < structure.dimensions.y; yOffset++) {
+    //             for (int zOffset = 0; zOffset < structure.dimensions.z; zOffset++) {
+    //                 Vector3Int currentTile = new Vector3Int(structure.position.x + xOffset,
+    //                                                         structure.position.y + yOffset,
+    //                                                         structure.position.z + zOffset);
+    //                 if (!fixedTiles.Contains(currentTile)) {
+    //                     fixedTiles.Add(currentTile);
 
-                        wfcConstraints.Add(new FixedTileConstraint() {
-                            Tiles = new DeBroglie.Tile[] { wfcTiles[structureTile] },
-                            Point = new Point(currentTile.x, currentTile.y, currentTile.z)
-                        });
+    //                     wfcConstraints.Add(new FixedTileConstraint() {
+    //                         Tiles = new DeBroglie.Tile[] { wfcTiles[structureTile] },
+    //                         Point = new Point(currentTile.x, currentTile.y, currentTile.z)
+    //                     });
 
-                        constrainedTileCount++;
-                    }
-                }
-            }
-        }
-        return constrainedTileCount;
-    }
+    //                     constrainedTileCount++;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return constrainedTileCount;
+    // }
 
-    private Vector3Int[] addStructureConstraints(Grid3D<int> tileIndices,
-                                         List<ITileConstraint> wfcConstraints,
-                                         Dictionary<int, DeBroglie.Tile> wfcTiles) {
-        //data structure to check for existing fixed tile constraints and avoid duplicates
-        HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
-        int structureTileCount = 0;
+    // private Vector3Int[] addStructureConstraints(Grid3D<int> tileIndices,
+    //                                      List<ITileConstraint> wfcConstraints,
+    //                                      Dictionary<int, DeBroglie.Tile> wfcTiles) {
+    //     //data structure to check for existing fixed tile constraints and avoid duplicates
+    //     HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
+    //     int structureTileCount = 0;
 
-        foreach (CuboidStructure room in createRoomsWithRandomPosition(randomRooms)) {
-            structureTileCount += addCuboidStructureConstraints(tileIndices,
-                                                                room,
-                                                                wfcConstraints,
-                                                                wfcTiles,
-                                                                fixedTiles);
-        }
+    //     foreach (CuboidStructure room in createRoomsWithRandomPosition(randomRooms)) {
+    //         structureTileCount += addCuboidStructureConstraints(tileIndices,
+    //                                                             room,
+    //                                                             wfcConstraints,
+    //                                                             wfcTiles,
+    //                                                             fixedTiles);
+    //     }
 
-        foreach (CuboidStructure structure in fixedRooms) {
-            structureTileCount += addCuboidStructureConstraints(tileIndices,
-                                                                structure,
-                                                                wfcConstraints,
-                                                                wfcTiles,
-                                                                fixedTiles);
-        }
+    //     foreach (CuboidStructure structure in fixedRooms) {
+    //         structureTileCount += addCuboidStructureConstraints(tileIndices,
+    //                                                             structure,
+    //                                                             wfcConstraints,
+    //                                                             wfcTiles,
+    //                                                             fixedTiles);
+    //     }
 
-        foreach (FullLengthTunnel tunnel in fixedTunnels) {
-            structureTileCount += addCuboidStructureConstraints(tileIndices,
-                                                                tunnel.toCuboidStructure(tileIndices.dimensions),
-                                                                wfcConstraints,
-                                                                wfcTiles,
-                                                                fixedTiles);
-        }
+    //     foreach (FullLengthTunnel tunnel in fixedTunnels) {
+    //         structureTileCount += addCuboidStructureConstraints(tileIndices,
+    //                                                             tunnel.toCuboidStructure(tileIndices.dimensions),
+    //                                                             wfcConstraints,
+    //                                                             wfcTiles,
+    //                                                             fixedTiles);
+    //     }
 
-        wfcConstraints.Add(new CountConstraint() {
-            Comparison = CountComparison.Exactly,
-            Count = structureTileCount,
-            Tiles = new HashSet<DeBroglie.Tile>() {
-                 wfcTiles[TileUtils.tileIndexToModelIndex(roomTileIndex, TileGrid.NO_ROTATION)]
-            }
-        });
+    //     wfcConstraints.Add(new CountConstraint() {
+    //         Comparison = CountComparison.Exactly,
+    //         Count = structureTileCount,
+    //         Tiles = new HashSet<DeBroglie.Tile>() {
+    //              wfcTiles[TileUtils.tileIndexToModelIndex(roomTileIndex, TileGrid.NO_ROTATION)]
+    //         }
+    //     });
 
-        return fixedTiles.ToArray();
-    }
+    //     return fixedTiles.ToArray();
+    // }
 
-    private void createRoomTileWalls(Vector3Int[] roomTilePositions, Grid3D<int> tileIndices, Grid3D<GameObject> tileObjects) {
-        //room tile positions are offset due to 1 tile border containing tile caps
-        Vector3Int borderOffset = Vector3Int.one;
-        int emptyPipeTileIndex = tileSets[TILESET_PIPES].emptyTileIndex;
-        foreach (Vector3Int position in roomTilePositions) {
-            RoomTile roomTile = tileObjects.at(position + borderOffset).GetComponent<RoomTile>();
-            foreach (Directions3D direction in DirectionUtils.allDirections) {
-                Vector3Int neighbourOffset = DirectionUtils.DirectionsToVectors[direction];
-                int neighbourTileIndex = tileIndices.at(position + neighbourOffset + borderOffset);
-                if (neighbourTileIndex != roomTileIndex) {
-                    if (neighbourTileIndex == TileGrid.TILE_EMPTY || neighbourTileIndex == emptyPipeTileIndex) {
-                        roomTile.instantiateWall(direction, RoomTile.WallType.SOLID);
-                    } else {
-                        roomTile.instantiateWall(direction, RoomTile.WallType.OPEN);
-                    }
-                }
-            }
-        }
-    }
+    // private void createRoomTileWalls(Vector3Int[] roomTilePositions, Grid3D<int> tileIndices, Grid3D<GameObject> tileObjects) {
+    //     //room tile positions are offset due to 1 tile border containing tile caps
+    //     Vector3Int borderOffset = Vector3Int.one;
+    //     int emptyPipeTileIndex = tileSets[TILESET_PIPES].emptyTileIndex;
+    //     foreach (Vector3Int position in roomTilePositions) {
+    //         RoomTile roomTile = tileObjects.at(position + borderOffset).GetComponent<RoomTile>();
+    //         foreach (Directions3D direction in DirectionUtils.allDirections) {
+    //             Vector3Int neighbourOffset = DirectionUtils.DirectionsToVectors[direction];
+    //             int neighbourTileIndex = tileIndices.at(position + neighbourOffset + borderOffset);
+    //             if (neighbourTileIndex != roomTileIndex) {
+    //                 if (neighbourTileIndex == TileGrid.TILE_EMPTY || neighbourTileIndex == emptyPipeTileIndex) {
+    //                     roomTile.instantiateWall(direction, RoomTile.WallType.SOLID);
+    //                 } else {
+    //                     roomTile.instantiateWall(direction, RoomTile.WallType.OPEN);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
-    private List<CuboidStructure> createRoomsWithRandomPosition(RandomRoom[] roomCounts, bool dontOverlap = false) {
-        List<CuboidStructure> rooms = new List<CuboidStructure>();
-        foreach (var room in roomCounts) {
-            for (int i = 0; i < room.count; i++) {
-                rooms.Add(new CuboidStructure() {
-                    dimensions = room.dimensions,
-                    position = randomVector3Int(Vector3Int.zero, generatedGridDimensions - room.dimensions)
-                });
-            }
-        }
-        return rooms;
-    }
+    // private List<CuboidStructure> createRoomsWithRandomPosition(RandomRoom[] roomCounts, bool dontOverlap = false) {
+    //     List<CuboidStructure> rooms = new List<CuboidStructure>();
+    //     foreach (var room in roomCounts) {
+    //         for (int i = 0; i < room.count; i++) {
+    //             rooms.Add(new CuboidStructure() {
+    //                 dimensions = room.dimensions,
+    //                 position = randomVector3Int(Vector3Int.zero, generatedGridDimensions - room.dimensions)
+    //             });
+    //         }
+    //     }
+    //     return rooms;
+    // }
 
     private Vector3Int randomVector3Int(Vector3Int min, Vector3Int max) {
         return new Vector3Int(
