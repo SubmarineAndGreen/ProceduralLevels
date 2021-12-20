@@ -28,7 +28,7 @@ public class StructureTileObject : MonoBehaviour {
         foreach (Directions3D direction in DirectionUtils.allDirections) {
             if (structureTile.isSideOpen(direction)) {
                 GameObject marker = Instantiate(openSideMarker,
-                                        transform.position + DirectionUtils.DirectionsToVectors[direction].toVector3() / 2,
+                                        transform.position + Vector3.up / 2 + DirectionUtils.DirectionsToVectors[direction].toVector3() / 2,
                                         Quaternion.identity);
                 markers.Add(marker);
                 marker.transform.SetParent(this.transform);
@@ -36,7 +36,7 @@ public class StructureTileObject : MonoBehaviour {
         }
         if(!structureTile.walkable) {
             GameObject marker = Instantiate(unwalkableMarker,
-                                        transform.position,
+                                        transform.position + Vector3.up / 2,
                                         Quaternion.identity);
                 markers.Add(marker);
                 marker.transform.SetParent(this.transform);

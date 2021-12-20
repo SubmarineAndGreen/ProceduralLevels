@@ -393,13 +393,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a939aecddc96714abd8c5588488bf8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structureSet: {fileID: 11400000, guid: a964ac38a210dde40bd26588fce08615, type: 2}
   gameLoop: {fileID: 1903047125}
   seed: -1
   levelGrid: {fileID: 2056008011}
-  generatedGridDimensions: {x: 5, y: 5, z: 5}
+  generatedGridDimensions: {x: 8, y: 8, z: 8}
   fullDimensions: {x: 0, y: 0, z: 0}
   scaleAfterGeneration: 1
-  scaleFactor: 25
+  scaleFactor: 1
   tileSets:
   - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
   - {fileID: 11400000, guid: 23fd1281d831cca4d9c87f1f4bd0d21b, type: 2}
@@ -407,6 +408,9 @@ MonoBehaviour:
   upTileCapIndex: 1
   downTileCapIndex: 2
   sideTileCapIndex: 0
+  structurePlaceholderIndex: 15
+  pipeUpTileIndex: 13
+  pipeHorizontalTileIndex: 9
   pipesSampleFileName: PipesNew.json
 --- !u!114 &924014583
 MonoBehaviour:

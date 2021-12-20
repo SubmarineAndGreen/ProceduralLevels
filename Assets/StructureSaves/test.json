@@ -1,0 +1,1 @@
+{"dimensions":{"x":3,"y":3,"z":3},"tiles":[{"position":{"x":0,"y":0,"z":0},"openSidesMask":32,"walkable":true},{"position":{"x":1,"y":0,"z":0},"openSidesMask":0,"walkable":true},{"position":{"x":1,"y":1,"z":0},"openSidesMask":0,"walkable":true},{"position":{"x":2,"y":1,"z":0},"openSidesMask":8,"walkable":true}]}

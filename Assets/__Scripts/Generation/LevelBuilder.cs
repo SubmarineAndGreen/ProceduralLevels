@@ -9,6 +9,7 @@ using System;
 
 [RequireComponent(typeof(WfcRunner))]
 public class LevelBuilder : MonoBehaviour {
+    public StructureSet structureSet;
     [SerializeField] GameLoop gameLoop;
     public int seed;
     public const int NO_SEED = -1;
@@ -26,12 +27,15 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] int upTileCapIndex;
     [SerializeField] int downTileCapIndex;
     [SerializeField] int sideTileCapIndex;
+    [SerializeField] int structurePlaceholderIndex;
+    [SerializeField] int pipeUpTileIndex;
+    [SerializeField] int pipeHorizontalTileIndex;
     [Space(10)]
-    // [SerializeField] int roomTileIndex;
-    // [SerializeField] private RandomRoom[] randomRooms;
-    // [SerializeField] private CuboidStructure[] fixedRooms;
-    // [SerializeField] private FullLengthTunnel[] fixedTunnels;
+
     [HideInInspector] public string pipesSampleFileName;
+    // private const int structureTilesOffset = 64;
+
+    // [SerializeField] private int structureCount;
 
     private void Start() {
         generate();
@@ -64,19 +68,17 @@ public class LevelBuilder : MonoBehaviour {
         wfcRunner = GetComponent<WfcRunner>();
         SamplerResult pipesSample = SamplerResult.loadFromFile($"{Application.dataPath}/SamplerSaves/{pipesSampleFileName}");
 
-        var wfcTiles = createWfcTiles(pipesSample.uniqueTiles);
+        var pipeTiles = createWfcTiles(pipesSample.uniqueTiles);
 
         List<ITileConstraint> wfcConstraints = new List<ITileConstraint>();
+
+        createStructureConstraints(Vector3Int.one * 3, 0, wfcConstraints, pipeTiles);
 
         if (pathConstraint) {
             wfcConstraints.Add(new PathConstraint(tilesWithoutEmpty(pipesSample.uniqueTiles,
                                                                     tileSets[TILESET_PIPES],
-                                                                    wfcTiles)));
+                                                                    pipeTiles)));
         }
-
-        // Vector3Int[] roomTilePositions = addStructureConstraints(tileIndices, wfcConstraints, wfcTiles);
-
-
 
         int[,,] generatedTiles;
         bool generationSuccess = wfcRunner.runAdjacentModel(out generatedTiles,
@@ -84,7 +86,7 @@ public class LevelBuilder : MonoBehaviour {
                                                             tileSets[TILESET_PIPES],
                                                             pipesSample.uniqueTiles,
                                                             pipesSample.rules,
-                                                            wfcTiles,
+                                                            pipeTiles,
                                                             wfcConstraints,
                                                             seed);
 
@@ -113,8 +115,6 @@ public class LevelBuilder : MonoBehaviour {
         levelGrid.tileSetIndices = tileSetIndices;
         levelGrid.tileObjects = tileObjects;
         levelGrid.rebuildGrid();
-
-        // createRoomTileWalls(roomTilePositions, tileIndices, tileObjects);
 
         System.Diagnostics.Stopwatch navigationStopwatch = System.Diagnostics.Stopwatch.StartNew();
         initializeNavigation(tileIndices, tileSetIndices);
@@ -148,7 +148,6 @@ public class LevelBuilder : MonoBehaviour {
                                     tileSetIndices.set(position + offset, TILESET_CAPS);
                                     tiles.set(position + offset, upTileCapIndex);
                                     rotations.set(position + offset, TileGrid.NO_ROTATION);
-                                    // levelGrid.placeTileDontInstantiate(upTileCapIndex, TILESET_CAPS, position + offset, TileGrid.NO_ROTATION);
                                     break;
                                 case Directions3D.DOWN:
                                     tileSetIndices.set(position + offset, TILESET_CAPS);
@@ -160,7 +159,6 @@ public class LevelBuilder : MonoBehaviour {
                                     tiles.set(position + offset, sideTileCapIndex);
                                     rotations.set(position + offset, (int)direction - 2);
                                     //direction - 2 gives correct rotation where FORWARD/Z+ is rotation 0
-                                    // levelGrid.placeTileDontInstantiate(sideTileCapIndex, TILESET_CAPS, position + offset, (int)direction - 2);
                                     break;
                             }
                         }
@@ -229,108 +227,127 @@ public class LevelBuilder : MonoBehaviour {
         return result;
     }
 
-    // private int addCuboidStructureConstraints(Grid3D<int> tileIndices,
-    //                                CuboidStructure structure,
-    //                                List<ITileConstraint> wfcConstraints,
-    //                                Dictionary<int, DeBroglie.Tile> wfcTiles,
-    //                                HashSet<Vector3Int> fixedTiles) {
-    //     int constrainedTileCount = 0;
-    //     int structureTile = TileUtils.tileIndexToModelIndex(roomTileIndex, TileGrid.NO_ROTATION);
-    //     for (int xOffset = 0; xOffset < structure.dimensions.x; xOffset++) {
-    //         for (int yOffset = 0; yOffset < structure.dimensions.y; yOffset++) {
-    //             for (int zOffset = 0; zOffset < structure.dimensions.z; zOffset++) {
-    //                 Vector3Int currentTile = new Vector3Int(structure.position.x + xOffset,
-    //                                                         structure.position.y + yOffset,
-    //                                                         structure.position.z + zOffset);
-    //                 if (!fixedTiles.Contains(currentTile)) {
-    //                     fixedTiles.Add(currentTile);
+    private void createStructureConstraints(Vector3Int position, int setIndex, List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
 
-    //                     wfcConstraints.Add(new FixedTileConstraint() {
-    //                         Tiles = new DeBroglie.Tile[] { wfcTiles[structureTile] },
-    //                         Point = new Point(currentTile.x, currentTile.y, currentTile.z)
-    //                     });
+        Structure structure = structureSet.frequencies[setIndex].structure;
 
-    //                     constrainedTileCount++;
-    //                 }
-    //             }
-    //         }
+        int structureCount = 0;
+        HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
+
+        foreach (StructureTile tile in structure.tiles) {
+            structureCount++;
+            Vector3Int structureTilePosition = position + tile.position;
+            Debug.Log(structureTilePosition);
+            fixedTiles.Add(structureTilePosition);
+
+            wfcConstraints.Add(new FixedTileConstraint() {
+                Point = new Point(structureTilePosition.x, structureTilePosition.y, structureTilePosition.z),
+                Tiles = new DeBroglie.Tile[] {
+                    wfcTiles[TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION)]
+                }
+            });
+        }
+
+        foreach (StructureTile tile in structure.tiles) {
+            foreach (Directions3D direction in DirectionUtils.allDirections) {
+                Vector3Int tilePosition = position + tile.position + DirectionUtils.DirectionsToVectors[direction];
+
+                if (fixedTiles.Contains(tilePosition)) {
+                    continue;
+                } else {
+                    fixedTiles.Add(tilePosition);
+                }
+
+                if (tile.isSideOpen(direction)) {
+                    DeBroglie.Tile tileToFix;
+
+                    switch (direction) {
+                        case Directions3D.UP:
+                        case Directions3D.DOWN:
+                            tileToFix = wfcTiles[TileUtils.tileIndexToModelIndex(pipeUpTileIndex, TileGrid.NO_ROTATION)];
+                            break;
+                        case Directions3D.FORWARD:
+                        case Directions3D.BACK:
+                            tileToFix = wfcTiles[TileUtils.tileIndexToModelIndex(pipeHorizontalTileIndex, 1)];
+                            break;
+                        case Directions3D.RIGHT:
+                        case Directions3D.LEFT:
+                            tileToFix = wfcTiles[TileUtils.tileIndexToModelIndex(pipeHorizontalTileIndex, TileGrid.NO_ROTATION)];
+                            break;
+                    }
+
+                    wfcConstraints.Add(new FixedTileConstraint() {
+                        Point = new Point(tilePosition.x, tilePosition.y, tilePosition.z),
+                        Tiles = new DeBroglie.Tile[] {
+                            tileToFix
+                        }
+                    });
+                } else {
+                    int emptyTileIndex = TileUtils.tileIndexToModelIndex(tileSets[TILESET_PIPES].emptyTileIndex, TileGrid.NO_ROTATION);
+
+                    wfcConstraints.Add(new FixedTileConstraint() {
+                        Point = new Point(tilePosition.x, tilePosition.y, tilePosition.z),
+                        Tiles = new DeBroglie.Tile[] {
+                            wfcTiles[emptyTileIndex]
+                        }
+                    });
+                }
+            }
+        }
+
+        wfcConstraints.Add(new CountConstraint() {
+            Comparison = CountComparison.Exactly,
+            Count = structureCount,
+            Tiles = new HashSet<DeBroglie.Tile>() {
+                    wfcTiles[TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION)]
+            }
+        });
+    }
+
+    // private List<int> getStructureTileIndices() {
+    //     const int structureTileCount = 64;
+    //     List<int> tileIndices = new List<int>();
+    //     for (int offset = 0; offset < structureTileCount; offset++) {
+    //         tileIndices.Add(structureTilesOffset + offset);
     //     }
-    //     return constrainedTileCount;
+
+    //     return tileIndices;
     // }
 
-    // private Vector3Int[] addStructureConstraints(Grid3D<int> tileIndices,
-    //                                      List<ITileConstraint> wfcConstraints,
-    //                                      Dictionary<int, DeBroglie.Tile> wfcTiles) {
-    //     //data structure to check for existing fixed tile constraints and avoid duplicates
-    //     HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
-    //     int structureTileCount = 0;
-
-    //     foreach (CuboidStructure room in createRoomsWithRandomPosition(randomRooms)) {
-    //         structureTileCount += addCuboidStructureConstraints(tileIndices,
-    //                                                             room,
-    //                                                             wfcConstraints,
-    //                                                             wfcTiles,
-    //                                                             fixedTiles);
-    //     }
-
-    //     foreach (CuboidStructure structure in fixedRooms) {
-    //         structureTileCount += addCuboidStructureConstraints(tileIndices,
-    //                                                             structure,
-    //                                                             wfcConstraints,
-    //                                                             wfcTiles,
-    //                                                             fixedTiles);
-    //     }
-
-    //     foreach (FullLengthTunnel tunnel in fixedTunnels) {
-    //         structureTileCount += addCuboidStructureConstraints(tileIndices,
-    //                                                             tunnel.toCuboidStructure(tileIndices.dimensions),
-    //                                                             wfcConstraints,
-    //                                                             wfcTiles,
-    //                                                             fixedTiles);
-    //     }
-
-    //     wfcConstraints.Add(new CountConstraint() {
-    //         Comparison = CountComparison.Exactly,
-    //         Count = structureTileCount,
-    //         Tiles = new HashSet<DeBroglie.Tile>() {
-    //              wfcTiles[TileUtils.tileIndexToModelIndex(roomTileIndex, TileGrid.NO_ROTATION)]
-    //         }
-    //     });
-
-    //     return fixedTiles.ToArray();
-    // }
-
-    // private void createRoomTileWalls(Vector3Int[] roomTilePositions, Grid3D<int> tileIndices, Grid3D<GameObject> tileObjects) {
-    //     //room tile positions are offset due to 1 tile border containing tile caps
-    //     Vector3Int borderOffset = Vector3Int.one;
-    //     int emptyPipeTileIndex = tileSets[TILESET_PIPES].emptyTileIndex;
-    //     foreach (Vector3Int position in roomTilePositions) {
-    //         RoomTile roomTile = tileObjects.at(position + borderOffset).GetComponent<RoomTile>();
+    // private List<TileRule> createStructureTileRules(List<int> structureTileIndices) {
+    //     List<TileRule> rules = new List<TileRule>();
+    //     // List<StructureTile> structureTiles = new List<StructureTile>();
+    //     foreach (int index in structureTileIndices) {
+    //         StructureTile structureTile = new StructureTile();
+    //         structureTile.openSidesMask = (uint)index;
     //         foreach (Directions3D direction in DirectionUtils.allDirections) {
-    //             Vector3Int neighbourOffset = DirectionUtils.DirectionsToVectors[direction];
-    //             int neighbourTileIndex = tileIndices.at(position + neighbourOffset + borderOffset);
-    //             if (neighbourTileIndex != roomTileIndex) {
-    //                 if (neighbourTileIndex == TileGrid.TILE_EMPTY || neighbourTileIndex == emptyPipeTileIndex) {
-    //                     roomTile.instantiateWall(direction, RoomTile.WallType.SOLID);
-    //                 } else {
-    //                     roomTile.instantiateWall(direction, RoomTile.WallType.OPEN);
+    //             if (structureTile.isSideOpen(direction)) {
+    //                 switch (direction) {
+    //                     case Directions3D.UP:
+    //                     case Directions3D.DOWN:
+    //                         rules.Add(new TileRule(index,
+    //                                                TileUtils.tileIndexToModelIndex(pipeUpTileIndex, TileGrid.NO_ROTATION),
+    //                                                direction));
+    //                         break;
+    //                     case Directions3D.FORWARD:
+    //                     case Directions3D.BACK:
+    //                         rules.Add(new TileRule(index,
+    //                                                TileUtils.tileIndexToModelIndex(pipeHorizontalTileIndex, 1),
+    //                                                direction));
+    //                         break;
+    //                     case Directions3D.RIGHT:
+    //                     case Directions3D.LEFT:
+    //                         rules.Add(new TileRule(index,
+    //                                                TileUtils.tileIndexToModelIndex(pipeHorizontalTileIndex, TileGrid.NO_ROTATION),
+    //                                                direction));
+    //                         break;
     //                 }
+    //             } else {
+    //                 rules.Add(new TileRule(index, TileUtils.tileIndexToModelIndex(tileSets[TILESET_PIPES].emptyTileIndex,
+    //                                                                               TileGrid.NO_ROTATION), direction));
     //             }
     //         }
     //     }
-    // }
-
-    // private List<CuboidStructure> createRoomsWithRandomPosition(RandomRoom[] roomCounts, bool dontOverlap = false) {
-    //     List<CuboidStructure> rooms = new List<CuboidStructure>();
-    //     foreach (var room in roomCounts) {
-    //         for (int i = 0; i < room.count; i++) {
-    //             rooms.Add(new CuboidStructure() {
-    //                 dimensions = room.dimensions,
-    //                 position = randomVector3Int(Vector3Int.zero, generatedGridDimensions - room.dimensions)
-    //             });
-    //         }
-    //     }
-    //     return rooms;
     // }
 
     private Vector3Int randomVector3Int(Vector3Int min, Vector3Int max) {
@@ -342,60 +359,25 @@ public class LevelBuilder : MonoBehaviour {
     }
 }
 
-[Serializable]
-public class CuboidStructure {
-    public Vector3Int dimensions;
-    public Vector3Int position;
+// [Serializable]
+// public class CuboidStructure {
+//     public Vector3Int dimensions;
+//     public Vector3Int position;
 
-    private bool inStructureBounds(Vector3Int point) {
-        if (point.x < position.x + dimensions.x
-            || point.y < position.y + dimensions.y
-            || point.z < position.z + dimensions.z
-            || point.x >= position.x
-            || point.y >= position.y
-            || point.z >= position.z) {
-            return false;
-        }
+//     private bool inStructureBounds(Vector3Int point) {
+//         if (point.x < position.x + dimensions.x
+//             || point.y < position.y + dimensions.y
+//             || point.z < position.z + dimensions.z
+//             || point.x >= position.x
+//             || point.y >= position.y
+//             || point.z >= position.z) {
+//             return false;
+//         }
 
-        return true;
-    }
-}
+//         return true;
+//     }
+// }
 
-[Serializable]
-public class RandomRoom {
-    public Vector3Int dimensions;
-    public int count;
-}
-
-[Serializable]
-public class FullLengthTunnel {
-    public Vector3Int pointInTunnel;
-    public Vector2Int dimensions;
-    public TunnelDirection direction;
-    public CuboidStructure toCuboidStructure(Vector3Int levelDimensions) {
-        if (direction == TunnelDirection.Vertical) {
-            return new CuboidStructure() {
-                dimensions = new Vector3Int(dimensions.x, levelDimensions.y - 2, dimensions.y),
-                position = new Vector3Int(pointInTunnel.x, 0, pointInTunnel.z)
-            };
-        } else if (direction == TunnelDirection.HorizontalX) {
-            return new CuboidStructure() {
-                dimensions = new Vector3Int(levelDimensions.x - 2, dimensions.y, dimensions.x),
-                position = new Vector3Int(0, pointInTunnel.y, pointInTunnel.z)
-            };
-        } else {
-            return new CuboidStructure() {
-                dimensions = new Vector3Int(dimensions.x, dimensions.y, levelDimensions.z - 2),
-                position = new Vector3Int(pointInTunnel.x, pointInTunnel.y, 0)
-            };
-        }
-    }
-    public enum TunnelDirection {
-        Vertical,
-        HorizontalX,
-        HorizontalZ
-    }
-}
 
 
 

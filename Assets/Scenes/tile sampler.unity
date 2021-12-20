@@ -359,6 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a939aecddc96714abd8c5588488bf8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structureSet: {fileID: 0}
   gameLoop: {fileID: 0}
   seed: 0
   levelGrid: {fileID: 633328298}
@@ -374,6 +375,8 @@ MonoBehaviour:
   downTileCapIndex: 2
   sideTileCapIndex: 0
   pipesSampleFileName: PipesNew.json
+  pipeUpTileIndex: 0
+  pipeHorizontalTileIndex: 0
 --- !u!114 &415501193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -473,7 +476,7 @@ MonoBehaviour:
   tileText: {fileID: 1389016780}
   cursorPrefab: {fileID: 6526753209231964760, guid: d182178f4c339c649ad5d066736aa3b6, type: 3}
   tileSets:
-  - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
+  - {fileID: 11400000, guid: 456f8cd44ceaa54459dd5658ab10658d, type: 2}
   currentTilesetIndex: 0
   loadFromFileOnStart: 1
   currentSaveFile: pipesNew.json
