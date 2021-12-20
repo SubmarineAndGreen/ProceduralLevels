@@ -1063,7 +1063,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnerPrefab: {fileID: 474496005252222220, guid: 51a3d34c134727543aff734f508b9f52, type: 3}
   spawnerCount: 1
-  enemySpawningPeriod: 5
+  enemySpawningPeriod: 0.5
 --- !u!114 &1903047125
 MonoBehaviour:
   m_ObjectHideFlags: 0

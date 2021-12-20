@@ -14,6 +14,14 @@ public class UI_Display : MonoBehaviour
     [SerializeField] public TextMeshProUGUI weaponText;
     [SerializeField] public GameObject deathScreen;
     [SerializeField] public GameObject victoryScreen;
+    [SerializeField] public GameObject pauseMenu;
+
+    private bool isPaused;
+
+    private void Start()
+    {
+        isPaused = false;
+    }
 
     public void UpdateHealth(int hp)
     {
@@ -54,6 +62,27 @@ public class UI_Display : MonoBehaviour
         victoryScreen.SetActive(true);
         StartCoroutine(Win());
     }
+    public void PauseMenu()
+    {
+        isPaused = !isPaused;
+        pauseMenu.SetActive(isPaused);
+        if(isPaused)
+        {
+            Time.timeScale = 0f;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+        else
+        {
+            Time.timeScale = 1.0f;
+            Cursor.visible = false;
+            Cursor.lockState=CursorLockMode.Locked;
+        }
+    }
+    public void ExitButton()
+    {
+        StartCoroutine(Pause());
+    }
     IEnumerator Win()
     {
         yield return new WaitForSeconds(2);
@@ -69,8 +98,16 @@ public class UI_Display : MonoBehaviour
     {
         yield return new WaitForSeconds(4);
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Main Menu");
+        
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+    }
+    IEnumerator Pause()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Main Menu");
 
-        // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
         {
             yield return null;
