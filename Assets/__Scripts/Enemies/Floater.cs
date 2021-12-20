@@ -86,4 +86,13 @@ public class Floater : MonoBehaviour {
         NAVIGATING,
         FOLLOWING
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        //Debug.Log("test");
+        if (collision.gameObject.tag == "Player")
+        {
+            Debug.Log("Took " + 1 + " damage!");
+            collision.gameObject.GetComponent<PlayerStatus>().TakeDamage(1);
+        }
+    }
 }

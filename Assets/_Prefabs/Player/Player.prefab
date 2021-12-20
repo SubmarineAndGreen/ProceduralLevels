@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 5421612076315244267}
   - component: {fileID: 7711137512567312672}
   - component: {fileID: 7711137512567312671}
+  - component: {fileID: 5036196300076983728}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -386,6 +387,21 @@ MonoBehaviour:
   startPullForce: 20
   constantPullForce: 500
   grappleCooldown: 0.5
+--- !u!114 &5036196300076983728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7711137511671875111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47060b5c894122740995fa66364203a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 3827984560697359273}
+  playerHP: 0
+  playerMaxHP: 10
 --- !u!1 &7711137512837268061
 GameObject:
   m_ObjectHideFlags: 0
