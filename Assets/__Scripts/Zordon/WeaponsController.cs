@@ -5,8 +5,7 @@ using UnityEngine;
 using static InputManagerGameplay;
 using UnityEngine.InputSystem;
 
-public class WeaponsController : MonoBehaviour
-{
+public class WeaponsController : MonoBehaviour {
     [SerializeField] public UI_Display ui;
     [SerializeField] GameObject sword;
     public SwordController swordController;
@@ -25,7 +24,7 @@ public class WeaponsController : MonoBehaviour
     private float timeToFire;
     private int weapon;
     //0-magic missiles, 1-sword
-    private int maxWeapons=2;
+    private int maxWeapons = 2;
 
     void Start() {
         weapon = 0;
@@ -34,11 +33,9 @@ public class WeaponsController : MonoBehaviour
         ui.UpdateWeapon(0);
     }
 
-    void Update()
-    {
+    void Update() {
         if (Mouse.current.leftButton.isPressed && Time.time >= timeToFire) {
-            switch (weapon)
-            {
+            switch (weapon) {
                 case 0:
                     timeToFire = Time.time + 1 * fireRate0;
                     ShootMagicMissile();
@@ -49,28 +46,24 @@ public class WeaponsController : MonoBehaviour
                     break;
             }
         }
-        if(Keyboard.current.eKey.wasPressedThisFrame) {
+        if (Keyboard.current.eKey.wasPressedThisFrame) {
             //timeToFire = Time.time + 1 * fireRate1;
             ChangeWeapon(true);
             ui.UpdateWeapon(weapon);
         }
-        if (Keyboard.current.qKey.wasPressedThisFrame)
-        {
+        if (Keyboard.current.qKey.wasPressedThisFrame) {
             //timeToFire = Time.time + 1 * fireRate1;
             ChangeWeapon(false);
             ui.UpdateWeapon(weapon);
         }
-        if(Keyboard.current.fKey.wasPressedThisFrame&&ui.energySlider.value==100)
-        {
+        if (Keyboard.current.fKey.wasPressedThisFrame && ui.energySlider.value == 100) {
             ui.energySlider.value = 0;
             var energyExplossion = Instantiate(energyExplossionFBX, cam.transform.position, Quaternion.identity) as GameObject;
-            Destroy(energyExplossion,3);
+            Destroy(energyExplossion, 3);
             Collider[] colliders = Physics.OverlapSphere(cam.transform.position, 50f);
-            foreach(Collider c in colliders)
-            {
-                if(c.tag=="Enemy")
-                {
-                    c.GetComponent<EnemyStatus>().TakeDamage(100);
+            foreach (Collider c in colliders) {
+                if (c.tag == "Enemy") {
+                    c.GetComponentInParent<EnemyStatus>().TakeDamage(100);
                 }
             }
             ui.energySlider.value = 0;
@@ -79,31 +72,28 @@ public class WeaponsController : MonoBehaviour
 
     private void ChangeWeapon(bool change) {
         rightHand = true;
-        if(change) {
+        if (change) {
             weapon++;
-        }
-        else {
+        } else {
             weapon--;
         }
-        if (weapon>=maxWeapons) {
+        if (weapon >= maxWeapons) {
             weapon = 0;
         }
-        if(weapon<0) {
+        if (weapon < 0) {
             weapon = maxWeapons;
         }
-        if(weapon == 0)
-        {
+        if (weapon == 0) {
             sword.SetActive(false);
             leftHandObject.SetActive(true);
             rightHandObject.SetActive(true);
         }
-        if(weapon == 1)
-        {
+        if (weapon == 1) {
             sword.SetActive(true);
             leftHandObject.SetActive(false);
             rightHandObject.SetActive(false);
         }
-        
+
     }
 
     void ShootMagicMissile() {
@@ -117,22 +107,17 @@ public class WeaponsController : MonoBehaviour
         if (rightHand) {
             rightHand = false;
             InstantiateMagicMissile(rightHandFirePoint);
-        }
-        else {
+        } else {
             rightHand = true;
             InstantiateMagicMissile(leftHandFirePoint);
         }
     }
 
-    void swingSword()
-    {
-        if (rightHand)
-        {
+    void swingSword() {
+        if (rightHand) {
             rightHand = false;
             swordController.SwordAttack(true);
-        }
-        else
-        {
+        } else {
             rightHand = true;
             swordController.SwordAttack(false);
         }
