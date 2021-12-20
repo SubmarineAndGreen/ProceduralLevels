@@ -13,7 +13,8 @@ public class UI_Display : MonoBehaviour
     //[SerializeField] public TextMeshProUGUI healthText;
     [SerializeField] public TextMeshProUGUI weaponText;
     [SerializeField] public GameObject deathScreen;
-    
+    [SerializeField] public GameObject victoryScreen;
+
     public void UpdateHealth(int hp)
     {
         //healthText.text = "Health: " + hp;
@@ -34,6 +35,10 @@ public class UI_Display : MonoBehaviour
     public void AddProgress(int progress)
     {
         progressSlider.value += progress;
+        if(progressSlider.value==100)
+        {
+            NewLevel();
+        }
     }
     public void AddEnergy(int energy)
     {
@@ -43,6 +48,22 @@ public class UI_Display : MonoBehaviour
     {
         deathScreen.SetActive(true);
         StartCoroutine(Death());
+    }
+    public void NewLevel()
+    {
+        victoryScreen.SetActive(true);
+        StartCoroutine(Win());
+    }
+    IEnumerator Win()
+    {
+        yield return new WaitForSeconds(2);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("mvp");
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
     }
     IEnumerator Death()
     {
