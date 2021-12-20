@@ -13,12 +13,18 @@ MonoBehaviour:
   m_Name: TestStructure
   m_EditorClassIdentifier: 
   structurePrefab: {fileID: 5270907737455984502, guid: dfd4b6931e76f584592bca7a9424480d, type: 3}
-  fileName: testStructure
+  fileName: test
   tiles:
-  - position: {x: 2, y: 0, z: 1}
+  - position: {x: 0, y: 0, z: 0}
+    openSidesMask: 32
+    walkable: 1
+  - position: {x: 1, y: 0, z: 0}
     openSidesMask: 0
     walkable: 1
-  - position: {x: 2, y: 1, z: 1}
-    openSidesMask: 40
-    walkable: 0
-  dimensions: {x: 0, y: 0, z: 0}
+  - position: {x: 1, y: 1, z: 0}
+    openSidesMask: 0
+    walkable: 1
+  - position: {x: 2, y: 1, z: 0}
+    openSidesMask: 8
+    walkable: 1
+  dimensions: {x: 3, y: 3, z: 3}

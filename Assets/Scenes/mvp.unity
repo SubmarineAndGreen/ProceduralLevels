@@ -400,7 +400,7 @@ MonoBehaviour:
   generatedGridDimensions: {x: 8, y: 8, z: 8}
   fullDimensions: {x: 0, y: 0, z: 0}
   scaleAfterGeneration: 1
-  scaleFactor: 1
+  scaleFactor: 25
   tileSets:
   - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
   - {fileID: 11400000, guid: 23fd1281d831cca4d9c87f1f4bd0d21b, type: 2}

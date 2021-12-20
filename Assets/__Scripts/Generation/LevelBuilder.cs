@@ -72,7 +72,11 @@ public class LevelBuilder : MonoBehaviour {
 
         List<ITileConstraint> wfcConstraints = new List<ITileConstraint>();
 
-        createStructureConstraints(Vector3Int.one * 3, 0, wfcConstraints, pipeTiles);
+        Vector3Int testPos = Vector3Int.one * 3;
+        int testStructure = 0;
+        createStructureConstraints(testPos, testStructure, wfcConstraints, pipeTiles);
+        instantiateStructure(testPos, testStructure);
+        
 
         if (pathConstraint) {
             wfcConstraints.Add(new PathConstraint(tilesWithoutEmpty(pipesSample.uniqueTiles,
@@ -237,7 +241,7 @@ public class LevelBuilder : MonoBehaviour {
         foreach (StructureTile tile in structure.tiles) {
             structureCount++;
             Vector3Int structureTilePosition = position + tile.position;
-            Debug.Log(structureTilePosition);
+            // Debug.Log(structureTilePosition);
             fixedTiles.Add(structureTilePosition);
 
             wfcConstraints.Add(new FixedTileConstraint() {
@@ -302,6 +306,13 @@ public class LevelBuilder : MonoBehaviour {
                     wfcTiles[TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION)]
             }
         });
+    }
+
+    private void instantiateStructure(Vector3Int position, int setIndex) {
+        Vector3 tileOffset = new Vector3(1, 0.5f, 1);
+        GameObject prefabToSpawn = structureSet.frequencies[setIndex].structure.structurePrefab;
+        GameObject structure = Instantiate(prefabToSpawn , position.toVector3() + tileOffset /* scaleFactor */, Quaternion.identity);
+        structure.transform.SetParent(levelGrid.transform);
     }
 
     // private List<int> getStructureTileIndices() {
