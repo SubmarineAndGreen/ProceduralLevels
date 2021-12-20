@@ -28,6 +28,7 @@ public class PlayerStatus : MonoBehaviour
         if(playerHP==0)
         {
             Debug.Log("You Died");
+            ui.DeathScreen();
         }
         ui.UpdateHealth(playerHP);
     }

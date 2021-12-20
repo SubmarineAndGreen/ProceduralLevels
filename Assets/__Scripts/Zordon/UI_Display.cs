@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UI_Display : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UI_Display : MonoBehaviour
     [SerializeField] public Slider energySlider;
     //[SerializeField] public TextMeshProUGUI healthText;
     [SerializeField] public TextMeshProUGUI weaponText;
+    [SerializeField] public GameObject deathScreen;
     
     public void UpdateHealth(int hp)
     {
@@ -36,5 +38,21 @@ public class UI_Display : MonoBehaviour
     public void AddEnergy(int energy)
     {
         energySlider.value += energy;
+    }
+    public void DeathScreen()
+    {
+        deathScreen.SetActive(true);
+        StartCoroutine(Death());
+    }
+    IEnumerator Death()
+    {
+        yield return new WaitForSeconds(4);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Main Menu");
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
     }
 }
