@@ -8,7 +8,7 @@ public class StructureTileObject : MonoBehaviour {
     List<GameObject> markers;
 
     private void Awake() {
-        structureTile = new StructureTile();
+        // structureTile = new StructureTile();
         markers = new List<GameObject>();
     }
     

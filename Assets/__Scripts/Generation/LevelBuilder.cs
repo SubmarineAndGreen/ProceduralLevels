@@ -30,6 +30,9 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] int structurePlaceholderIndex;
     [SerializeField] int pipeUpTileIndex;
     [SerializeField] int pipeHorizontalTileIndex;
+    [SerializeField] GameObject fanPrefab;
+    [SerializeField] GameObject vinePrefab;
+
     [Space(10)]
 
     [HideInInspector] public string pipesSampleFileName;
@@ -76,7 +79,7 @@ public class LevelBuilder : MonoBehaviour {
         int testStructure = 0;
         createStructureConstraints(testPos, testStructure, wfcConstraints, pipeTiles);
         instantiateStructure(testPos, testStructure);
-        
+
 
         if (pathConstraint) {
             wfcConstraints.Add(new PathConstraint(tilesWithoutEmpty(pipesSample.uniqueTiles,
@@ -124,7 +127,11 @@ public class LevelBuilder : MonoBehaviour {
         initializeNavigation(tileIndices, tileSetIndices);
         navigationStopwatch.Stop();
 
-        initializeEnemyManager(tileIndices, tileSetIndices);
+        List<Vector3Int> pipeTilePositions = getAllPipeTiles(tileIndices, tileSetIndices);
+        EnemyManager enemyManager = EnemyManager.instance;
+        enemyManager.validSpawningTiles = pipeTilePositions;
+
+        instantiateDecorations(pipeTilePositions);
 
         if (scaleAfterGeneration) {
             levelGrid.transform.localScale = Vector3.one * scaleFactor;
@@ -194,20 +201,19 @@ public class LevelBuilder : MonoBehaviour {
         navigation.tileGridDimensions = fullDimensions;
     }
 
-    private void initializeEnemyManager(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {
+    private List<Vector3Int> getAllPipeTiles(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {
 
-        EnemyManager enemyManager = EnemyManager.instance;
-        List<Vector3Int> validSpawningTiles = new List<Vector3Int>();
+        List<Vector3Int> pipeTiles = new List<Vector3Int>();
 
         tileIndices.forEach((x, y, z, tileIndex) => {
             if (tileIndex != TileGrid.TILE_EMPTY
             && tileSetIndices.at(x, y, z) == TILESET_PIPES
             && tileIndex != tileSets[TILESET_PIPES].emptyTileIndex) {
-                validSpawningTiles.Add(new Vector3Int(x, y, z));
+                pipeTiles.Add(new Vector3Int(x, y, z));
             }
         });
 
-        enemyManager.validSpawningTiles = validSpawningTiles;
+        return pipeTiles;
     }
 
     private Dictionary<int, DeBroglie.Tile> createWfcTiles(List<int> uniqueTiles) {
@@ -280,6 +286,7 @@ public class LevelBuilder : MonoBehaviour {
                             break;
                     }
 
+                    // Debug.Log(tilePosition);
                     wfcConstraints.Add(new FixedTileConstraint() {
                         Point = new Point(tilePosition.x, tilePosition.y, tilePosition.z),
                         Tiles = new DeBroglie.Tile[] {
@@ -311,55 +318,40 @@ public class LevelBuilder : MonoBehaviour {
     private void instantiateStructure(Vector3Int position, int setIndex) {
         Vector3 tileOffset = new Vector3(1, 0.5f, 1);
         GameObject prefabToSpawn = structureSet.frequencies[setIndex].structure.structurePrefab;
-        GameObject structure = Instantiate(prefabToSpawn , position.toVector3() + tileOffset /* scaleFactor */, Quaternion.identity);
+        GameObject structure = Instantiate(prefabToSpawn, position.toVector3() + tileOffset /* scaleFactor */, Quaternion.identity);
         structure.transform.SetParent(levelGrid.transform);
     }
 
-    // private List<int> getStructureTileIndices() {
-    //     const int structureTileCount = 64;
-    //     List<int> tileIndices = new List<int>();
-    //     for (int offset = 0; offset < structureTileCount; offset++) {
-    //         tileIndices.Add(structureTilesOffset + offset);
-    //     }
+    private void instantiateDecorations(List<Vector3Int> tilesToDecorate) {
+        instantiateFans(tilesToDecorate);
+        instantiateVines(tilesToDecorate);
+    }
 
-    //     return tileIndices;
-    // }
+    private void instantiateFans(List<Vector3Int> tilesToDecorate) {
+        const float chanceToSpawn = 0.1f;
+        Vector3 tileOffset = new Vector3(-0.5f, 0, -0.5f);
 
-    // private List<TileRule> createStructureTileRules(List<int> structureTileIndices) {
-    //     List<TileRule> rules = new List<TileRule>();
-    //     // List<StructureTile> structureTiles = new List<StructureTile>();
-    //     foreach (int index in structureTileIndices) {
-    //         StructureTile structureTile = new StructureTile();
-    //         structureTile.openSidesMask = (uint)index;
-    //         foreach (Directions3D direction in DirectionUtils.allDirections) {
-    //             if (structureTile.isSideOpen(direction)) {
-    //                 switch (direction) {
-    //                     case Directions3D.UP:
-    //                     case Directions3D.DOWN:
-    //                         rules.Add(new TileRule(index,
-    //                                                TileUtils.tileIndexToModelIndex(pipeUpTileIndex, TileGrid.NO_ROTATION),
-    //                                                direction));
-    //                         break;
-    //                     case Directions3D.FORWARD:
-    //                     case Directions3D.BACK:
-    //                         rules.Add(new TileRule(index,
-    //                                                TileUtils.tileIndexToModelIndex(pipeHorizontalTileIndex, 1),
-    //                                                direction));
-    //                         break;
-    //                     case Directions3D.RIGHT:
-    //                     case Directions3D.LEFT:
-    //                         rules.Add(new TileRule(index,
-    //                                                TileUtils.tileIndexToModelIndex(pipeHorizontalTileIndex, TileGrid.NO_ROTATION),
-    //                                                direction));
-    //                         break;
-    //                 }
-    //             } else {
-    //                 rules.Add(new TileRule(index, TileUtils.tileIndexToModelIndex(tileSets[TILESET_PIPES].emptyTileIndex,
-    //                                                                               TileGrid.NO_ROTATION), direction));
-    //             }
-    //         }
-    //     }
-    // }
+        foreach (Vector3Int tilePosition in tilesToDecorate) {
+            if (UnityEngine.Random.Range(0f, 1f) < chanceToSpawn) {
+                if (levelGrid.tileIndices.at(tilePosition) == pipeHorizontalTileIndex) {
+                    int rotation = levelGrid.tileRotations.at(tilePosition);
+                    GameObject fanObject = Instantiate(fanPrefab,
+                                                       tilePosition.toVector3() + tileOffset,
+                                                       Quaternion.Euler(0, 90 * rotation, 0));
+                    fanObject.transform.SetParent(levelGrid.transform);
+                } else if (levelGrid.tileIndices.at(tilePosition) == pipeUpTileIndex) {
+                    GameObject fanObject = Instantiate(fanPrefab,
+                                                       tilePosition.toVector3() + tileOffset,
+                                                       Quaternion.Euler(0, 0, 90));
+                    fanObject.transform.SetParent(levelGrid.transform);
+                }
+            }
+        }
+    }
+
+    private void instantiateVines(List<Vector3Int> tilesToDecorate) {
+
+    }
 
     private Vector3Int randomVector3Int(Vector3Int min, Vector3Int max) {
         return new Vector3Int(

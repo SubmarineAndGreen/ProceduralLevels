@@ -397,7 +397,7 @@ MonoBehaviour:
   gameLoop: {fileID: 1903047125}
   seed: -1
   levelGrid: {fileID: 2056008011}
-  generatedGridDimensions: {x: 8, y: 8, z: 8}
+  generatedGridDimensions: {x: 7, y: 7, z: 7}
   fullDimensions: {x: 0, y: 0, z: 0}
   scaleAfterGeneration: 1
   scaleFactor: 25
@@ -411,6 +411,8 @@ MonoBehaviour:
   structurePlaceholderIndex: 15
   pipeUpTileIndex: 13
   pipeHorizontalTileIndex: 9
+  fanPrefab: {fileID: 3972037967575831215, guid: d73b3e898e60c354cac3fdd77d6cd29c, type: 3}
+  vinePrefab: {fileID: 4107743455612661017, guid: a2d83a00b2111df45b3545909efbc544, type: 3}
   pipesSampleFileName: PipesNew.json
 --- !u!114 &924014583
 MonoBehaviour:

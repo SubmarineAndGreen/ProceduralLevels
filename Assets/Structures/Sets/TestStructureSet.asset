@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: TestStructureSet
   m_EditorClassIdentifier: 
   frequencies:
+  - structure: {fileID: 11400000, guid: 43c4a3a1dc38e7f419b2c46d4418d756, type: 2}
+    frequency: 1
   - structure: {fileID: 11400000, guid: 78f241f230e45ac4db5e85669dad932e, type: 2}
     frequency: 1
