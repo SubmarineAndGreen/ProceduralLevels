@@ -15,6 +15,7 @@ public class UI_Display : MonoBehaviour
     [SerializeField] public GameObject deathScreen;
     [SerializeField] public GameObject victoryScreen;
     [SerializeField] public GameObject pauseMenu;
+    public bool godMode;
 
     private bool isPaused;
     private bool isSceneChanging;
@@ -26,12 +27,14 @@ public class UI_Display : MonoBehaviour
     {
         isPaused = false;
         isSceneChanging = false;
+        godMode = false;
     }
 
     public void UpdateHealth(int hp)
     {
         //healthText.text = "Health: " + hp;
-        healthSlider.value = hp;
+        if(!godMode)
+            healthSlider.value = hp;
     }
     public void UpdateWeapon(int weapon)
     {
