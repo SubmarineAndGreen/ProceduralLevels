@@ -17,10 +17,15 @@ public class UI_Display : MonoBehaviour
     [SerializeField] public GameObject pauseMenu;
 
     private bool isPaused;
+    private bool isSceneChanging;
+    public int hp;
+    public int energy;
+    public int progress;
 
     private void Start()
     {
         isPaused = false;
+        isSceneChanging = false;
     }
 
     public void UpdateHealth(int hp)
@@ -43,8 +48,9 @@ public class UI_Display : MonoBehaviour
     public void AddProgress(int progress)
     {
         progressSlider.value += progress;
-        if(progressSlider.value==100)
+        if(progressSlider.value==100&&!isSceneChanging)
         {
+            isSceneChanging = true;
             NewLevel();
         }
     }
