@@ -239,12 +239,12 @@ public class LevelBuilder : MonoBehaviour {
 
     private void createStructureConstraints(Vector3Int position, int setIndex, List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
 
-        Structure structure = structureSet.frequencies[setIndex].structure;
+        List<StructureTile> structureTiles = structureSet.frequencies[setIndex].structure.getTilesFromFile();
 
         int structureCount = 0;
         HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
 
-        foreach (StructureTile tile in structure.tiles) {
+        foreach (StructureTile tile in structureTiles) {
             structureCount++;
             Vector3Int structureTilePosition = position + tile.position;
             // Debug.Log(structureTilePosition);
@@ -258,7 +258,7 @@ public class LevelBuilder : MonoBehaviour {
             });
         }
 
-        foreach (StructureTile tile in structure.tiles) {
+        foreach (StructureTile tile in structureTiles) {
             foreach (Directions3D direction in DirectionUtils.allDirections) {
                 Vector3Int tilePosition = position + tile.position + DirectionUtils.DirectionsToVectors[direction];
 

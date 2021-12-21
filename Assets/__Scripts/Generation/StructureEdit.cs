@@ -5,7 +5,7 @@ using UnityEditor;
 
 
 [RequireComponent(typeof(TileGrid))]
-public class StructureEditor : MonoBehaviour {
+public class StructureEdit : MonoBehaviour {
     [SerializeField] Structure structureScriptableObject;
     GameObject structureInstance;
     Structure structure;
@@ -60,7 +60,7 @@ public class StructureEditor : MonoBehaviour {
     }
 
     public void loadStructure() {
-        structureScriptableObject.loadTilesFromFile();
+        structureScriptableObject.tiles = structureScriptableObject.getTilesFromFile();
         grid.clear();
         grid.resizePerserveTiles(structureScriptableObject.dimensions);
 
@@ -81,13 +81,13 @@ public class StructureEditor : MonoBehaviour {
 
 
 
-[CustomEditor(typeof(StructureEditor))]
+[CustomEditor(typeof(StructureEdit))]
 public class StructureEditorUI : Editor {
 
-    StructureEditor structureEditor;
+    StructureEdit structureEditor;
 
     private void OnEnable() {
-        structureEditor = target as StructureEditor;
+        structureEditor = target as StructureEdit;
     }
 
     public override void OnInspectorGUI() {
