@@ -387,16 +387,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugUI: 0
+  cursorHidden: 0
   previewRotationText: {fileID: 0}
   selectedTileRotationText: {fileID: 0}
   tileText: {fileID: 0}
   cursorPrefab: {fileID: 6526753209231964760, guid: d182178f4c339c649ad5d066736aa3b6, type: 3}
-  defaultTileSet: {fileID: 0}
   tileSets:
   - {fileID: 11400000, guid: 7ad9496ce26df9b46aa58ed3aa801db6, type: 2}
   currentTilesetIndex: 0
   loadFromFileOnStart: 1
-  currentSaveFile: navTest.json
+  currentSaveFile: navTunnel.json
   dimensions: {x: 0, y: 0, z: 0}
   areEditingControlsOn: 0
   cursorPosition: {x: 0, y: 0, z: 0}
@@ -445,8 +445,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 1059060814}
-  maxDistance: 20
+  levelBuilder: {fileID: 0}
+  maxDistance: 24
   arrowPrefab: {fileID: 670401371144489744, guid: 89ad7c7b728192a47872f657fe1df9f1, type: 3}
+  arrows: []
+  goalTile: {x: 0, y: 0, z: 0}
+  navigationManager: {fileID: 0}
 --- !u!4 &1505876687
 Transform:
   m_ObjectHideFlags: 0

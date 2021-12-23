@@ -359,24 +359,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a939aecddc96714abd8c5588488bf8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureSet: {fileID: 0}
+  structureSet: {fileID: 11400000, guid: a964ac38a210dde40bd26588fce08615, type: 2}
   gameLoop: {fileID: 0}
-  seed: 0
+  seed: -1
   levelGrid: {fileID: 633328298}
-  generatedGridDimensions: {x: 12, y: 12, z: 12}
+  generatedGridDimensions: {x: 7, y: 7, z: 7}
   fullDimensions: {x: 0, y: 0, z: 0}
-  scaleAfterGeneration: 0
-  scaleFactor: 0
+  scaleAfterGeneration: 1
+  scaleFactor: 1
   tileSets:
-  - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
+  - {fileID: 11400000, guid: 456f8cd44ceaa54459dd5658ab10658d, type: 2}
   - {fileID: 11400000, guid: 23fd1281d831cca4d9c87f1f4bd0d21b, type: 2}
   pathConstraint: 1
   upTileCapIndex: 1
   downTileCapIndex: 2
   sideTileCapIndex: 0
+  structurePlaceholderIndex: 15
+  pipeUpTileIndex: 13
+  pipeHorizontalTileIndex: 9
+  fanPrefab: {fileID: 3972037967575831215, guid: d73b3e898e60c354cac3fdd77d6cd29c, type: 3}
+  vinePrefab: {fileID: 4107743455612661017, guid: a2d83a00b2111df45b3545909efbc544, type: 3}
   pipesSampleFileName: PipesNew.json
-  pipeUpTileIndex: 0
-  pipeHorizontalTileIndex: 0
 --- !u!114 &415501193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,7 +494,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 561711770}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10, y: 0, z: 0}
+  m_LocalPosition: {x: -40, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1228197857}
@@ -580,7 +583,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 633328297}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1228197857}

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameLoop : MonoBehaviour
 {
+    [SerializeField] LevelBuilder levelBuilder;
     SpawnerPlacer spawnerPlacer;
     NavigationManager navigationManager;
     EnemyManager enemyManager;
@@ -14,6 +15,8 @@ public class GameLoop : MonoBehaviour
     }
     void Start()
     {
+        levelBuilder.generate();
+
         navigationManager = NavigationManager.instance;
         enemyManager = EnemyManager.instance;
 

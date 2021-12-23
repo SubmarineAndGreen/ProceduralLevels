@@ -25,7 +25,7 @@ public class NavigationVisuals : MonoBehaviour {
         // }
 
         if (Keyboard.current.tKey.wasPressedThisFrame) {
-            grid.resizePerserveTiles(levelBuilder.fullDimensions);
+            // grid.resizePerserveTiles(levelBuilder.fullDimensions);
             updateDistanceFieldVisuals(navigationManager.distanceFields[goalTile.x, goalTile.y, goalTile.z]);
             updateVectorFieldVisuals(navigationManager.vectorFields[goalTile.x, goalTile.y, goalTile.z]);
             grid.transform.localScale = new Vector3(levelBuilder.scaleFactor,levelBuilder.scaleFactor,levelBuilder.scaleFactor);

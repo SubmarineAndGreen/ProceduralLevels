@@ -62,7 +62,7 @@ public class StructureEdit : MonoBehaviour {
     public void loadStructure() {
         structureScriptableObject.tiles = structureScriptableObject.getTilesFromFile();
         grid.clear();
-        grid.resizePerserveTiles(structureScriptableObject.dimensions);
+        // grid.resizePerserveTiles(structureScriptableObject.dimensions);
 
         foreach (StructureTile tile in structureScriptableObject.tiles) {
             grid.placeTile(STRUCTURE_TILE_INDEX, STRUCTURE_TILE_SET, tile.position, TileGrid.NO_ROTATION);

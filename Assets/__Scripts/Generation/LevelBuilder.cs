@@ -15,7 +15,7 @@ public class LevelBuilder : MonoBehaviour {
     public const int NO_SEED = -1;
     private WfcRunner wfcRunner;
     [SerializeField] private TileGrid levelGrid;
-    [SerializeField] Vector3Int generatedGridDimensions;
+    [SerializeField] Vector3Int levelDimensions;
     [HideInInspector] public Vector3Int fullDimensions;
     [SerializeField] bool scaleAfterGeneration;
     public float scaleFactor;
@@ -36,16 +36,8 @@ public class LevelBuilder : MonoBehaviour {
     [Space(10)]
 
     [HideInInspector] public string pipesSampleFileName;
-    // private const int structureTilesOffset = 64;
 
-    // [SerializeField] private int structureCount;
-
-    private void Start() {
-        generate();
-        gameLoop.enabled = true;
-    }
-
-    void generate() {
+    public void generate() {
         System.Diagnostics.Stopwatch allStopwatch = System.Diagnostics.Stopwatch.StartNew();
 
         if (seed != NO_SEED) {
@@ -56,7 +48,7 @@ public class LevelBuilder : MonoBehaviour {
 
         //leave 1 tile of margin on each side for ending hole blocking tiles
         Vector3Int oneTileMargin = Vector3Int.one * 2;
-        fullDimensions = generatedGridDimensions + oneTileMargin;
+        fullDimensions = levelDimensions + oneTileMargin;
 
         levelGrid.dimensions = fullDimensions;
 
@@ -89,7 +81,7 @@ public class LevelBuilder : MonoBehaviour {
 
         int[,,] generatedTiles;
         bool generationSuccess = wfcRunner.runAdjacentModel(out generatedTiles,
-                                                            generatedGridDimensions,
+                                                            levelDimensions,
                                                             tileSets[TILESET_PIPES],
                                                             pipesSample.uniqueTiles,
                                                             pipesSample.rules,
