@@ -15,18 +15,26 @@ public class UI_Display : MonoBehaviour
     [SerializeField] public GameObject deathScreen;
     [SerializeField] public GameObject victoryScreen;
     [SerializeField] public GameObject pauseMenu;
+    public bool godMode;
 
     private bool isPaused;
+    private bool isSceneChanging;
+    public int hp;
+    public int energy;
+    public int progress;
 
     private void Start()
     {
         isPaused = false;
+        isSceneChanging = false;
+        godMode = false;
     }
 
     public void UpdateHealth(int hp)
     {
         //healthText.text = "Health: " + hp;
-        healthSlider.value = hp;
+        if(!godMode)
+            healthSlider.value = hp;
     }
     public void UpdateWeapon(int weapon)
     {
@@ -43,8 +51,9 @@ public class UI_Display : MonoBehaviour
     public void AddProgress(int progress)
     {
         progressSlider.value += progress;
-        if(progressSlider.value==100)
+        if(progressSlider.value==100&&!isSceneChanging)
         {
+            isSceneChanging = true;
             NewLevel();
         }
     }
