@@ -14,5 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   emptyTileIndex: 0
   tiles:
-  - tilePrefab: {fileID: 7117702373457063440, guid: ca601faf7a35760469c04a7757e58cd5, type: 3}
-    symmetry: 2
+  - {fileID: 11400000, guid: 5e74386245c699c4997a3395bd2698e7, type: 2}

@@ -24,17 +24,13 @@ public class LevelBuilder : MonoBehaviour {
     private const int TILESET_PIPES = 0;
     private const int TILESET_CAPS = 1;
     [Header("Tile Caps")]
-    [SerializeField] int upTileCapIndex;
-    [SerializeField] int downTileCapIndex;
-    [SerializeField] int sideTileCapIndex;
-    [SerializeField] int structurePlaceholderIndex;
-    [SerializeField] int pipeUpTileIndex;
-    [SerializeField] int pipeHorizontalTileIndex;
-    [SerializeField] GameObject fanPrefab;
-    [SerializeField] GameObject vinePrefab;
-
+    [SerializeField] Tile upTileCap;
+    [SerializeField] Tile downTileCap;
+    [SerializeField] Tile sideTileCap;
     [Space(10)]
-
+    [SerializeField] Tile structurePlaceholderTile;
+    [SerializeField] Tile pipeUpTile;
+    [SerializeField] Tile pipeHorizontalTile;
     [HideInInspector] public string pipesSampleFileName;
 
     public void generate() {
@@ -69,6 +65,7 @@ public class LevelBuilder : MonoBehaviour {
 
         Vector3Int testPos = Vector3Int.one * 3;
         int testStructure = 0;
+        
         createStructureConstraints(testPos, testStructure, wfcConstraints, pipeTiles);
         instantiateStructure(testPos, testStructure);
 
@@ -123,8 +120,6 @@ public class LevelBuilder : MonoBehaviour {
         EnemyManager enemyManager = EnemyManager.instance;
         enemyManager.validSpawningTiles = pipeTilePositions;
 
-        instantiateDecorations(pipeTilePositions);
-
         if (scaleAfterGeneration) {
             levelGrid.transform.localScale = Vector3.one * scaleFactor;
         }
@@ -136,6 +131,10 @@ public class LevelBuilder : MonoBehaviour {
     private void capOffTileEnds(Grid3D<int> tiles, Grid3D<int> rotations, Grid3D<int> tileSetIndices, SamplerResult pipesSample) {
 
         ConnectionData[] connectionData = pipesSample.connections;
+
+        int upTileCapIndex = tileSets[TILESET_CAPS].getTileIndexFromTileObject(upTileCap);
+        int downTileCapIndex = tileSets[TILESET_CAPS].getTileIndexFromTileObject(downTileCap);
+        int sideTileCapIndex = tileSets[TILESET_CAPS].getTileIndexFromTileObject(sideTileCap);
 
         tiles.forEach((position, tile) => {
             if (tile != TileGrid.TILE_EMPTY && tileSetIndices.at(position) != TILESET_CAPS) {
@@ -231,7 +230,11 @@ public class LevelBuilder : MonoBehaviour {
 
     private void createStructureConstraints(Vector3Int position, int setIndex, List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
 
-        List<StructureTile> structureTiles = structureSet.frequencies[setIndex].structure.getTilesFromFile();
+        Structure structure = structureSet.frequencies[setIndex].structure;
+        List<StructureTile> structureTiles = structure.getTilesCollection().tiles;
+        int structurePlaceholderIndex = tileSets[TILESET_PIPES].getTileIndexFromTileObject(structurePlaceholderTile);
+        int pipeUpTileIndex = tileSets[TILESET_PIPES].getTileIndexFromTileObject(pipeUpTile);
+        int pipeHorizontalTileIndex = tileSets[TILESET_PIPES].getTileIndexFromTileObject(pipeHorizontalTile);
 
         int structureCount = 0;
         HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
@@ -312,37 +315,6 @@ public class LevelBuilder : MonoBehaviour {
         GameObject prefabToSpawn = structureSet.frequencies[setIndex].structure.structurePrefab;
         GameObject structure = Instantiate(prefabToSpawn, position.toVector3() + tileOffset /* scaleFactor */, Quaternion.identity);
         structure.transform.SetParent(levelGrid.transform);
-    }
-
-    private void instantiateDecorations(List<Vector3Int> tilesToDecorate) {
-        instantiateFans(tilesToDecorate);
-        instantiateVines(tilesToDecorate);
-    }
-
-    private void instantiateFans(List<Vector3Int> tilesToDecorate) {
-        const float chanceToSpawn = 0.1f;
-        Vector3 tileOffset = new Vector3(-0.5f, 0, -0.5f);
-
-        foreach (Vector3Int tilePosition in tilesToDecorate) {
-            if (UnityEngine.Random.Range(0f, 1f) < chanceToSpawn) {
-                if (levelGrid.tileIndices.at(tilePosition) == pipeHorizontalTileIndex) {
-                    int rotation = levelGrid.tileRotations.at(tilePosition);
-                    GameObject fanObject = Instantiate(fanPrefab,
-                                                       tilePosition.toVector3() + tileOffset,
-                                                       Quaternion.Euler(0, 90 * rotation, 0));
-                    fanObject.transform.SetParent(levelGrid.transform);
-                } else if (levelGrid.tileIndices.at(tilePosition) == pipeUpTileIndex) {
-                    GameObject fanObject = Instantiate(fanPrefab,
-                                                       tilePosition.toVector3() + tileOffset,
-                                                       Quaternion.Euler(0, 0, 90));
-                    fanObject.transform.SetParent(levelGrid.transform);
-                }
-            }
-        }
-    }
-
-    private void instantiateVines(List<Vector3Int> tilesToDecorate) {
-
     }
 
     private Vector3Int randomVector3Int(Vector3Int min, Vector3Int max) {

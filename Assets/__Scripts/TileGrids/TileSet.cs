@@ -5,4 +5,8 @@ using System.Collections.Generic;
 public class TileSet : ScriptableObject {
     public int emptyTileIndex;
     public List<Tile> tiles;
+
+    public int getTileIndexFromTileObject(Tile tile) {
+        return tiles.IndexOf(tile);
+    }
 }   

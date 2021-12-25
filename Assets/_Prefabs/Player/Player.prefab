@@ -236,7 +236,7 @@ MonoBehaviour:
   groundCheckDistanceFromOrigin: 1.25
   maxGroundAngle: 60
   maxSpeed: 10
-  maxVerticalSpeed: 30
+  maxVerticalSpeed: 50
   groundAcceleration: 150
   airAcceleration: 100
   groundDrag: 80

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class Tile {
+[CreateAssetMenu(fileName = "Tile", menuName = "wfc/Tile", order = 0)]
+public class Tile : ScriptableObject {
     public GameObject tilePrefab;
     public RotationalSymmetry symmetry;
     // public bool excludeFromGeneration = false;
@@ -21,5 +22,4 @@ public enum RotationalSymmetry {
     I,
     X
 }
-
 

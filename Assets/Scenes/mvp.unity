@@ -397,7 +397,7 @@ MonoBehaviour:
   gameLoop: {fileID: 1903047125}
   seed: -1
   levelGrid: {fileID: 2056008011}
-  generatedGridDimensions: {x: 7, y: 7, z: 7}
+  levelDimensions: {x: 10, y: 10, z: 10}
   fullDimensions: {x: 0, y: 0, z: 0}
   scaleAfterGeneration: 1
   scaleFactor: 25
@@ -405,14 +405,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
   - {fileID: 11400000, guid: 23fd1281d831cca4d9c87f1f4bd0d21b, type: 2}
   pathConstraint: 1
-  upTileCapIndex: 1
-  downTileCapIndex: 2
-  sideTileCapIndex: 0
-  structurePlaceholderIndex: 15
-  pipeUpTileIndex: 13
-  pipeHorizontalTileIndex: 9
-  fanPrefab: {fileID: 3972037967575831215, guid: d73b3e898e60c354cac3fdd77d6cd29c, type: 3}
-  vinePrefab: {fileID: 4107743455612661017, guid: a2d83a00b2111df45b3545909efbc544, type: 3}
+  upTileCap: {fileID: 11400000, guid: b1814110b8344744a93ef688f30337d2, type: 2}
+  downTileCap: {fileID: 11400000, guid: 948208bc203764e4cba24bb864568e7f, type: 2}
+  sideTileCap: {fileID: 11400000, guid: 8dabb03eff9827c489c3a39383c7372e, type: 2}
+  structurePlaceholderTile: {fileID: 11400000, guid: 3d3392e3cd4f3644b9c974710d723c49, type: 2}
+  pipeUpTile: {fileID: 11400000, guid: 748a5d7eae4fc584395e9aa114efa299, type: 2}
+  pipeHorizontalTile: {fileID: 11400000, guid: 564c15b65a2080843bef0fea0a2d88d3, type: 2}
   pipesSampleFileName: PipesNew.json
 --- !u!114 &924014583
 MonoBehaviour:
@@ -1071,11 +1069,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903047123}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66fc66c6e23f1c54694bc40ec1193e9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelBuilder: {fileID: 924014582}
   playerPrefab: {fileID: 5231489966705550095, guid: fc0730db6bb540a428557cd88e44756d, type: 3}
 --- !u!4 &1903047126
 Transform:

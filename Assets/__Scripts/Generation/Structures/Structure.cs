@@ -12,10 +12,10 @@ public class Structure : ScriptableObject {
     string savePath;
     string saveFolder = "StructureSaves";
 
-    public List<StructureTile> getTilesFromFile() {
+    public StructureTileCollection getTilesCollection() {
         savePath = $"{Application.dataPath}/{saveFolder}";
         StructureTileCollection collection = JsonUtility.FromJson<StructureTileCollection>(File.ReadAllText($"{savePath}/{fileName}.json"));
-        return collection.tiles;
+        return collection;
     }
 
     public void saveTilesToFile() {

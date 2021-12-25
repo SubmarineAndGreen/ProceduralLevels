@@ -21,7 +21,7 @@ public class StructureEdit : MonoBehaviour {
 
     public void toggleOpenSideAtCursor(Directions3D side) {
         GameObject tileObject = grid.tileObjects.at(grid.cursorPosition);
-        StructureTileObject structureTileObject = tileObject.GetComponent<StructureTileObject>();
+        StructureEditorTileObject structureTileObject = tileObject.GetComponent<StructureEditorTileObject>();
         StructureTile structureTile = structureTileObject.structureTile;
         if (structureTile != null) {
             structureTile.setSideOpen(side, !structureTile.isSideOpen(side));
@@ -33,12 +33,24 @@ public class StructureEdit : MonoBehaviour {
 
     public void toggleUnwalkableAtCursor() {
         GameObject tileObject = grid.tileObjects.at(grid.cursorPosition);
-        StructureTileObject structureTileObject = tileObject.GetComponent<StructureTileObject>();
+        StructureEditorTileObject structureTileObject = tileObject.GetComponent<StructureEditorTileObject>();
         StructureTile structureTile = structureTileObject.structureTile;
         if (structureTile != null) {
             structureTile.walkable = !structureTile.walkable;
         } else {
             Debug.LogWarning("Tried to set walkable on non structure tile");
+        }
+        structureTileObject.instantiateMarkers();
+    }
+
+    public void toggleExcludeFromSpawningAtCursor() {
+        GameObject tileObject = grid.tileObjects.at(grid.cursorPosition);
+        StructureEditorTileObject structureTileObject = tileObject.GetComponent<StructureEditorTileObject>();
+        StructureTile structureTile = structureTileObject.structureTile;
+        if (structureTile != null) {
+            structureTile.excludeFromSpawning = !structureTile.excludeFromSpawning;
+        } else {
+            Debug.LogWarning("Tried to set exclude from spawning on non structure tile");
         }
         structureTileObject.instantiateMarkers();
     }
@@ -50,7 +62,7 @@ public class StructureEdit : MonoBehaviour {
         grid.tileIndices.forEach((Vector3Int position, int index) => {
             if (index != TileGrid.TILE_EMPTY) {
                 StructureTile structureTile = grid.tileObjects.at(position)
-                                                              .GetComponent<StructureTileObject>().structureTile;
+                                                              .GetComponent<StructureEditorTileObject>().structureTile;
                 structureTile.position = position;
                 structureScriptableObject.tiles.Add(structureTile);
             }
@@ -60,14 +72,15 @@ public class StructureEdit : MonoBehaviour {
     }
 
     public void loadStructure() {
-        structureScriptableObject.tiles = structureScriptableObject.getTilesFromFile();
+        StructureTileCollection structureTileCollection = structureScriptableObject.getTilesCollection();
+        structureScriptableObject.tiles = structureTileCollection.tiles;
         grid.clear();
-        // grid.resizePerserveTiles(structureScriptableObject.dimensions);
+        grid.resizePerserveTiles(structureTileCollection.dimensions);
 
         foreach (StructureTile tile in structureScriptableObject.tiles) {
             grid.placeTile(STRUCTURE_TILE_INDEX, STRUCTURE_TILE_SET, tile.position, TileGrid.NO_ROTATION);
             GameObject newTileObject = grid.tileObjects.at(tile.position);
-            StructureTileObject structureTileObject = newTileObject.GetComponent<StructureTileObject>();
+            StructureEditorTileObject structureTileObject = newTileObject.GetComponent<StructureEditorTileObject>();
             structureTileObject.structureTile = tile;
             structureTileObject.instantiateMarkers();
         }
@@ -103,6 +116,7 @@ public class StructureEditorUI : Editor {
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space(10);
         EditorUtils.guiButton("Toggle walkable", structureEditor.toggleUnwalkableAtCursor);
+        EditorUtils.guiButton("Toggle exclude from spawning", structureEditor.toggleExcludeFromSpawningAtCursor);
         EditorUtils.guiButton("Instantiate structure", structureEditor.instantiateStructure);
         EditorUtils.guiButton("Load structure tiles", structureEditor.loadStructure);
         EditorUtils.guiButton("Saves structure tiles", structureEditor.saveStructure);

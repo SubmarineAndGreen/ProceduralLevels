@@ -79,8 +79,10 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     openSidesMask: 0
     walkable: 1
+    excludeFromSpawning: 0
   openSideMarker: {fileID: 6615380386925493888, guid: a13a36a6843e87b4ba00197d2b904049, type: 3}
   unwalkableMarker: {fileID: 9005021207848124177, guid: 6701c6b72306ea149a5fac5e7e0b6339, type: 3}
+  spawningMarker: {fileID: 4931018895623283006, guid: 28a5f3f3bf851ef49a08e959b65810cb, type: 3}
 --- !u!1 &7881937548989659831
 GameObject:
   m_ObjectHideFlags: 0
