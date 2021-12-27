@@ -21,7 +21,7 @@ public class LevelBuilder : MonoBehaviour {
     public float scaleFactor;
     public TileSet[] tileSets;
     [SerializeField] private bool pathConstraint = true;
-    private const int TILESET_PIPES = 0;
+    private const int TILESET_MAIN = 0;
     private const int TILESET_CAPS = 1;
     [Header("Tile Caps")]
     [SerializeField] Tile upTileCap;
@@ -65,21 +65,21 @@ public class LevelBuilder : MonoBehaviour {
 
         Vector3Int testPos = Vector3Int.one * 3;
         int testStructure = 0;
-        
+
         createStructureConstraints(testPos, testStructure, wfcConstraints, pipeTiles);
         instantiateStructure(testPos, testStructure);
 
 
         if (pathConstraint) {
             wfcConstraints.Add(new PathConstraint(tilesWithoutEmpty(pipesSample.uniqueTiles,
-                                                                    tileSets[TILESET_PIPES],
+                                                                    tileSets[TILESET_MAIN],
                                                                     pipeTiles)));
         }
 
         int[,,] generatedTiles;
         bool generationSuccess = wfcRunner.runAdjacentModel(out generatedTiles,
                                                             levelDimensions,
-                                                            tileSets[TILESET_PIPES],
+                                                            tileSets[TILESET_MAIN],
                                                             pipesSample.uniqueTiles,
                                                             pipesSample.rules,
                                                             pipeTiles,
@@ -92,17 +92,9 @@ public class LevelBuilder : MonoBehaviour {
             Debug.LogError("WFC failed!");
         }
 
-        //leave 1 empty tile border
-        for (int x = 1; x < fullDimensions.x - 1; x++) {
-            for (int y = 1; y < fullDimensions.y - 1; y++) {
-                for (int z = 1; z < fullDimensions.z - 1; z++) {
-                    tileIndices.set(x, y, z, TileUtils.modelIndexToTileIndex(generatedTiles[x - 1, y - 1, z - 1]));
-                    tileRotations.set(x, y, z, TileUtils.modelIndexToRotation(generatedTiles[x - 1, y - 1, z - 1]));
-                    tileSetIndices.set(x, y, z, TILESET_PIPES);
-                }
-            }
-        }
+        Dictionary<int, List<Vector3Int>> generatedTilePositionsByIndex = new Dictionary<int, List<Vector3Int>>();
 
+        assignGeneratedTiles(generatedTiles, generatedTilePositionsByIndex, tileIndices, tileRotations, tileSetIndices);
 
         capOffTileEnds(tileIndices, tileRotations, tileSetIndices, pipesSample);
 
@@ -177,8 +169,8 @@ public class LevelBuilder : MonoBehaviour {
 
         tileIndices.forEach((x, y, z, tileIndex) => {
             if (tileIndex == TileGrid.TILE_EMPTY
-                || tileSetIndices.at(x, y, z) != TILESET_PIPES
-                || tileIndex == tileSets[TILESET_PIPES].emptyTileIndex) {
+                || tileSetIndices.at(x, y, z) != TILESET_MAIN
+                || tileIndex == tileSets[TILESET_MAIN].emptyTileIndex) {
                 inputDistanceField[x, y, z] = blockedTile;
             } else {
                 inputDistanceField[x, y, z] = int.MaxValue / 2;
@@ -198,8 +190,8 @@ public class LevelBuilder : MonoBehaviour {
 
         tileIndices.forEach((x, y, z, tileIndex) => {
             if (tileIndex != TileGrid.TILE_EMPTY
-            && tileSetIndices.at(x, y, z) == TILESET_PIPES
-            && tileIndex != tileSets[TILESET_PIPES].emptyTileIndex) {
+            && tileSetIndices.at(x, y, z) == TILESET_MAIN
+            && tileIndex != tileSets[TILESET_MAIN].emptyTileIndex) {
                 pipeTiles.Add(new Vector3Int(x, y, z));
             }
         });
@@ -228,13 +220,37 @@ public class LevelBuilder : MonoBehaviour {
         return result;
     }
 
+    public void assignGeneratedTiles(int[,,] generatedTiles,
+                                     Dictionary<int, List<Vector3Int>> generatedTilePositionsByIndex,
+                                     Grid3D<int> tileIndices,
+                                     Grid3D<int> tileRotations,
+                                     Grid3D<int> tileSetIndices) {
+        for (int x = 1; x < fullDimensions.x - 1; x++) {
+            for (int y = 1; y < fullDimensions.y - 1; y++) {
+                for (int z = 1; z < fullDimensions.z - 1; z++) {
+                    int tileIndex = TileUtils.modelIndexToTileIndex(generatedTiles[x - 1, y - 1, z - 1]);
+
+                    if (!generatedTilePositionsByIndex.ContainsKey(tileIndex)) {
+                        generatedTilePositionsByIndex[tileIndex] = new List<Vector3Int>();
+                    }
+
+                    generatedTilePositionsByIndex[tileIndex].Add(new Vector3Int(x, y, z));
+
+                    tileIndices.set(x, y, z, tileIndex);
+                    tileRotations.set(x, y, z, TileUtils.modelIndexToRotation(generatedTiles[x - 1, y - 1, z - 1]));
+                    tileSetIndices.set(x, y, z, TILESET_MAIN);
+                }
+            }
+        }
+    }
+
     private void createStructureConstraints(Vector3Int position, int setIndex, List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
 
         Structure structure = structureSet.frequencies[setIndex].structure;
         List<StructureTile> structureTiles = structure.getTilesCollection().tiles;
-        int structurePlaceholderIndex = tileSets[TILESET_PIPES].getTileIndexFromTileObject(structurePlaceholderTile);
-        int pipeUpTileIndex = tileSets[TILESET_PIPES].getTileIndexFromTileObject(pipeUpTile);
-        int pipeHorizontalTileIndex = tileSets[TILESET_PIPES].getTileIndexFromTileObject(pipeHorizontalTile);
+        int structurePlaceholderIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(structurePlaceholderTile);
+        int pipeUpTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(pipeUpTile);
+        int pipeHorizontalTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(pipeHorizontalTile);
 
         int structureCount = 0;
         HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
@@ -289,7 +305,7 @@ public class LevelBuilder : MonoBehaviour {
                         }
                     });
                 } else {
-                    int emptyTileIndex = TileUtils.tileIndexToModelIndex(tileSets[TILESET_PIPES].emptyTileIndex, TileGrid.NO_ROTATION);
+                    int emptyTileIndex = TileUtils.tileIndexToModelIndex(tileSets[TILESET_MAIN].emptyTileIndex, TileGrid.NO_ROTATION);
 
                     wfcConstraints.Add(new FixedTileConstraint() {
                         Point = new Point(tilePosition.x, tilePosition.y, tilePosition.z),
