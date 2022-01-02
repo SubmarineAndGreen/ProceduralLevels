@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 7672600972993412334, guid: 13347f2c873f3a144a4bdd6fc93193fa, type: 3}
   symmetry: 2
+  frequency: 1

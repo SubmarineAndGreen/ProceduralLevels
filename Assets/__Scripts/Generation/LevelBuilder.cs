@@ -22,18 +22,24 @@ public class LevelBuilder : MonoBehaviour {
     public TileSet[] tileSets;
     [SerializeField] private bool pathConstraint = true;
     private const int TILESET_MAIN = 0;
-    private const int TILESET_CAPS = 1;
-    [Header("Tile Caps")]
-    [SerializeField] Tile upTileCap;
-    [SerializeField] Tile downTileCap;
-    [SerializeField] Tile sideTileCap;
-    [Space(10)]
+    // private const int TILESET_CAPS = 1;
+    // [Header("Tile Caps")]
+    // [SerializeField] Tile upTileCap;
+    // [SerializeField] Tile downTileCap;
+    // [SerializeField] Tile sideTileCap;
+    [Header("Structures")]
+    [SerializeField] bool generateStructures;
     [SerializeField] Tile structurePlaceholderTile;
-    [SerializeField] Tile pipeUpTile;
-    [SerializeField] Tile pipeHorizontalTile;
+    [SerializeField] Tile verticalPipeTile;
+    [SerializeField] Tile horizontalPipeTile;
+    [SerializeField] Tile emptyTile;
+    [Header("Post Processing")]
+    [SerializeField] GameObject stairsPrefab;
+
+
     [HideInInspector] public string pipesSampleFileName;
 
-    public void generate() {
+    public void generateLevel() {
         System.Diagnostics.Stopwatch allStopwatch = System.Diagnostics.Stopwatch.StartNew();
 
         if (seed != NO_SEED) {
@@ -57,32 +63,44 @@ public class LevelBuilder : MonoBehaviour {
 
         System.Diagnostics.Stopwatch wfcStopwatch = System.Diagnostics.Stopwatch.StartNew();
         wfcRunner = GetComponent<WfcRunner>();
-        SamplerResult pipesSample = SamplerResult.loadFromFile($"{Application.dataPath}/SamplerSaves/{pipesSampleFileName}");
+        SamplerResult samplerResult = SamplerResult.loadFromFile($"{Application.dataPath}/SamplerSaves/{pipesSampleFileName}");
 
-        var pipeTiles = createWfcTiles(pipesSample.uniqueTiles);
+        var wfcTiles = createWfcTiles(samplerResult.uniqueTiles);
 
         List<ITileConstraint> wfcConstraints = new List<ITileConstraint>();
 
         Vector3Int testPos = Vector3Int.one * 3;
         int testStructure = 0;
 
-        createStructureConstraints(testPos, testStructure, wfcConstraints, pipeTiles);
-        instantiateStructure(testPos, testStructure);
+        if (generateStructures) {
+            createStructureConstraints(testPos, testStructure, wfcConstraints, wfcTiles);
+            instantiateStructure(testPos, testStructure);
+        } else {
+            int index = tileSets[TILESET_MAIN].getTileIndexFromTileObject(structurePlaceholderTile);
+            // Debug.Log(index);
+            wfcConstraints.Add(new CountConstraint() {
+                Comparison = CountComparison.Exactly,
+                Count = 0,
+                Tiles = new HashSet<DeBroglie.Tile>()  {wfcTiles[TileUtils.tileIndexToModelIndex(index, 0)]}
+            });
+        }
 
 
         if (pathConstraint) {
-            wfcConstraints.Add(new PathConstraint(tilesWithoutEmpty(pipesSample.uniqueTiles,
+            wfcConstraints.Add(new PathConstraint(tilesWithoutEmpty(samplerResult.uniqueTiles,
                                                                     tileSets[TILESET_MAIN],
-                                                                    pipeTiles)));
+                                                                    wfcTiles)));
         }
+
+        createEmptyBorderConstraint(wfcConstraints, wfcTiles);
 
         int[,,] generatedTiles;
         bool generationSuccess = wfcRunner.runAdjacentModel(out generatedTiles,
-                                                            levelDimensions,
+                                                            fullDimensions,
                                                             tileSets[TILESET_MAIN],
-                                                            pipesSample.uniqueTiles,
-                                                            pipesSample.rules,
-                                                            pipeTiles,
+                                                            samplerResult.uniqueTiles,
+                                                            samplerResult.rules,
+                                                            wfcTiles,
                                                             wfcConstraints,
                                                             seed);
 
@@ -96,13 +114,13 @@ public class LevelBuilder : MonoBehaviour {
 
         assignGeneratedTiles(generatedTiles, generatedTilePositionsByIndex, tileIndices, tileRotations, tileSetIndices);
 
-        capOffTileEnds(tileIndices, tileRotations, tileSetIndices, pipesSample);
-
         levelGrid.tileIndices = tileIndices;
         levelGrid.tileRotations = tileRotations;
         levelGrid.tileSetIndices = tileSetIndices;
         levelGrid.tileObjects = tileObjects;
         levelGrid.rebuildGrid();
+
+        placeStairs(levelGrid, samplerResult);
 
         System.Diagnostics.Stopwatch navigationStopwatch = System.Diagnostics.Stopwatch.StartNew();
         initializeNavigation(tileIndices, tileSetIndices);
@@ -120,46 +138,13 @@ public class LevelBuilder : MonoBehaviour {
         Debug.Log($"Level created in: {allStopwatch.ElapsedMilliseconds}ms, wfc/constraints:{wfcStopwatch.ElapsedMilliseconds}ms, navigation:{navigationStopwatch.ElapsedMilliseconds}ms");
     }
 
-    private void capOffTileEnds(Grid3D<int> tiles, Grid3D<int> rotations, Grid3D<int> tileSetIndices, SamplerResult pipesSample) {
-
-        ConnectionData[] connectionData = pipesSample.connections;
-
-        int upTileCapIndex = tileSets[TILESET_CAPS].getTileIndexFromTileObject(upTileCap);
-        int downTileCapIndex = tileSets[TILESET_CAPS].getTileIndexFromTileObject(downTileCap);
-        int sideTileCapIndex = tileSets[TILESET_CAPS].getTileIndexFromTileObject(sideTileCap);
-
-        tiles.forEach((position, tile) => {
-            if (tile != TileGrid.TILE_EMPTY && tileSetIndices.at(position) != TILESET_CAPS) {
-                var possibleConnections = connectionData[tile];
-                foreach (Directions3D direction in DirectionUtils.allDirections) {
-                    bool isConnectionPossible = possibleConnections.canConnectFromDirection(direction, rotations.at(position));
-                    if (isConnectionPossible) {
-                        Vector3Int offset = DirectionUtils.DirectionsToVectors[direction];
-                        // Debug.Log(tiles.at(position) + " " + offset);
-                        if (tiles.at(position + offset) == TileGrid.TILE_EMPTY) {
-                            switch (direction) {
-                                case Directions3D.UP:
-                                    tileSetIndices.set(position + offset, TILESET_CAPS);
-                                    tiles.set(position + offset, upTileCapIndex);
-                                    rotations.set(position + offset, TileGrid.NO_ROTATION);
-                                    break;
-                                case Directions3D.DOWN:
-                                    tileSetIndices.set(position + offset, TILESET_CAPS);
-                                    tiles.set(position + offset, downTileCapIndex);
-                                    rotations.set(position + offset, TileGrid.NO_ROTATION);
-                                    break;
-                                default:
-                                    tileSetIndices.set(position + offset, TILESET_CAPS);
-                                    tiles.set(position + offset, sideTileCapIndex);
-                                    rotations.set(position + offset, (int)direction - 2);
-                                    //direction - 2 gives correct rotation where FORWARD/Z+ is rotation 0
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-        });
+    private void createEmptyBorderConstraint(List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
+        int emptyTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(emptyTile);
+        DeBroglie.Tile emptyWfcTile = wfcTiles[TileUtils.tileIndexToModelIndex(emptyTileIndex, TileGrid.NO_ROTATION)];
+        BorderConstraint emptyBorderConstraint = new BorderConstraint();
+        emptyBorderConstraint.Sides = BorderSides.All;
+        emptyBorderConstraint.Tiles = new DeBroglie.Tile[] { emptyWfcTile };
+        wfcConstraints.Add(emptyBorderConstraint);
     }
 
     private void initializeNavigation(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {
@@ -225,10 +210,10 @@ public class LevelBuilder : MonoBehaviour {
                                      Grid3D<int> tileIndices,
                                      Grid3D<int> tileRotations,
                                      Grid3D<int> tileSetIndices) {
-        for (int x = 1; x < fullDimensions.x - 1; x++) {
-            for (int y = 1; y < fullDimensions.y - 1; y++) {
-                for (int z = 1; z < fullDimensions.z - 1; z++) {
-                    int tileIndex = TileUtils.modelIndexToTileIndex(generatedTiles[x - 1, y - 1, z - 1]);
+        for (int x = 0; x < fullDimensions.x; x++) {
+            for (int y = 0; y < fullDimensions.y; y++) {
+                for (int z = 0; z < fullDimensions.z; z++) {
+                    int tileIndex = TileUtils.modelIndexToTileIndex(generatedTiles[x, y, z]);
 
                     if (!generatedTilePositionsByIndex.ContainsKey(tileIndex)) {
                         generatedTilePositionsByIndex[tileIndex] = new List<Vector3Int>();
@@ -237,7 +222,7 @@ public class LevelBuilder : MonoBehaviour {
                     generatedTilePositionsByIndex[tileIndex].Add(new Vector3Int(x, y, z));
 
                     tileIndices.set(x, y, z, tileIndex);
-                    tileRotations.set(x, y, z, TileUtils.modelIndexToRotation(generatedTiles[x - 1, y - 1, z - 1]));
+                    tileRotations.set(x, y, z, TileUtils.modelIndexToRotation(generatedTiles[x, y, z]));
                     tileSetIndices.set(x, y, z, TILESET_MAIN);
                 }
             }
@@ -249,8 +234,8 @@ public class LevelBuilder : MonoBehaviour {
         Structure structure = structureSet.frequencies[setIndex].structure;
         List<StructureTile> structureTiles = structure.getTilesCollection().tiles;
         int structurePlaceholderIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(structurePlaceholderTile);
-        int pipeUpTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(pipeUpTile);
-        int pipeHorizontalTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(pipeHorizontalTile);
+        int pipeUpTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(verticalPipeTile);
+        int pipeHorizontalTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(horizontalPipeTile);
 
         int structureCount = 0;
         HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
@@ -327,7 +312,7 @@ public class LevelBuilder : MonoBehaviour {
     }
 
     private void instantiateStructure(Vector3Int position, int setIndex) {
-        Vector3 tileOffset = new Vector3(1, 0.5f, 1);
+        Vector3 tileOffset = new Vector3(0, -0.5f, 0);
         GameObject prefabToSpawn = structureSet.frequencies[setIndex].structure.structurePrefab;
         GameObject structure = Instantiate(prefabToSpawn, position.toVector3() + tileOffset /* scaleFactor */, Quaternion.identity);
         structure.transform.SetParent(levelGrid.transform);
@@ -340,26 +325,17 @@ public class LevelBuilder : MonoBehaviour {
             UnityEngine.Random.Range(min.z, max.z)
         );
     }
+
+    private void placeStairs(TileGrid grid, SamplerResult samplerResult) {
+        Vector3 offset = new Vector3(0.5f, 0, 0.5f);
+        grid.tileIndices.forEach((Vector3Int position, int index) => {
+            if(samplerResult.connections[index].canConnectFromDirection(Directions3D.UP, TileGrid.NO_ROTATION)) {
+                GameObject stairsObject = Instantiate(stairsPrefab, position.toVector3() - offset, Quaternion.identity);
+                stairsObject.transform.SetParent(levelGrid.transform);
+            }
+        });
+    }
 }
-
-// [Serializable]
-// public class CuboidStructure {
-//     public Vector3Int dimensions;
-//     public Vector3Int position;
-
-//     private bool inStructureBounds(Vector3Int point) {
-//         if (point.x < position.x + dimensions.x
-//             || point.y < position.y + dimensions.y
-//             || point.z < position.z + dimensions.z
-//             || point.x >= position.x
-//             || point.y >= position.y
-//             || point.z >= position.z) {
-//             return false;
-//         }
-
-//         return true;
-//     }
-// }
 
 
 

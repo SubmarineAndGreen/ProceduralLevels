@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1adfbd31f78c0ea49911d5556555ab78, type: 3}
   m_Name: turn_down
   m_EditorClassIdentifier: 
-  tilePrefab: {fileID: 859057947058939483, guid: 3f48abfa4c5235f4f91815f9ddc59106, type: 3}
+  tilePrefab: {fileID: 859057947058939483, guid: 87d75056ab0b18f4eafe88dadd5a5e59, type: 3}
   symmetry: 0
+  frequency: 1

@@ -15,7 +15,7 @@ public class GameLoop : MonoBehaviour
     }
     void Start()
     {
-        levelBuilder.generate();
+        levelBuilder.generateLevel();
 
         navigationManager = NavigationManager.instance;
         enemyManager = EnemyManager.instance;

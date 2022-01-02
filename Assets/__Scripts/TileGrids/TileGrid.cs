@@ -278,7 +278,7 @@ public class TileGrid : MonoBehaviour {
         int tileSetIndex = tileSetIndices.at(position);
         int rotation = tileRotations.at(position);
 
-        if (tileIndex != TILE_EMPTY) {
+        if (tileIndex != TILE_EMPTY && tileIndex != tileSets[currentTilesetIndex].emptyTileIndex) {
             GameObject newTileObject = Instantiate(tileSets[tileSetIndex].tiles[tileIndex].tilePrefab,
             transform.position + position + halfTileOffset,
             Quaternion.Euler(0, rotation * 90, 0));

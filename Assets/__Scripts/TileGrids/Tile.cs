@@ -7,6 +7,7 @@ using UnityEngine;
 public class Tile : ScriptableObject {
     public GameObject tilePrefab;
     public RotationalSymmetry symmetry;
+    public float frequency = 1;
     // public bool excludeFromGeneration = false;
     // const int numberOfDirections = 6;
     // public bool[] possibleConnections = new bool[numberOfDirections];

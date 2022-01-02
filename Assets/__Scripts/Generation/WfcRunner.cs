@@ -55,8 +55,13 @@ public class WfcRunner : MonoBehaviour {
 
         foreach (var item in tileObjects) {
             int tileIndex = TileUtils.modelIndexToTileIndex(item.Key);
-            int numberOfRotations = Tile.symmetryToNumberOfRotations[tileSet.tiles[tileIndex].symmetry];
-            model.SetFrequency(item.Value, 1.0 / numberOfRotations);
+            Tile tile = tileSet.tiles[tileIndex];
+            int numberOfRotations = Tile.symmetryToNumberOfRotations[tile.symmetry];
+            float frequency = (1f / numberOfRotations);
+            if(tile.frequency != 0) {
+                frequency *= tile.frequency;
+            }
+            model.SetFrequency(item.Value, frequency);
         }
 
 

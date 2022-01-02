@@ -20,10 +20,10 @@ RenderSettings:
   m_FogDensity: 0.003
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.53333336, g: 0.5647059, b: 4.329412, a: 1}
+  m_AmbientSkyColor: {r: 0.1933534, g: 0.19573818, b: 0.15049681, a: 1}
   m_AmbientEquatorColor: {r: 0.07450981, g: 0.043137256, b: 0.49411765, a: 1}
   m_AmbientGroundColor: {r: 1.4117647, g: 0.5176471, b: 0.015686275, a: 1}
-  m_AmbientIntensity: 2
+  m_AmbientIntensity: 0.85
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 02e6d3804cc653548806f9aea778f488, type: 2}
@@ -36,9 +36,9 @@ RenderSettings:
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 2
   m_ReflectionIntensity: 1
-  m_CustomReflection: {fileID: 8900000, guid: ef86bdc3c65918e45b55db2ce87bdc7f, type: 2}
+  m_CustomReflection: {fileID: 8900000, guid: 2a00e265c7de50e4b9f8fe53fbb18066, type: 2}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.091101654, g: 0.43796113, b: 0.58389586, a: 1}
+  m_IndirectSpecularColor: {r: 0.64515644, g: 0.7924249, b: 0.9360791, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: bbd39966c37439f42967cc6700c0ed13, type: 2}
+  m_LightingDataAsset: {fileID: 112000002, guid: bbd39966c37439f42967cc6700c0ed13, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -216,7 +216,7 @@ RectTransform:
   m_Children:
   - {fileID: 1056067539}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -361,7 +361,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &924014581
 GameObject:
@@ -395,22 +395,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureSet: {fileID: 11400000, guid: a964ac38a210dde40bd26588fce08615, type: 2}
   gameLoop: {fileID: 1903047125}
-  seed: -1
+  seed: 1
   levelGrid: {fileID: 2056008011}
-  levelDimensions: {x: 10, y: 10, z: 10}
+  levelDimensions: {x: 8, y: 8, z: 8}
   fullDimensions: {x: 0, y: 0, z: 0}
   scaleAfterGeneration: 1
   scaleFactor: 25
   tileSets:
-  - {fileID: 11400000, guid: 508fc9d582d8e1743a1d17c8d4780208, type: 2}
-  - {fileID: 11400000, guid: 23fd1281d831cca4d9c87f1f4bd0d21b, type: 2}
+  - {fileID: 11400000, guid: eb37ae926bd290943a3345fc897fab29, type: 2}
   pathConstraint: 1
-  upTileCap: {fileID: 11400000, guid: b1814110b8344744a93ef688f30337d2, type: 2}
-  downTileCap: {fileID: 11400000, guid: 948208bc203764e4cba24bb864568e7f, type: 2}
-  sideTileCap: {fileID: 11400000, guid: 8dabb03eff9827c489c3a39383c7372e, type: 2}
-  structurePlaceholderTile: {fileID: 11400000, guid: 3d3392e3cd4f3644b9c974710d723c49, type: 2}
-  pipeUpTile: {fileID: 11400000, guid: 748a5d7eae4fc584395e9aa114efa299, type: 2}
-  pipeHorizontalTile: {fileID: 11400000, guid: 564c15b65a2080843bef0fea0a2d88d3, type: 2}
+  generateStructures: 0
+  structurePlaceholderTile: {fileID: 11400000, guid: ab9583fd849417a4dbe65d14384e5cb3, type: 2}
+  verticalPipeTile: {fileID: 11400000, guid: a2a887c554196f64bb77aca83fdd59e3, type: 2}
+  horizontalPipeTile: {fileID: 11400000, guid: 8d46994c577773346b38fff731c59946, type: 2}
+  emptyTile: {fileID: 11400000, guid: 9249f4a0141a4c14ea88d8db70f6a929, type: 2}
+  stairsPrefab: {fileID: 5580729774755843381, guid: e2fec73a27226874d8a9c32946ec9fcb, type: 3}
   pipesSampleFileName: PipesNew.json
 --- !u!114 &924014583
 MonoBehaviour:
@@ -441,7 +440,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1056067538
 GameObject:
@@ -547,7 +546,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1144108052
 MonoBehaviour:
@@ -656,7 +655,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1243435620
 GameObject:
@@ -714,7 +713,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1243435623
 MonoBehaviour:
@@ -818,7 +817,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1403971906
 MonoBehaviour:
@@ -907,7 +906,50 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1512144370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1512144372}
+  - component: {fileID: 1512144371}
+  m_Layer: 0
+  m_Name: SkyboxLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1512144371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512144370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 202bb65b4f1b3fc4ea340fcc447f2ea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1512144372
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512144370}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1580598709
 GameObject:
@@ -938,7 +980,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1580598711
 MonoBehaviour:
@@ -1027,7 +1069,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1903047123
 GameObject:
@@ -1060,8 +1102,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnerPrefab: {fileID: 474496005252222220, guid: 51a3d34c134727543aff734f508b9f52, type: 3}
-  spawnerCount: 1
-  enemySpawningPeriod: 0.5
+  spawnerCount: 0
+  enemySpawningPeriod: 10
 --- !u!114 &1903047125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1088,7 +1130,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2056008010
 GameObject:
@@ -1144,5 +1186,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

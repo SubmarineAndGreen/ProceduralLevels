@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour {
         applyGravity();
         // Debug.Log(groundContactCount);
         // clearState();
+        floatAboveGroundColliderSeamFix();
     }
 
     void Update() {
@@ -174,6 +175,24 @@ public class PlayerController : MonoBehaviour {
             rb.velocity += Vector3.up * jumpSpeed;
             //jump along normal / nie dziala bez zmian w kontroli predkosci
             // rb.velocity += groundNormal * jumpSpeed;
+        }
+    }
+
+    private void floatAboveGroundColliderSeamFix() {
+        float floatingHeight = groundCheckDistanceFromOrigin - 0.01f;
+
+        if (grounded) {
+            Vector3 position = rb.position;
+            Vector3 velocity = rb.velocity;
+
+            position.y = groundCheckInfo.point.y + floatingHeight;
+            rb.position = position;
+
+            if (velocity.y < 0) {
+                float dot = Vector3.Dot(velocity, groundNormal);
+                velocity -= groundNormal * dot;
+                rb.velocity = velocity;
+            }
         }
     }
 

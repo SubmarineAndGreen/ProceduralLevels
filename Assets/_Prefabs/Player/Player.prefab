@@ -260,7 +260,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 3
+  m_CollisionDetection: 0
 --- !u!114 &5421612076315244267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b157dc76ed513884292a9685103061fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxGrappleDistance: 60
+  maxGrappleDistance: 90
   startPullForce: 20
   constantPullForce: 500
   grappleCooldown: 0.5
@@ -416,7 +416,7 @@ GameObject:
   - component: {fileID: 7711137512837268057}
   m_Layer: 6
   m_Name: Player Camera
-  m_TagString: Player
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adfbd31f78c0ea49911d5556555ab78, type: 3}
+  m_Name: 4junction_vertical
+  m_EditorClassIdentifier: 
+  tilePrefab: {fileID: 3226642682669331534, guid: 92c2e6e1ce8c73b4e834a53a740ddc42, type: 3}
+  symmetry: 1
+  frequency: 1
