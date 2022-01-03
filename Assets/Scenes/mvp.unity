@@ -394,10 +394,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureSet: {fileID: 11400000, guid: a964ac38a210dde40bd26588fce08615, type: 2}
-  gameLoop: {fileID: 1903047125}
   seed: 1
   levelGrid: {fileID: 2056008011}
-  levelDimensions: {x: 15, y: 15, z: 15}
+  levelDimensions: {x: 5, y: 5, z: 5}
   fullDimensions: {x: 0, y: 0, z: 0}
   scaleAfterGeneration: 1
   scaleFactor: 25
@@ -410,6 +409,7 @@ MonoBehaviour:
   horizontalPipeTile: {fileID: 11400000, guid: 8d46994c577773346b38fff731c59946, type: 2}
   emptyTile: {fileID: 11400000, guid: 9249f4a0141a4c14ea88d8db70f6a929, type: 2}
   stairsPrefab: {fileID: 5580729774755843381, guid: e2fec73a27226874d8a9c32946ec9fcb, type: 3}
+  windowPrefab: {fileID: 3377803632933796834, guid: 8afd888c3bdfb0943b0865e3062cf67c, type: 3}
   pipesSampleFileName: PipesNew.json
 --- !u!114 &924014583
 MonoBehaviour:

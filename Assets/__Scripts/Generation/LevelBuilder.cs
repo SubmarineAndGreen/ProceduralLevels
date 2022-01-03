@@ -30,6 +30,7 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] Tile emptyTile;
     [Header("Decorations")]
     [SerializeField] GameObject stairsPrefab;
+    [SerializeField] GameObject walkwayPrefab;
     [SerializeField] GameObject windowPrefab;
 
 
@@ -168,7 +169,7 @@ public class LevelBuilder : MonoBehaviour {
                         isStairsTile = connectionData[tileIndex].canConnectFromDirection(Directions3D.UP, tileRotation);
 
                         if (isStairsTile) {
-                            if(isWallOnRight) {
+                            if (isWallOnRight) {
                                 windowDirection = Directions3D.RIGHT;
                             } else {
                                 noDirection = true;
@@ -439,6 +440,14 @@ public class LevelBuilder : MonoBehaviour {
             if (samplerResult.connections[index].canConnectFromDirection(Directions3D.UP, TileGrid.NO_ROTATION)) {
                 GameObject stairsObject = Instantiate(stairsPrefab, position.toVector3() - offset, Quaternion.identity);
                 stairsObject.transform.SetParent(levelGrid.transform);
+                Vector3Int tileAbovePosition = position + Vector3Int.up;
+                if (grid.tileIndices.inBounds(position + Vector3Int.up)) {
+                    int tileAbove = grid.tileIndices.at(tileAbovePosition);
+                    if (samplerResult.connections[tileAbove].canConnectFromDirection(Directions3D.LEFT, grid.tileRotations.at(tileAbovePosition))) {
+                        GameObject walkwayObject = Instantiate(walkwayPrefab, position.toVector3() - offset, Quaternion.identity);
+                        walkwayObject.transform.SetParent(levelGrid.transform);
+                    }
+                }
             }
         });
     }
