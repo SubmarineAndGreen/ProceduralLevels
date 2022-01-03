@@ -233,7 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613edf162a993304ab0dd25a0856f02e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheckDistanceFromOrigin: 1.25
+  groundCheckDistanceFromOrigin: 1.35
   maxGroundAngle: 60
   maxSpeed: 10
   maxVerticalSpeed: 50
@@ -260,7 +260,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &5421612076315244267
 MonoBehaviour:
   m_ObjectHideFlags: 0

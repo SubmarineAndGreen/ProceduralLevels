@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000002, guid: bbd39966c37439f42967cc6700c0ed13, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: bbd39966c37439f42967cc6700c0ed13, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -397,7 +397,7 @@ MonoBehaviour:
   gameLoop: {fileID: 1903047125}
   seed: 1
   levelGrid: {fileID: 2056008011}
-  levelDimensions: {x: 8, y: 8, z: 8}
+  levelDimensions: {x: 15, y: 15, z: 15}
   fullDimensions: {x: 0, y: 0, z: 0}
   scaleAfterGeneration: 1
   scaleFactor: 25
@@ -1103,7 +1103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnerPrefab: {fileID: 474496005252222220, guid: 51a3d34c134727543aff734f508b9f52, type: 3}
   spawnerCount: 0
-  enemySpawningPeriod: 10
+  enemySpawningPeriod: 0.5
 --- !u!114 &1903047125
 MonoBehaviour:
   m_ObjectHideFlags: 0
