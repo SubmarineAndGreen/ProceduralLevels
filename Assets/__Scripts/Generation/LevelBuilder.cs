@@ -153,6 +153,7 @@ public class LevelBuilder : MonoBehaviour {
 
                     bool isWallOnRight = false;
                     bool isWallOnLeft = false;
+                    bool isStairsTile = false;
 
                     bool changedDirection = false;
                     bool noDirection = false;
@@ -164,40 +165,50 @@ public class LevelBuilder : MonoBehaviour {
                     } else {
                         isWallOnRight = !connectionData[tileIndex].canConnectFromDirection(Directions3D.RIGHT, tileRotation);
                         isWallOnLeft = !connectionData[tileIndex].canConnectFromDirection(Directions3D.LEFT, tileRotation);
+                        isStairsTile = connectionData[tileIndex].canConnectFromDirection(Directions3D.UP, tileRotation);
 
-                        if (placedWindowLastTile) {
-                            if ((windowDirection == Directions3D.RIGHT && !isWallOnRight)
-                                || (windowDirection == Directions3D.LEFT && !isWallOnLeft)) {
+                        if (isStairsTile) {
+                            if(isWallOnRight) {
+                                windowDirection = Directions3D.RIGHT;
+                            } else {
                                 noDirection = true;
                             }
                         } else {
-                            noDirection = true;
-                        }
-
-                        if (noDirection) {
-                            noDirection = false;
-                            changedDirection = true;
-
-
-                            if (isWallOnLeft && isWallOnRight) {
-                                switch (UnityEngine.Random.Range(0, 1)) {
-                                    case 0:
-                                        windowDirection = Directions3D.RIGHT;
-                                        break;
-                                    case 1:
-                                        windowDirection = Directions3D.LEFT;
-                                        break;
-
+                            if (placedWindowLastTile) {
+                                if ((windowDirection == Directions3D.RIGHT && !isWallOnRight)
+                                    || (windowDirection == Directions3D.LEFT && !isWallOnLeft)) {
+                                    noDirection = true;
                                 }
-                            } else if (isWallOnRight) {
-                                windowDirection = Directions3D.RIGHT;
-                            } else if (isWallOnLeft) {
-                                windowDirection = Directions3D.LEFT;
                             } else {
                                 noDirection = true;
-                                changedDirection = false;
+                            }
+
+                            if (noDirection) {
+                                noDirection = false;
+                                changedDirection = true;
+
+                                if (isWallOnLeft && isWallOnRight) {
+                                    switch (UnityEngine.Random.Range(0, 1)) {
+                                        case 0:
+                                            windowDirection = Directions3D.RIGHT;
+                                            break;
+                                        case 1:
+                                            windowDirection = Directions3D.LEFT;
+                                            break;
+
+                                    }
+                                } else if (isWallOnRight) {
+                                    windowDirection = Directions3D.RIGHT;
+                                } else if (isWallOnLeft) {
+                                    windowDirection = Directions3D.LEFT;
+                                } else {
+                                    noDirection = true;
+                                    changedDirection = false;
+                                }
                             }
                         }
+
+
 
 
                         if (!noDirection) {
