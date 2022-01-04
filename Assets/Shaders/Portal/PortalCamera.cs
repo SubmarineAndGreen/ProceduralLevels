@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class PortalCamera : MonoBehaviour {
     [SerializeField] Transform baseCameraTransform;
+    Vector3 origin;
 
     private void Start() {
         if (baseCameraTransform == null) {
             baseCameraTransform = Camera.main.transform;
         }
+        origin = this.transform.position;
     }
 
     void Update() {
-        // if (baseCameraTransform == null) {
-        //     baseCameraTransform = Camera.main.transform;
-        // } else {
-            this.transform.rotation = baseCameraTransform.rotation;
-        // }
+        this.transform.rotation = baseCameraTransform.rotation;
+        this.transform.position = origin + baseCameraTransform.localPosition;
     }
 }

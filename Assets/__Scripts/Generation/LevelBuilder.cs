@@ -37,6 +37,7 @@ public class LevelBuilder : MonoBehaviour {
     [HideInInspector] public string pipesSampleFileName;
 
     public void generateLevel() {
+        #region MAIN_STRUCTURE
         System.Diagnostics.Stopwatch allStopwatch = System.Diagnostics.Stopwatch.StartNew();
 
         if (seed != NO_SEED) {
@@ -116,7 +117,7 @@ public class LevelBuilder : MonoBehaviour {
         levelGrid.tileSetIndices = tileSetIndices;
         levelGrid.tileObjects = tileObjects;
         levelGrid.rebuildGrid();
-
+        #endregion MAIN_STRUCTURE
         placeStairs(levelGrid, samplerResult);
         placeWindows(levelGrid, samplerResult);
 
@@ -136,115 +137,7 @@ public class LevelBuilder : MonoBehaviour {
         Debug.Log($"Level created in: {allStopwatch.ElapsedMilliseconds}ms, wfc/constraints:{wfcStopwatch.ElapsedMilliseconds}ms, navigation:{navigationStopwatch.ElapsedMilliseconds}ms");
     }
 
-    private void placeWindows(TileGrid levelGrid, SamplerResult samplerResult) {
-        int emptyTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(emptyTile);
-        // Directions3D windowDirection = Directions3D.FORWARD;
-        bool placedWindowLastTile = false;
-        Directions3D windowDirection = Directions3D.UP;
 
-        ConnectionData[] connectionData = samplerResult.connections;
-        //iterate through xz rows
-        for (int y = 0; y < fullDimensions.y; y++) {
-            for (int x = 0; x < fullDimensions.x; x++) {
-                placedWindowLastTile = false;
-                for (int z = 0; z < fullDimensions.z; z++) {
-                    Vector3 currentPosition = new Vector3(x, y, z);
-                    int tileIndex = levelGrid.tileIndices.at(x, y, z);
-                    int tileRotation = levelGrid.tileRotations.at(x, y, z);
-
-                    bool isWallOnRight = false;
-                    bool isWallOnLeft = false;
-                    bool isStairsTile = false;
-
-                    bool changedDirection = false;
-                    bool noDirection = false;
-
-                    Vector3 offset = new Vector3(-0.5f, 0, -0.5f);
-
-                    if (tileIndex == emptyTileIndex) {
-                        placedWindowLastTile = false;
-                    } else {
-                        isWallOnRight = !connectionData[tileIndex].canConnectFromDirection(Directions3D.RIGHT, tileRotation);
-                        isWallOnLeft = !connectionData[tileIndex].canConnectFromDirection(Directions3D.LEFT, tileRotation);
-                        isStairsTile = connectionData[tileIndex].canConnectFromDirection(Directions3D.UP, tileRotation);
-
-                        if (isStairsTile) {
-                            if (isWallOnRight) {
-                                windowDirection = Directions3D.RIGHT;
-                            } else {
-                                noDirection = true;
-                            }
-                        } else {
-                            if (placedWindowLastTile) {
-                                if ((windowDirection == Directions3D.RIGHT && !isWallOnRight)
-                                    || (windowDirection == Directions3D.LEFT && !isWallOnLeft)) {
-                                    noDirection = true;
-                                }
-                            } else {
-                                noDirection = true;
-                            }
-
-                            if (noDirection) {
-                                noDirection = false;
-                                changedDirection = true;
-
-                                if (isWallOnLeft && isWallOnRight) {
-                                    switch (UnityEngine.Random.Range(0, 1)) {
-                                        case 0:
-                                            windowDirection = Directions3D.RIGHT;
-                                            break;
-                                        case 1:
-                                            windowDirection = Directions3D.LEFT;
-                                            break;
-
-                                    }
-                                } else if (isWallOnRight) {
-                                    windowDirection = Directions3D.RIGHT;
-                                } else if (isWallOnLeft) {
-                                    windowDirection = Directions3D.LEFT;
-                                } else {
-                                    noDirection = true;
-                                    changedDirection = false;
-                                }
-                            }
-                        }
-
-
-
-
-                        if (!noDirection) {
-                            // Debug.Log(changedDirection);
-                            // Debug.Log(windowDirection);
-
-                            Quaternion windowRotation = Quaternion.Euler(0, ((int)windowDirection - 2) * 90, 0);
-                            GameObject windowObject = Instantiate(windowPrefab, currentPosition + offset, windowRotation);
-                            windowObject.transform.SetParent(levelGrid.transform);
-
-                            if (placedWindowLastTile && !changedDirection) {
-                                Vector3 previousOffest = new Vector3(0, 0, -0.5f);
-                                GameObject previousWindowObject = Instantiate(windowPrefab, currentPosition + offset + previousOffest, windowRotation);
-                                previousWindowObject.transform.SetParent(levelGrid.transform);
-                            }
-
-                            placedWindowLastTile = true;
-                        } else {
-                            placedWindowLastTile = false;
-                        }
-                    }
-                }
-            }
-        }
-
-
-        //iterate thorugh zx rows
-        // for (int y = 0; y < levelDimensions.y; y++) {
-        //     for (int z = 0; z < levelDimensions.z; z++) {
-        //         for (int x = 0; x < levelDimensions.x; x++) {
-
-        //         }
-        //     }
-        // }
-    }
 
     private void createEmptyBorderConstraint(List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
         int emptyTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(emptyTile);
@@ -450,6 +343,110 @@ public class LevelBuilder : MonoBehaviour {
                 }
             }
         });
+    }
+
+    private void placeWindows(TileGrid levelGrid, SamplerResult samplerResult) {
+        int emptyTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(emptyTile);
+        // Directions3D windowDirection = Directions3D.FORWARD;
+        bool placedWindowLastTile = false;
+        Directions3D windowDirection = Directions3D.UP;
+
+        ConnectionData[] connectionData = samplerResult.connections;
+        //iterate through xz rows
+        for (int y = 0; y < fullDimensions.y; y++) {
+            for (int x = 0; x < fullDimensions.x; x++) {
+                placedWindowLastTile = false;
+                for (int z = 0; z < fullDimensions.z; z++) {
+                    Vector3 currentPosition = new Vector3(x, y, z);
+                    int tileIndex = levelGrid.tileIndices.at(x, y, z);
+                    int tileRotation = levelGrid.tileRotations.at(x, y, z);
+
+                    bool isWallOnRight = false;
+                    bool isWallOnLeft = false;
+                    bool isStairsTile = false;
+
+                    bool changedDirection = false;
+                    bool noDirection = false;
+
+                    Vector3 offset = new Vector3(-0.5f, 0, -0.5f);
+
+                    if (tileIndex == emptyTileIndex) {
+                        placedWindowLastTile = false;
+                    } else {
+                        isWallOnRight = !connectionData[tileIndex].canConnectFromDirection(Directions3D.RIGHT, tileRotation);
+                        isWallOnLeft = !connectionData[tileIndex].canConnectFromDirection(Directions3D.LEFT, tileRotation);
+                        isStairsTile = connectionData[tileIndex].canConnectFromDirection(Directions3D.UP, tileRotation);
+
+                        if (isStairsTile) {
+                            if (isWallOnRight) {
+                                windowDirection = Directions3D.RIGHT;
+                            } else {
+                                noDirection = true;
+                            }
+                        } else {
+                            if (placedWindowLastTile) {
+                                if ((windowDirection == Directions3D.RIGHT && !isWallOnRight)
+                                    || (windowDirection == Directions3D.LEFT && !isWallOnLeft)) {
+                                    noDirection = true;
+                                }
+                            } else {
+                                noDirection = true;
+                            }
+
+                            if (noDirection) {
+                                noDirection = false;
+                                changedDirection = true;
+
+                                if (isWallOnLeft && isWallOnRight) {
+                                    switch (UnityEngine.Random.Range(0, 1)) {
+                                        case 0:
+                                            windowDirection = Directions3D.RIGHT;
+                                            break;
+                                        case 1:
+                                            windowDirection = Directions3D.LEFT;
+                                            break;
+
+                                    }
+                                } else if (isWallOnRight) {
+                                    windowDirection = Directions3D.RIGHT;
+                                } else if (isWallOnLeft) {
+                                    windowDirection = Directions3D.LEFT;
+                                } else {
+                                    noDirection = true;
+                                    changedDirection = false;
+                                }
+                            }
+                        }
+
+                        if (!noDirection) {
+                            Quaternion windowRotation = Quaternion.Euler(0, ((int)windowDirection - 2) * 90, 0);
+                            GameObject windowObject = Instantiate(windowPrefab, currentPosition + offset, windowRotation);
+                            windowObject.transform.SetParent(levelGrid.transform);
+
+                            if (placedWindowLastTile && !changedDirection) {
+                                Vector3 previousOffest = new Vector3(0, 0, -0.5f);
+                                GameObject previousWindowObject = Instantiate(windowPrefab, currentPosition + offset + previousOffest, windowRotation);
+                                previousWindowObject.transform.SetParent(levelGrid.transform);
+                            }
+
+                            placedWindowLastTile = true;
+                        } else {
+                            placedWindowLastTile = false;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        //iterate thorugh zx rows
+        // for (int y = 0; y < levelDimensions.y; y++) {
+        //     for (int z = 0; z < levelDimensions.z; z++) {
+        //         for (int x = 0; x < levelDimensions.x; x++) {
+
+        //         }
+        //     }
+        // }
     }
 }
 
