@@ -32,6 +32,7 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] GameObject stairsPrefab;
     [SerializeField] GameObject walkwayPrefab;
     [SerializeField] GameObject windowPrefab;
+    [SerializeField] GameObject doorPrefab;
 
 
     [HideInInspector] public string pipesSampleFileName;
@@ -120,6 +121,7 @@ public class LevelBuilder : MonoBehaviour {
         #endregion MAIN_STRUCTURE
         placeStairs(levelGrid, samplerResult);
         placeWindows(levelGrid, samplerResult);
+        List<Vector3Int> doorTiles = placeDoors(levelGrid, samplerResult);
 
         System.Diagnostics.Stopwatch navigationStopwatch = System.Diagnostics.Stopwatch.StartNew();
         initializeNavigation(tileIndices, tileSetIndices);
@@ -346,6 +348,7 @@ public class LevelBuilder : MonoBehaviour {
     }
 
     private void placeWindows(TileGrid levelGrid, SamplerResult samplerResult) {
+        // Directions3D[,,] windowPlacement = new Directions3D[fullDimensions.x, fullDimensions.y, fullDimensions.z];
         int emptyTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(emptyTile);
         // Directions3D windowDirection = Directions3D.FORWARD;
         bool placedWindowLastTile = false;
@@ -379,7 +382,7 @@ public class LevelBuilder : MonoBehaviour {
 
                         if (isStairsTile) {
                             if (isWallOnRight) {
-                                if(windowDirection == Directions3D.LEFT) {
+                                if (windowDirection == Directions3D.LEFT) {
                                     changedDirection = true;
                                 }
                                 windowDirection = Directions3D.RIGHT;
@@ -433,23 +436,64 @@ public class LevelBuilder : MonoBehaviour {
                             }
 
                             placedWindowLastTile = true;
+                            // windowPlacement[x, y, z] = windowDirection;
                         } else {
                             placedWindowLastTile = false;
+                            // windowPlacement[x, y, z] = Directions3D.UP;
                         }
                     }
                 }
             }
         }
 
+        // return windowPlacement;
+    }
 
-        //iterate thorugh zx rows
-        // for (int y = 0; y < levelDimensions.y; y++) {
-        //     for (int z = 0; z < levelDimensions.z; z++) {
-        //         for (int x = 0; x < levelDimensions.x; x++) {
+    private List<Vector3Int> placeDoors(TileGrid levelGrid, SamplerResult samplerResult) {
+        Vector3 offset = new Vector3(-0.5f, 0, -0.5f);
+        int emptyTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(emptyTile);
 
-        //         }
-        //     }
-        // }
+        const float doorProbability = 0.8f;
+        ConnectionData[] connectionData = samplerResult.connections;
+        int[,,] tileIndices = levelGrid.tileIndices.toArray();
+
+        int doorNumber = 0;
+        HashSet<Vector3Int> doorPlacements = new HashSet<Vector3Int>();
+
+        for (int y = 0; y < fullDimensions.y; y++) {
+            for (int z = 0; z < fullDimensions.z; z++) {
+                for (int x = 0; x < fullDimensions.x; x++) {
+                    int index = tileIndices[x, y, z];
+                    Vector3Int position = new Vector3Int(x, y, z);
+                    int rotation = levelGrid.tileRotations.at(position);
+                    if (index != emptyTileIndex
+                        && !connectionData[index].canConnectFromDirection(Directions3D.DOWN, TileGrid.NO_ROTATION)) {
+
+                        if (!connectionData[index].canConnectFromDirection(Directions3D.FORWARD, rotation)) {
+                            if (UnityEngine.Random.Range(0f, 1f) <= doorProbability) {
+                                doorPlacements.Add(position);
+                                GameObject doorObject = Instantiate(doorPrefab, position.toVector3() + offset, Quaternion.Euler(0f, 90f, 0f), levelGrid.transform);
+                                doorNumber++;
+                                Door door = doorObject.GetComponentInChildren<Door>();
+                                door.setDoorNumber(doorNumber);
+                            }
+                        }
+                        if (!connectionData[index].canConnectFromDirection(Directions3D.BACK, rotation)
+                            && !connectionData[index].canConnectFromDirection(Directions3D.UP, TileGrid.NO_ROTATION)) {
+                            if (UnityEngine.Random.Range(0f, 1f) <= doorProbability) {
+                                doorPlacements.Add(position);
+                                GameObject doorObject = Instantiate(doorPrefab, position.toVector3() + offset, Quaternion.Euler(0f, -90f, 0f), levelGrid.transform);
+                                doorNumber++;
+                                Door door = doorObject.GetComponentInChildren<Door>();
+                                door.setDoorNumber(doorNumber);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return doorPlacements.ToList();
     }
 }
 

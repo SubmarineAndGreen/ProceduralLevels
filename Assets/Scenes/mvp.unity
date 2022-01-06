@@ -411,6 +411,7 @@ MonoBehaviour:
   stairsPrefab: {fileID: 5580729774755843381, guid: e2fec73a27226874d8a9c32946ec9fcb, type: 3}
   walkwayPrefab: {fileID: 8357840224249447361, guid: cc17a62132d1e55489af9b57cb810a94, type: 3}
   windowPrefab: {fileID: 3377803632933796834, guid: 8afd888c3bdfb0943b0865e3062cf67c, type: 3}
+  doorPrefab: {fileID: 2905836741937314148, guid: 08e750dc10033c540b2c39f1b2b31ea5, type: 3}
   pipesSampleFileName: PipesNew.json
 --- !u!114 &924014583
 MonoBehaviour:
@@ -1103,8 +1104,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnerPrefab: {fileID: 474496005252222220, guid: 51a3d34c134727543aff734f508b9f52, type: 3}
-  spawnerCount: 0
-  enemySpawningPeriod: 0.5
+  spawnerCount: 1
+  enemySpawningPeriod: 0.2
 --- !u!114 &1903047125
 MonoBehaviour:
   m_ObjectHideFlags: 0
