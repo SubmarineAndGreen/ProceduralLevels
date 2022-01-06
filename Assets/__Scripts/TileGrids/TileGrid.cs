@@ -11,7 +11,7 @@ public class TileGrid : MonoBehaviour {
     public const int NO_ROTATION = 0;
     public const string SAVE_FOLDER = "InputGrids";
     public bool debugUI = true;
-    public bool cursorHidden = false;
+    public bool cursorHidden = true;
     [SerializeField] private TextMeshProUGUI previewRotationText;
     [SerializeField] private TextMeshProUGUI selectedTileRotationText;
     [SerializeField] private TextMeshProUGUI tileText;
@@ -44,6 +44,7 @@ public class TileGrid : MonoBehaviour {
         cursor.transform.SetParent(this.transform);
 
         if (tileSets.GetLength(0) == 0) {
+            cursor.SetActive(false);
             return;
         }
 

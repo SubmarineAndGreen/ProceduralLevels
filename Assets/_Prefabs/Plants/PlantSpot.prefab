@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3626122282121581207
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2646956874090906130}
+  - component: {fileID: 1268833665831947569}
+  m_Layer: 0
+  m_Name: PlantSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2646956874090906130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3626122282121581207}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1268833665831947569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3626122282121581207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b813e5525123986499d3b20bc978369d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chanceToSpawn: 0.5
+  potPrefabs:
+  - {fileID: 9049803426163934453, guid: 28ec158100c9f5a4dba4834d25d7e2f1, type: 3}
+  - {fileID: 2501849944237854139, guid: b39af038b3a02d946915aa0bf58138f2, type: 3}
+  - {fileID: 5993694276128436576, guid: f45fb173ce6659e47b17b836e982d559, type: 3}
+  plantPrefabs:
+  - {fileID: 8452610461152376028, guid: f8c108eb4552c094a854f24ad918781d, type: 3}
+  - {fileID: 2551572054834684060, guid: a3f0037a7984fef4bbf99b0ffd897ca8, type: 3}
+  - {fileID: 4723296810604480635, guid: 5e61b0d826029cd42bf226a2947bd4be, type: 3}
+  scale: 0.03

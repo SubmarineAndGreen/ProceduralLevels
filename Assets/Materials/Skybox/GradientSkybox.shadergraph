@@ -11,9 +11,6 @@
         },
         {
             "m_Id": "650abc250af54df1979732a65aec2a40"
-        },
-        {
-            "m_Id": "829e10e89a5f46e382c66e23adbf9489"
         }
     ],
     "m_Keywords": [],
@@ -985,29 +982,6 @@
         "m_SerializableColors": []
     },
     "m_SerializedDescriptor": "VertexDescription.Tangent"
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
-    "m_ObjectId": "829e10e89a5f46e382c66e23adbf9489",
-    "m_Guid": {
-        "m_GuidSerialized": "b961b67b-a81f-45d5-9a03-770d6e5b3e87"
-    },
-    "m_Name": "NoiseOffset",
-    "m_DefaultReferenceName": "Vector1_829e10e89a5f46e382c66e23adbf9489",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": 0.0,
-    "m_FloatType": 0,
-    "m_RangeValues": {
-        "x": 0.0,
-        "y": 1.0
-    }
 }
 
 {

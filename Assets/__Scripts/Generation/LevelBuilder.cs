@@ -379,6 +379,9 @@ public class LevelBuilder : MonoBehaviour {
 
                         if (isStairsTile) {
                             if (isWallOnRight) {
+                                if(windowDirection == Directions3D.LEFT) {
+                                    changedDirection = true;
+                                }
                                 windowDirection = Directions3D.RIGHT;
                             } else {
                                 noDirection = true;
