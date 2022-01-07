@@ -9,7 +9,7 @@ public class PlantSpot : MonoBehaviour {
     [SerializeField] float scale = 0.1f;
 
     private void Start() {
-        if (Random.Range(0f, 1f) >= chanceToSpawn) {
+        if (Random.Range(0f, 1f) <= chanceToSpawn) {
             GameObject potObject = Instantiate(potPrefabs[Random.Range(0, potPrefabs.Count)],
                                   transform.position,
                                   Quaternion.Euler(0, Random.Range(-180, 180), 0),
