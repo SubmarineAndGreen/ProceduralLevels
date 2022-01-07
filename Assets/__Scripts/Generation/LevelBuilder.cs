@@ -69,11 +69,10 @@ public class LevelBuilder : MonoBehaviour {
         List<ITileConstraint> wfcConstraints = new List<ITileConstraint>();
 
         if (generateStructures) {
-            // createStructureConstraints(testPos, testStructure, wfcConstraints, wfcTiles);
-            // instantiateStructure(testPos, testStructure);
+            placePatioStructure(wfcConstraints, wfcTiles);
         } else {
             int index = tileSets[TILESET_MAIN].getTileIndexFromTileObject(structurePlaceholderTile);
-            // Debug.Log(index);
+
             wfcConstraints.Add(new CountConstraint() {
                 Comparison = CountComparison.Exactly,
                 Count = 0,
@@ -89,7 +88,6 @@ public class LevelBuilder : MonoBehaviour {
         }
 
         createEmptyBorderConstraint(wfcConstraints, wfcTiles);
-        placePatioStructure(wfcConstraints, wfcTiles);
         // createStructureConstraints(new Vector3Int(6, 6, 6), patioBase, wfcConstraints, wfcTiles, new List<Vector3Int>());
 
         int[,,] generatedTiles;
@@ -256,6 +254,7 @@ public class LevelBuilder : MonoBehaviour {
             } else {
                 structureTileCount++;
             }
+
             if (tile.excludeFromSpawning) {
                 nonSpawnableTiles.Add(structureTilePosition);
             }
@@ -347,17 +346,18 @@ public class LevelBuilder : MonoBehaviour {
         int structureTileCount = 0;
 
         const int structureWidth = 7;
-        const int baseY = 2;
+        const int baseY = 1;
         Vector3Int basePositon = new Vector3Int(UnityEngine.Random.Range(structureWidth + 1, fullDimensions.x - 1 - structureWidth),
                                                 baseY,
                                                 UnityEngine.Random.Range(structureWidth + 1, fullDimensions.x - 1 - structureWidth));
         int maxY = fullDimensions.y - 3;
         int yOffset = 0;
+        
         structureTileCount += createStructureConstraints(basePositon, patioBase, wfcConstraints, wfcTiles, nonSpawnableTiles);
         instantiateStructure(basePositon, patioBase);
 
         bool placeOpenPart = false;
-        for (int i = yOffset; i <= maxY - baseY; i++) {
+        for (int i = yOffset; i <= maxY - baseY - 1; i++) {
             Structure structureToPlace = placeOpenPart ? patioOpen : patioClosed;
             placeOpenPart = !placeOpenPart;
 
@@ -369,7 +369,7 @@ public class LevelBuilder : MonoBehaviour {
         structureTileCount += createStructureConstraints(basePositon + Vector3Int.up * (maxY - baseY), patioTop, wfcConstraints, wfcTiles, nonSpawnableTiles);
         instantiateStructure(basePositon + Vector3Int.up * (maxY - baseY), patioTop);
 
-        structureTileCount -= 5;
+        // structureTileCount -= 9;
 
         constrainStructureTileCount(structureTileCount, wfcConstraints, wfcTiles);
     }
