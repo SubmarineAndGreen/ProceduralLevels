@@ -393,8 +393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a939aecddc96714abd8c5588488bf8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureSet: {fileID: 11400000, guid: a964ac38a210dde40bd26588fce08615, type: 2}
-  seed: 1
+  seed: 2
   levelGrid: {fileID: 2056008011}
   levelDimensions: {x: 15, y: 15, z: 15}
   fullDimensions: {x: 0, y: 0, z: 0}
@@ -403,7 +402,7 @@ MonoBehaviour:
   tileSets:
   - {fileID: 11400000, guid: eb37ae926bd290943a3345fc897fab29, type: 2}
   pathConstraint: 1
-  generateStructures: 0
+  generateStructures: 1
   structurePlaceholderTile: {fileID: 11400000, guid: ab9583fd849417a4dbe65d14384e5cb3, type: 2}
   verticalPipeTile: {fileID: 11400000, guid: a2a887c554196f64bb77aca83fdd59e3, type: 2}
   horizontalPipeTile: {fileID: 11400000, guid: 8d46994c577773346b38fff731c59946, type: 2}
@@ -412,6 +411,10 @@ MonoBehaviour:
   walkwayPrefab: {fileID: 8357840224249447361, guid: cc17a62132d1e55489af9b57cb810a94, type: 3}
   windowPrefab: {fileID: 3377803632933796834, guid: 8afd888c3bdfb0943b0865e3062cf67c, type: 3}
   doorPrefab: {fileID: 2905836741937314148, guid: 08e750dc10033c540b2c39f1b2b31ea5, type: 3}
+  patioBase: {fileID: 11400000, guid: 27931f04a779b704898721704b43639c, type: 2}
+  patioOpen: {fileID: 11400000, guid: 4b3708cc29503784292a7ba174fc14fc, type: 2}
+  patioClosed: {fileID: 11400000, guid: 4e25453de65b44040ad4ed1760952c42, type: 2}
+  patioTop: {fileID: 11400000, guid: da0b30a49e00d174e98deb4c8032f46f, type: 2}
   pipesSampleFileName: PipesNew.json
 --- !u!114 &924014583
 MonoBehaviour:
@@ -1104,7 +1107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnerPrefab: {fileID: 474496005252222220, guid: 51a3d34c134727543aff734f508b9f52, type: 3}
-  spawnerCount: 1
+  spawnerCount: 0
   enemySpawningPeriod: 0.2
 --- !u!114 &1903047125
 MonoBehaviour:

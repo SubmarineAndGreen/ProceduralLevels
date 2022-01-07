@@ -55,6 +55,18 @@ public class StructureEdit : MonoBehaviour {
         structureTileObject.instantiateMarkers();
     }
 
+     public void toggleNoConstraintsAtCursor() {
+        GameObject tileObject = grid.tileObjects.at(grid.cursorPosition);
+        StructureEditorTileObject structureTileObject = tileObject.GetComponent<StructureEditorTileObject>();
+        StructureTile structureTile = structureTileObject.structureTile;
+        if (structureTile != null) {
+            structureTile.noConstraints = !structureTile.noConstraints;
+        } else {
+            Debug.LogWarning("Tried to set no constraints on non structure tile");
+        }
+        structureTileObject.instantiateMarkers();
+    }
+
     public void saveStructure() {
         structureScriptableObject.tiles = new List<StructureTile>();
         structureScriptableObject.dimensions = grid.dimensions;
@@ -117,6 +129,7 @@ public class StructureEditorUI : Editor {
         EditorGUILayout.Space(10);
         EditorUtils.guiButton("Toggle walkable", structureEditor.toggleUnwalkableAtCursor);
         EditorUtils.guiButton("Toggle exclude from spawning", structureEditor.toggleExcludeFromSpawningAtCursor);
+        EditorUtils.guiButton("Toggle no constraints spawning", structureEditor.toggleNoConstraintsAtCursor);
         EditorUtils.guiButton("Instantiate structure", structureEditor.instantiateStructure);
         EditorUtils.guiButton("Load structure tiles", structureEditor.loadStructure);
         EditorUtils.guiButton("Saves structure tiles", structureEditor.saveStructure);

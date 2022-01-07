@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StructureEditorTileObject : MonoBehaviour {
     public StructureTile structureTile;
-    [SerializeField] GameObject openSideMarker, unwalkableMarker, spawningMarker;
+    [SerializeField] GameObject openSideMarker, unwalkableMarker, spawningMarker, noConstraintsMarker;
     List<GameObject> markers;
 
     private void Awake() {
@@ -27,19 +27,26 @@ public class StructureEditorTileObject : MonoBehaviour {
                 marker.transform.SetParent(this.transform);
             }
         }
-        if(!structureTile.walkable) {
+        if (!structureTile.walkable) {
             GameObject marker = Instantiate(unwalkableMarker,
                                         transform.position + Vector3.up / 2,
                                         Quaternion.identity);
-                markers.Add(marker);
-                marker.transform.SetParent(this.transform);
+            markers.Add(marker);
+            marker.transform.SetParent(this.transform);
         }
-        if(structureTile.excludeFromSpawning) {
+        if (structureTile.excludeFromSpawning) {
             GameObject marker = Instantiate(spawningMarker,
                                         transform.position + Vector3.up / 2,
                                         Quaternion.identity);
-                markers.Add(marker);
-                marker.transform.SetParent(this.transform);
+            markers.Add(marker);
+            marker.transform.SetParent(this.transform);
+        }
+        if (structureTile.noConstraints) {
+            GameObject marker = Instantiate(noConstraintsMarker,
+                                        transform.position + Vector3.up / 2,
+                                        Quaternion.identity);
+            markers.Add(marker);
+            marker.transform.SetParent(this.transform);
         }
 
     }

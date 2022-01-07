@@ -6,6 +6,7 @@ public class StructureTile {
     public uint openSidesMask;
     public bool walkable;
     public bool excludeFromSpawning;
+    public bool noConstraints;
 
     public StructureTile()
     {

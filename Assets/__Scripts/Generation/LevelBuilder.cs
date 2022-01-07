@@ -9,7 +9,6 @@ using System;
 
 [RequireComponent(typeof(WfcRunner))]
 public class LevelBuilder : MonoBehaviour {
-    public StructureSet structureSet;
     public int seed;
     public const int NO_SEED = -1;
     private WfcRunner wfcRunner;
@@ -33,6 +32,7 @@ public class LevelBuilder : MonoBehaviour {
     [SerializeField] GameObject walkwayPrefab;
     [SerializeField] GameObject windowPrefab;
     [SerializeField] GameObject doorPrefab;
+    [SerializeField] Structure patioBase, patioOpen, patioClosed, patioTop;
 
 
     [HideInInspector] public string pipesSampleFileName;
@@ -68,12 +68,9 @@ public class LevelBuilder : MonoBehaviour {
 
         List<ITileConstraint> wfcConstraints = new List<ITileConstraint>();
 
-        Vector3Int testPos = Vector3Int.one * 3;
-        int testStructure = 0;
-
         if (generateStructures) {
-            createStructureConstraints(testPos, testStructure, wfcConstraints, wfcTiles);
-            instantiateStructure(testPos, testStructure);
+            // createStructureConstraints(testPos, testStructure, wfcConstraints, wfcTiles);
+            // instantiateStructure(testPos, testStructure);
         } else {
             int index = tileSets[TILESET_MAIN].getTileIndexFromTileObject(structurePlaceholderTile);
             // Debug.Log(index);
@@ -92,6 +89,8 @@ public class LevelBuilder : MonoBehaviour {
         }
 
         createEmptyBorderConstraint(wfcConstraints, wfcTiles);
+        placePatioStructure(wfcConstraints, wfcTiles);
+        // createStructureConstraints(new Vector3Int(6, 6, 6), patioBase, wfcConstraints, wfcTiles, new List<Vector3Int>());
 
         int[,,] generatedTiles;
         bool generationSuccess = wfcRunner.runAdjacentModel(out generatedTiles,
@@ -232,22 +231,34 @@ public class LevelBuilder : MonoBehaviour {
         }
     }
 
-    private void createStructureConstraints(Vector3Int position, int setIndex, List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
+    private int createStructureConstraints(Vector3Int position,
+                                            Structure structure,
+                                            List<ITileConstraint> wfcConstraints,
+                                            Dictionary<int, DeBroglie.Tile> wfcTiles,
+                                            List<Vector3Int> nonSpawnableTiles) {
 
-        Structure structure = structureSet.frequencies[setIndex].structure;
+        // Structure structure = structure;
         List<StructureTile> structureTiles = structure.getTilesCollection().tiles;
         int structurePlaceholderIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(structurePlaceholderTile);
         int pipeUpTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(verticalPipeTile);
         int pipeHorizontalTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(horizontalPipeTile);
 
-        int structureCount = 0;
+        int structureTileCount = 0;
         HashSet<Vector3Int> fixedTiles = new HashSet<Vector3Int>();
 
         foreach (StructureTile tile in structureTiles) {
-            structureCount++;
             Vector3Int structureTilePosition = position + tile.position;
             // Debug.Log(structureTilePosition);
             fixedTiles.Add(structureTilePosition);
+
+            if (tile.noConstraints) {
+                continue;
+            } else {
+                structureTileCount++;
+            }
+            if (tile.excludeFromSpawning) {
+                nonSpawnableTiles.Add(structureTilePosition);
+            }
 
             wfcConstraints.Add(new FixedTileConstraint() {
                 Point = new Point(structureTilePosition.x, structureTilePosition.y, structureTilePosition.z),
@@ -258,6 +269,9 @@ public class LevelBuilder : MonoBehaviour {
         }
 
         foreach (StructureTile tile in structureTiles) {
+            if (tile.noConstraints) {
+                continue;
+            }
             foreach (Directions3D direction in DirectionUtils.allDirections) {
                 Vector3Int tilePosition = position + tile.position + DirectionUtils.DirectionsToVectors[direction];
 
@@ -305,20 +319,59 @@ public class LevelBuilder : MonoBehaviour {
             }
         }
 
+        return structureTileCount;
+    }
+
+    private void constrainStructureTileCount(int count, List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
+
+        int structurePlaceholderIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(structurePlaceholderTile);
+
         wfcConstraints.Add(new CountConstraint() {
             Comparison = CountComparison.Exactly,
-            Count = structureCount,
+            Count = count,
             Tiles = new HashSet<DeBroglie.Tile>() {
                     wfcTiles[TileUtils.tileIndexToModelIndex(structurePlaceholderIndex, TileGrid.NO_ROTATION)]
             }
         });
     }
 
-    private void instantiateStructure(Vector3Int position, int setIndex) {
+    private void instantiateStructure(Vector3Int position, Structure structure) {
         Vector3 tileOffset = new Vector3(0, -0.5f, 0);
-        GameObject prefabToSpawn = structureSet.frequencies[setIndex].structure.structurePrefab;
-        GameObject structure = Instantiate(prefabToSpawn, position.toVector3() + tileOffset /* scaleFactor */, Quaternion.identity);
-        structure.transform.SetParent(levelGrid.transform);
+        GameObject prefabToSpawn = structure.structurePrefab;
+        GameObject structureObject = Instantiate(prefabToSpawn, position.toVector3() + tileOffset /* scaleFactor */, Quaternion.identity);
+        structureObject.transform.SetParent(levelGrid.transform);
+    }
+
+    private void placePatioStructure(List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
+        List<Vector3Int> nonSpawnableTiles = new List<Vector3Int>();
+        int structureTileCount = 0;
+
+        const int structureWidth = 7;
+        const int baseY = 2;
+        Vector3Int basePositon = new Vector3Int(UnityEngine.Random.Range(structureWidth + 1, fullDimensions.x - 1 - structureWidth),
+                                                baseY,
+                                                UnityEngine.Random.Range(structureWidth + 1, fullDimensions.x - 1 - structureWidth));
+        int maxY = fullDimensions.y - 3;
+        int yOffset = 0;
+        structureTileCount += createStructureConstraints(basePositon, patioBase, wfcConstraints, wfcTiles, nonSpawnableTiles);
+        instantiateStructure(basePositon, patioBase);
+
+        bool placeOpenPart = false;
+        for (int i = yOffset; i <= maxY - baseY; i++) {
+            Structure structureToPlace = placeOpenPart ? patioOpen : patioClosed;
+            placeOpenPart = !placeOpenPart;
+
+            Vector3Int newPosition = basePositon + Vector3Int.up * i;
+            structureTileCount += createStructureConstraints(newPosition, structureToPlace, wfcConstraints, wfcTiles, nonSpawnableTiles);
+            instantiateStructure(newPosition, structureToPlace);
+        }
+
+        structureTileCount += createStructureConstraints(basePositon + Vector3Int.up * (maxY - baseY), patioTop, wfcConstraints, wfcTiles, nonSpawnableTiles);
+        instantiateStructure(basePositon + Vector3Int.up * (maxY - baseY), patioTop);
+
+        structureTileCount -= 5;
+
+        constrainStructureTileCount(structureTileCount, wfcConstraints, wfcTiles);
     }
 
     private Vector3Int randomVector3Int(Vector3Int min, Vector3Int max) {
@@ -350,6 +403,7 @@ public class LevelBuilder : MonoBehaviour {
     private void placeWindows(TileGrid levelGrid, SamplerResult samplerResult) {
         // Directions3D[,,] windowPlacement = new Directions3D[fullDimensions.x, fullDimensions.y, fullDimensions.z];
         int emptyTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(emptyTile);
+        int structureTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(structurePlaceholderTile);
         // Directions3D windowDirection = Directions3D.FORWARD;
         bool placedWindowLastTile = false;
         Directions3D windowDirection = Directions3D.UP;
@@ -373,7 +427,7 @@ public class LevelBuilder : MonoBehaviour {
 
                     Vector3 offset = new Vector3(-0.5f, 0, -0.5f);
 
-                    if (tileIndex == emptyTileIndex) {
+                    if (tileIndex == emptyTileIndex || tileIndex == structureTileIndex) {
                         placedWindowLastTile = false;
                     } else {
                         isWallOnRight = !connectionData[tileIndex].canConnectFromDirection(Directions3D.RIGHT, tileRotation);
@@ -452,6 +506,7 @@ public class LevelBuilder : MonoBehaviour {
     private List<Vector3Int> placeDoors(TileGrid levelGrid, SamplerResult samplerResult) {
         Vector3 offset = new Vector3(-0.5f, 0, -0.5f);
         int emptyTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(emptyTile);
+        int structureTileIndex = tileSets[TILESET_MAIN].getTileIndexFromTileObject(structurePlaceholderTile);
 
         const float doorProbability = 0.8f;
         ConnectionData[] connectionData = samplerResult.connections;
@@ -466,7 +521,7 @@ public class LevelBuilder : MonoBehaviour {
                     int index = tileIndices[x, y, z];
                     Vector3Int position = new Vector3Int(x, y, z);
                     int rotation = levelGrid.tileRotations.at(position);
-                    if (index != emptyTileIndex
+                    if (index != emptyTileIndex && index != structureTileIndex
                         && !connectionData[index].canConnectFromDirection(Directions3D.DOWN, TileGrid.NO_ROTATION)) {
 
                         if (!connectionData[index].canConnectFromDirection(Directions3D.FORWARD, rotation)) {
