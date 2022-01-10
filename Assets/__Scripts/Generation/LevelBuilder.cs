@@ -22,7 +22,7 @@ public class LevelBuilder : MonoBehaviour {
     private const int TILESET_MAIN = 0;
 
     [Header("Structures")]
-    [SerializeField] bool generateStructures;
+    public bool generateStructures;
     [SerializeField] Tile structurePlaceholderTile;
     [SerializeField] Tile verticalPipeTile;
     [SerializeField] Tile horizontalPipeTile;
@@ -36,6 +36,7 @@ public class LevelBuilder : MonoBehaviour {
 
 
     [HideInInspector] public string pipesSampleFileName;
+    public Vector3Int playerSpawn;
 
     public void generateLevel() {
         #region MAIN_STRUCTURE
@@ -69,7 +70,7 @@ public class LevelBuilder : MonoBehaviour {
         List<ITileConstraint> wfcConstraints = new List<ITileConstraint>();
 
         if (generateStructures) {
-            placePatioStructure(wfcConstraints, wfcTiles);
+            playerSpawn = placePatioStructure(wfcConstraints, wfcTiles);
         } else {
             int index = tileSets[TILESET_MAIN].getTileIndexFromTileObject(structurePlaceholderTile);
 
@@ -341,7 +342,7 @@ public class LevelBuilder : MonoBehaviour {
         structureObject.transform.SetParent(levelGrid.transform);
     }
 
-    private void placePatioStructure(List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
+    private Vector3Int placePatioStructure(List<ITileConstraint> wfcConstraints, Dictionary<int, DeBroglie.Tile> wfcTiles) {
         List<Vector3Int> nonSpawnableTiles = new List<Vector3Int>();
         int structureTileCount = 0;
 
@@ -352,7 +353,7 @@ public class LevelBuilder : MonoBehaviour {
                                                 UnityEngine.Random.Range(structureWidth + 1, fullDimensions.x - 1 - structureWidth));
         int maxY = fullDimensions.y - 3;
         int yOffset = 0;
-        
+
         structureTileCount += createStructureConstraints(basePositon, patioBase, wfcConstraints, wfcTiles, nonSpawnableTiles);
         instantiateStructure(basePositon, patioBase);
 
@@ -372,6 +373,9 @@ public class LevelBuilder : MonoBehaviour {
         // structureTileCount -= 9;
 
         constrainStructureTileCount(structureTileCount, wfcConstraints, wfcTiles);
+
+        Vector3Int playerSpawn = new Vector3Int(basePositon.x + 1, UnityEngine.Random.Range(baseY, maxY - 1), basePositon.z + 1);
+        return playerSpawn;
     }
 
     private Vector3Int randomVector3Int(Vector3Int min, Vector3Int max) {

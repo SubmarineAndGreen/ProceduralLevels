@@ -20,7 +20,9 @@ public class GameLoop : MonoBehaviour
         navigationManager = NavigationManager.instance;
         enemyManager = EnemyManager.instance;
 
-        Vector3Int playerSpawnTile = enemyManager.getRandomValidSpawningTile();
+        Vector3Int playerSpawnTile = levelBuilder.generateStructures ? levelBuilder.playerSpawn : enemyManager.getRandomValidSpawningTile();
+        Debug.Log(playerSpawnTile);
+
         Vector3 playerSpawn = navigationManager.gridPositionToWorldPosition(playerSpawnTile);
         GameObject player = Instantiate(playerPrefab, playerSpawn, Quaternion.identity);
 

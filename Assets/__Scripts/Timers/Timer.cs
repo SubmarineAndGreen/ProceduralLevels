@@ -12,7 +12,7 @@ public class Timer {
         this.maxTime = maxTime;
         this.repeating = repeating;
         onAlarm += onAlarmCallback;
-        running = true;
+        running = false;
     }
 
 
@@ -23,12 +23,13 @@ public class Timer {
         }
         time += dt;
         if (time > maxTime) {
-            onAlarm();
             if (repeating) {
                 time -= maxTime;
             } else {
                 running = false;
             }
+
+            onAlarm();
         }
     }
 
