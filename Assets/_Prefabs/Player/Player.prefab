@@ -415,7 +415,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_Antialiasing: 1
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -602,6 +602,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6727416383297338837, guid: 7d33290606db05448a49218ceab32225, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6727416383297338837, guid: 7d33290606db05448a49218ceab32225, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -632,6 +636,10 @@ PrefabInstance:
     - target: {fileID: 6727416383774172460, guid: 7d33290606db05448a49218ceab32225, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6727416383774172463, guid: 7d33290606db05448a49218ceab32225, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -5767
       objectReference: {fileID: 0}
     - target: {fileID: 6727416383784733683, guid: 7d33290606db05448a49218ceab32225, type: 3}
       propertyPath: m_Layer

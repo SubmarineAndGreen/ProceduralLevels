@@ -1,30 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using System;
+using DG.Tweening;
 
 public class GameLoop : MonoBehaviour {
     [SerializeField] LevelBuilder levelBuilder;
-    SpawnerPlacer spawnerPlacer;
     NavigationManager navigationManager;
     [SerializeField] GameObject playerPrefab;
     Transform playerTransform;
     [SerializeField] NavigationHintSpawner navigationHintSpawner;
     Vector3Int playerTile;
+    Vector3Int previousPlayerTile;
     [SerializeField] GameObject goalPrefab;
     Vector3Int goalTile;
+    int reachedGoalCounter = 0;
+    int currentDifficulty = 0;
+    [SerializeField] List<int> nextDifficultyGoalCount;
+    [SerializeField] List<DifficultyData> difficultyData;
+    DifficultyData currentDifficultyData;
+    float remainingTime;
+    int distanceToGoal;
 
-    // int difficultyModifier = 0;
-    int startingMinDistance = 10, startingMaxDistance = 20;
+    [Header("UI")]
+    [SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] TextMeshProUGUI addedTimeText;
+    [SerializeField] TextMeshProUGUI distanceText;
 
-    private void Awake() {
-        spawnerPlacer = GetComponent<SpawnerPlacer>();
-    }
     void Start() {
         levelBuilder.generateLevel();
         navigationManager = NavigationManager.instance;
-        spawnerPlacer.enabled = true;
+
+        currentDifficultyData = difficultyData[0];
+
         spawnPlayer();
-        pickGoal(startingMinDistance, startingMaxDistance);
+        pickGoal();
         createNavigationHints();
     }
 
@@ -33,11 +45,14 @@ public class GameLoop : MonoBehaviour {
         Vector3Int currentTile = navigationManager.worldPositionToGridPosition(playerTransform.position);
 
         if (currentTile != playerTile) {
+            previousPlayerTile = playerTile;
             playerTile = currentTile;
+            distanceToGoal = navigationManager.getGridDistance(playerTile, goalTile);
+            updateDistanceUIText();
             createNavigationHints();
-
         }
 
+        updateRemainingTime();
     }
 
     private void spawnPlayer() {
@@ -46,13 +61,17 @@ public class GameLoop : MonoBehaviour {
 
         Vector3 playerSpawn = navigationManager.gridPositionToWorldPosition(playerSpawnTile);
         playerTile = playerSpawnTile;
+        previousPlayerTile = playerSpawnTile;
         GameObject player = Instantiate(playerPrefab, playerSpawn, Quaternion.identity);
         playerTransform = player.transform.GetChild(0);
 
         navigationManager.playerTransform = playerTransform;
     }
 
-    private void pickGoal(int minDistance, int maxDistance) {
+    private void pickGoal() {
+        int minDistance = currentDifficultyData.minDistance;
+        int maxDistance = currentDifficultyData.maxDistance;
+
         const int tries = 10;
         bool foundGoalTile = false;
         Vector3Int result = Vector3Int.zero;
@@ -69,6 +88,7 @@ public class GameLoop : MonoBehaviour {
                     // Debug.Log(distance);
                     result = randomGoalTile;
                     foundGoalTile = true;
+                    addRemainingTime(distance * currentDifficultyData.timePerDistance);
                     break;
                 }
             }
@@ -83,7 +103,7 @@ public class GameLoop : MonoBehaviour {
 
         GameObject goalObject = Instantiate(goalPrefab, navigationManager.gridPositionToWorldPosition(result), Quaternion.identity, levelBuilder.levelGrid.transform);
         Goal goal = goalObject.GetComponentInChildren<Goal>();
-        goal.onGoalReached += onGoalReached;
+        goal.onGoalReached += goalReached;
 
         goalTile = result;
     }
@@ -92,17 +112,17 @@ public class GameLoop : MonoBehaviour {
         Vector3 heightOffset = Vector3.down * navigationManager.tileSize * 0.3f;
         List<Vector3> followNodes = new List<Vector3>();
 
-        Vector3Int currentTile = navigationManager.worldPositionToGridPosition(playerTransform.position);
-        Vector3 playerPosition = navigationManager.gridPositionToWorldPosition(currentTile);
+        Vector3Int startingTile = previousPlayerTile;
+        Vector3 playerPosition = navigationManager.gridPositionToWorldPosition(startingTile);
         followNodes.Add(playerPosition + heightOffset);
 
-        while (currentTile != goalTile) {
-            Vector3Int nextMove = Vector3Int.FloorToInt(navigationManager.getPathVector(goalTile, currentTile));
+        while (startingTile != goalTile) {
+            Vector3Int nextMove = Vector3Int.FloorToInt(navigationManager.getPathVector(goalTile, startingTile));
             if (nextMove == Vector3Int.zero) {
                 break;
             } else {
-                currentTile += nextMove;
-                Vector3 nodePosition = navigationManager.gridPositionToWorldPosition(currentTile);
+                startingTile += nextMove;
+                Vector3 nodePosition = navigationManager.gridPositionToWorldPosition(startingTile);
                 followNodes.Add(nodePosition + heightOffset);
             }
         }
@@ -110,8 +130,106 @@ public class GameLoop : MonoBehaviour {
         navigationHintSpawner.replaceFollowNodes(followNodes);
     }
 
-    void onGoalReached() {
-        pickGoal(startingMinDistance, startingMaxDistance);
+    void updateDifficulty() {
+        reachedGoalCounter++;
+
+        if(nextDifficultyGoalCount[currentDifficulty] == -1) {
+            return;
+        }
+
+        if(reachedGoalCounter > nextDifficultyGoalCount[currentDifficulty]) {
+            Debug.Log("next difficulty");
+            reachedGoalCounter = 0;
+            currentDifficulty++;
+            currentDifficultyData = difficultyData[currentDifficulty];
+        }
+    }
+
+    void goalReached() {
+        reachedGoalCounter++;
+        updateDifficulty();
+        pickGoal();
+        previousPlayerTile = playerTile;
         createNavigationHints();
+    }
+
+    void updateRemainingTime() {
+        remainingTime -= Time.deltaTime;
+
+        if (remainingTime <= 0) {
+            remainingTime = 0;
+            timeElapsed();
+        }
+
+        updateTimeUI();
+
+    }
+
+    void addRemainingTime(float timeToAdd) {
+        remainingTime += timeToAdd;
+        showAddedTimeUIText(timeToAdd);
+    }
+
+    void timeElapsed() {
+        Debug.Log("time elapsed!");
+    }
+
+    void updateTimeUI() {
+        timerText.text = formatUITime(remainingTime);
+    }
+
+    void showAddedTimeUIText(float addedTime) {
+        // Debug.Log(addedTime);
+        float tweenDuration = 1.5f;
+        float originalHeight = addedTimeText.rectTransform.anchoredPosition.y;
+        float targetHeight = addedTimeText.rectTransform.anchoredPosition.y - 128;
+
+        addedTimeText.text = $"+{formatUITime(addedTime)}";
+
+        Color textColor = addedTimeText.color;
+        textColor.a = 1f;
+        addedTimeText.color = textColor;
+
+        DOTween.To(() => {
+            Color textColor = addedTimeText.color;
+            return textColor.a;
+        }, newAlpha => {
+            Color textColor = addedTimeText.color;
+            textColor.a = newAlpha;
+            addedTimeText.color = textColor;
+
+        }, 0f, tweenDuration).SetEase(Ease.InQuad);
+
+        var heightTween = DOTween.To(() => {
+            return addedTimeText.rectTransform.anchoredPosition.y;
+        }, height => {
+            Vector2 positon = addedTimeText.rectTransform.anchoredPosition;
+            positon.y = height;
+            addedTimeText.rectTransform.anchoredPosition = positon;
+        }, targetHeight, tweenDuration);
+
+        heightTween.onComplete += () => {
+            Vector2 positon = addedTimeText.rectTransform.anchoredPosition;
+            positon.y = originalHeight;
+            addedTimeText.rectTransform.anchoredPosition = positon;
+        };
+    }
+
+    string formatUITime(float time) {
+
+        float minutes = Mathf.Floor(time / 60);
+        float seconds = (int)time % 60;
+        return $"{minutes.ToString("00")}:{seconds.ToString("00")}";
+    }
+
+    void updateDistanceUIText() {
+        distanceText.text = $"distance: {distanceToGoal.ToString("00")}";
+    }
+
+    [System.Serializable]
+    struct DifficultyData {
+        public int minDistance;
+        public int maxDistance;
+        public float timePerDistance;
     }
 }

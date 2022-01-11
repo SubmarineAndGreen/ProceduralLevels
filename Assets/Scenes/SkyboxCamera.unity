@@ -224,7 +224,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!215 &1307909406
 ReflectionProbe:
   m_ObjectHideFlags: 0
@@ -361,6 +361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseCameraTransform: {fileID: 0}
+  portalMaterial: {fileID: 2100000, guid: 38329f19824013b4c9cdff7621818050, type: 2}
 --- !u!114 &1982200278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,7 +385,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_Antialiasing: 1
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
