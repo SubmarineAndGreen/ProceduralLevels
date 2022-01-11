@@ -12,7 +12,7 @@ public class LevelBuilder : MonoBehaviour {
     public int seed;
     public const int NO_SEED = -1;
     private WfcRunner wfcRunner;
-    [SerializeField] private TileGrid levelGrid;
+    public TileGrid levelGrid;
     [SerializeField] Vector3Int levelDimensions;
     [HideInInspector] public Vector3Int fullDimensions;
     [SerializeField] bool scaleAfterGeneration;
@@ -125,9 +125,10 @@ public class LevelBuilder : MonoBehaviour {
         initializeNavigation(tileIndices, tileSetIndices);
         navigationStopwatch.Stop();
 
-        List<Vector3Int> pipeTilePositions = getAllPipeTiles(tileIndices, tileSetIndices);
-        EnemyManager enemyManager = EnemyManager.instance;
-        enemyManager.validSpawningTiles = pipeTilePositions;
+        List<Vector3Int> walkableTilePositions = getWalkableTiles(tileIndices, tileSetIndices);
+        NavigationManager navigationManager = NavigationManager.instance;
+        navigationManager.walkableTiles = walkableTilePositions;
+        navigationManager.doorTiles = doorTiles;
 
         if (scaleAfterGeneration) {
             levelGrid.transform.localScale = Vector3.one * scaleFactor;
@@ -170,7 +171,7 @@ public class LevelBuilder : MonoBehaviour {
         navigation.tileGridDimensions = fullDimensions;
     }
 
-    private List<Vector3Int> getAllPipeTiles(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {
+    private List<Vector3Int> getWalkableTiles(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {
 
         List<Vector3Int> pipeTiles = new List<Vector3Int>();
 

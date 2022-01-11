@@ -29,7 +29,7 @@ public class Dash : MonoBehaviour {
 
     private void addDash() {
         availableDashCount += 1;
-        Debug.Log("(cooldown) dashes: " + availableDashCount);
+        // Debug.Log("(cooldown) dashes: " + availableDashCount);
     }
 
     private void runCooldownIfNotMaxDashes() {
@@ -52,7 +52,7 @@ public class Dash : MonoBehaviour {
             Vector3 lookDirection = playerCameraTransform.forward.normalized;
             float speedAfterDash = rb.velocity.magnitude + dashAddedSpeed;
             rb.velocity = lookDirection * speedAfterDash;
-            Debug.Log("(use) dashes: " + availableDashCount);
+            // Debug.Log("(use) dashes: " + availableDashCount);
         }
     }
 

@@ -429,8 +429,8 @@ MonoBehaviour:
   minDistance: 450
   minScale: 6
   maxScale: 20
-  minHeightScale: 5
-  maxHeightScale: 9
+  minHeightScale: 7
+  maxHeightScale: 12
   maxPositionRadialOffset: 1
   baseWindowTilingX: 8
   baseWindowTilingY: 15
@@ -442,7 +442,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2087385979}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.15, z: 0}
+  m_LocalPosition: {x: 0, y: 0.16, z: 0}
   m_LocalScale: {x: 0.00025, y: 0.00025, z: 0.00025}
   m_Children: []
   m_Father: {fileID: 172540168}

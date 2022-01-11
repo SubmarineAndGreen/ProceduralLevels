@@ -6,11 +6,9 @@ public class SpawnerPlacer : MonoBehaviour {
     [SerializeField] GameObject spawnerPrefab;
     [SerializeField] int spawnerCount;
     [SerializeField] float enemySpawningPeriod;
-    EnemyManager enemyManager;
     NavigationManager navigationManager;
     HashSet<Vector3Int> spawnerTiles;
     void Start() {
-        enemyManager = EnemyManager.instance;
         navigationManager = NavigationManager.instance;
         instantiateSpawnersInRandomTiles();
     }
@@ -20,7 +18,7 @@ public class SpawnerPlacer : MonoBehaviour {
         int tries = 100;
         spawnerTiles = new HashSet<Vector3Int>();
         while (createdSpawners < spawnerCount && tries-- > 0) {
-            Vector3Int validSpawnerTile = enemyManager.getRandomValidSpawningTile();
+            Vector3Int validSpawnerTile = navigationManager.getRandomWalkableTile();
             if (!spawnerTiles.Contains(validSpawnerTile)) {
                 spawnerTiles.Add(validSpawnerTile);
                 GameObject spawnerObject = Instantiate(spawnerPrefab,
