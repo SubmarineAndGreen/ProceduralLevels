@@ -29,6 +29,9 @@ public class GameLoop : MonoBehaviour {
     [SerializeField] TextMeshProUGUI addedTimeText;
     [SerializeField] TextMeshProUGUI distanceText;
 
+    Sequence flashSequence;
+    float flashTimeThreshold = 10f;
+
     void Start() {
         levelBuilder.generateLevel();
         navigationManager = NavigationManager.instance;
@@ -38,6 +41,8 @@ public class GameLoop : MonoBehaviour {
         spawnPlayer();
         pickGoal();
         createNavigationHints();
+
+        flashSequence = createTimeTextFlashSequence();
     }
 
 
@@ -47,12 +52,21 @@ public class GameLoop : MonoBehaviour {
         if (currentTile != playerTile) {
             previousPlayerTile = playerTile;
             playerTile = currentTile;
-            distanceToGoal = navigationManager.getGridDistance(playerTile, goalTile);
+            updateDistanceToGoal();
             updateDistanceUIText();
             createNavigationHints();
         }
 
         updateRemainingTime();
+
+        if(remainingTime < flashTimeThreshold) {
+            flashSequence.Play();
+        } else {
+            if(flashSequence.IsPlaying()) {
+                flashSequence.Rewind();
+            }
+        }
+
     }
 
     private void spawnPlayer() {
@@ -133,11 +147,11 @@ public class GameLoop : MonoBehaviour {
     void updateDifficulty() {
         reachedGoalCounter++;
 
-        if(nextDifficultyGoalCount[currentDifficulty] == -1) {
+        if (nextDifficultyGoalCount[currentDifficulty] == -1) {
             return;
         }
 
-        if(reachedGoalCounter > nextDifficultyGoalCount[currentDifficulty]) {
+        if (reachedGoalCounter > nextDifficultyGoalCount[currentDifficulty]) {
             Debug.Log("next difficulty");
             reachedGoalCounter = 0;
             currentDifficulty++;
@@ -151,6 +165,8 @@ public class GameLoop : MonoBehaviour {
         pickGoal();
         previousPlayerTile = playerTile;
         createNavigationHints();
+        updateDistanceToGoal();
+        updateDistanceUIText();
     }
 
     void updateRemainingTime() {
@@ -215,11 +231,28 @@ public class GameLoop : MonoBehaviour {
         };
     }
 
+    Sequence createTimeTextFlashSequence() {
+        float flashDuration = 0.5f;
+
+        Color startingColor = timerText.color;
+        Color flashColor = Color.red;
+
+        return DOTween.Sequence().Append(
+            DOTween.To(() => timerText.color, color => timerText.color = color, flashColor, flashDuration)
+        ).Append(
+            DOTween.To(() => timerText.color, color => timerText.color = color, startingColor, flashDuration)
+        ).SetLoops(-1);
+    }
+
     string formatUITime(float time) {
 
         float minutes = Mathf.Floor(time / 60);
         float seconds = (int)time % 60;
         return $"{minutes.ToString("00")}:{seconds.ToString("00")}";
+    }
+
+    void updateDistanceToGoal() {
+        distanceToGoal = navigationManager.getGridDistance(playerTile, goalTile);
     }
 
     void updateDistanceUIText() {
