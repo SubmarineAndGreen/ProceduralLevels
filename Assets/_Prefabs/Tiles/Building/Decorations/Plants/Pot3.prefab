@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 923950774745423651}
   - component: {fileID: 8159560555760924807}
   - component: {fileID: 597530549932489878}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pot3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3299544971944577270}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlantOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

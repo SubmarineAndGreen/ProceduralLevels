@@ -14,7 +14,6 @@ public class Floater : MonoBehaviour {
     int playerLayer;
     Rigidbody rb;
     NavigationManager navigationManager;
-    EnemyManager enemyManager;
     FloaterState state;
     RaycastHit lineOfSightInfo;
     private int hp;
@@ -28,7 +27,6 @@ public class Floater : MonoBehaviour {
 
     private void Start() {
         navigationManager = NavigationManager.instance;
-        enemyManager = EnemyManager.instance;
         state = FloaterState.NAVIGATING;
         hp = 1;
     }
@@ -49,7 +47,7 @@ public class Floater : MonoBehaviour {
                 rb.AddForce(navigationManager.getPathVectorToPlayer(transform.position) * navigationForce * Time.fixedDeltaTime, ForceMode.Force);
                 break;
             case FloaterState.FOLLOWING:
-                Vector3 vectorTowardsPlayer = enemyManager.playerTransform.position - transform.position;
+                Vector3 vectorTowardsPlayer = navigationManager.playerTransform.position - transform.position;
                 rb.AddForce(vectorTowardsPlayer.normalized * followForce * Time.fixedDeltaTime, ForceMode.Force);
                 break;
         }
@@ -65,22 +63,18 @@ public class Floater : MonoBehaviour {
     }
 
     private bool playerInFollowRange() {
-        return navigationManager.getGridDistanceToPlayer(transform.position) <= maxTileFollowDistance;
+        return navigationManager.getGridDistanceToPlayerWorld(transform.position) <= maxTileFollowDistance;
     }
 
     private bool playerInLineOfSight() {
-        Ray lineOfSightRay = new Ray(transform.position, enemyManager.playerTransform.position - transform.position);
+        Ray lineOfSightRay = new Ray(transform.position, navigationManager.playerTransform.position - transform.position);
         if (Physics.Raycast(lineOfSightRay, out lineOfSightInfo, lineOfSightDistance, lineOfSightMask)) {
 
-            return lineOfSightInfo.collider.gameObject.layer == enemyManager.playerLayer;
+            return lineOfSightInfo.collider.gameObject.layer == navigationManager.playerLayer;
         }
 
         return false;
     }
-
-    // private void OnDrawGizmos() {
-    //     Gizmos.DrawLine(transform.position, transform.position + (enemyManager.playerTransform.position - transform.position) * lineOfSightDistance);
-    // }
 
     private enum FloaterState {
         NAVIGATING,

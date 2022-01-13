@@ -897,7 +897,7 @@
     },
     "m_Name": "RenderTexture",
     "m_DefaultReferenceName": "Texture2D_ed924b56b65f47989eb5323514181c5c",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_RenderTexture",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,

@@ -305,7 +305,6 @@ MonoBehaviour:
   maxDashCount: 4
   dashAddedSpeed: 25
   playerCameraTransform: {fileID: 7711137512837268062}
-  ui: {fileID: 3827984560697359273}
 --- !u!1 &7711137512837268061
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,7 +372,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 503
+    m_Bits: 3575
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -603,6 +602,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6727416383297338837, guid: 7d33290606db05448a49218ceab32225, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6727416383297338837, guid: 7d33290606db05448a49218ceab32225, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -634,14 +637,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 6727416383774172462, guid: 7d33290606db05448a49218ceab32225, type: 3}
-      propertyPath: dashSliderGO
-      value: 
-      objectReference: {fileID: 1101527763366165277}
-    - target: {fileID: 6727416383774172462, guid: 7d33290606db05448a49218ceab32225, type: 3}
-      propertyPath: dashUsesText
-      value: 
-      objectReference: {fileID: 2827445064334192892}
+    - target: {fileID: 6727416383774172463, guid: 7d33290606db05448a49218ceab32225, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -5767
+      objectReference: {fileID: 0}
     - target: {fileID: 6727416383784733683, guid: 7d33290606db05448a49218ceab32225, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -724,19 +723,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce38bfdef9adcc64186af127e258a799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2827445064334192892 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5728073422317629051, guid: 7d33290606db05448a49218ceab32225, type: 3}
-  m_PrefabInstance: {fileID: 7512899335152672391}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1101527763366165277 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7424825592842855834, guid: 7d33290606db05448a49218ceab32225, type: 3}
-  m_PrefabInstance: {fileID: 7512899335152672391}
-  m_PrefabAsset: {fileID: 0}

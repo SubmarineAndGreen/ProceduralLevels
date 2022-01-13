@@ -5,12 +5,10 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(LineRenderer))]
 public class PathDrawer : MonoBehaviour {
-    EnemyManager enemyManager;
     NavigationManager navigationManager;
     LineRenderer lineRenderer;
 
     void Start() {
-        enemyManager = EnemyManager.instance;
         navigationManager = NavigationManager.instance;
         lineRenderer = GetComponent<LineRenderer>();
     }
@@ -22,8 +20,8 @@ public class PathDrawer : MonoBehaviour {
     }
 
     private IEnumerator startStepToGoal() {
-        Vector3Int currentTile = enemyManager.getRandomValidSpawningTile();
-        Vector3Int goalTile = enemyManager.getRandomValidSpawningTile();
+        Vector3Int currentTile = navigationManager.getRandomWalkableTile();
+        Vector3Int goalTile = navigationManager.getRandomWalkableTile();
         Vector3 offset = new Vector3(-0.5f, 0, -0.5f);
         Debug.Log("start:" + currentTile + "goal:" + goalTile);
         // GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);

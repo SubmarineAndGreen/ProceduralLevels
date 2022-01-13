@@ -8,10 +8,27 @@ public class NavigationManager : MonoBehaviour {
     private Vector3 gridOrigin;
     public Vector3Int tileGridDimensions;
     public float tileSize;
+    [HideInInspector] public List<Vector3Int> walkableTiles;
+    [HideInInspector] public List<Vector3Int> doorTiles;
+    public int playerLayer;
+    public LayerMask levelMask;
+    public LayerMask ignoreDecorationsMask;
+    public Vector3Int getRandomWalkableTile() {
+        return walkableTiles[Random.Range(0, walkableTiles.Count - 1)];
+    }
+
+    public Vector3Int getRandomDoorTile() {
+        return doorTiles[Random.Range(0, doorTiles.Count - 1)];
+    }
+
     [SerializeField] public Transform playerTransform;
     private void Awake() {
         instance = this;
         gridOrigin = levelGrid.transform.position;
+        walkableTiles = new List<Vector3Int>();
+        playerLayer = LayerMask.NameToLayer("Player");
+        levelMask = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Enemy")) | (1 << LayerMask.NameToLayer("Decorations")) | (1 << LayerMask.NameToLayer("EnemyIgnoreDecorations")));
+        ignoreDecorationsMask = ~(1 << LayerMask.NameToLayer("Decorations"));
     }
 
     public int[,,][,,] vectorFields;
@@ -41,7 +58,7 @@ public class NavigationManager : MonoBehaviour {
             return int.MaxValue;
         }
 
-        var distanceField = vectorFields[goalTile.x, goalTile.y, goalTile.z];
+        var distanceField = distanceFields[goalTile.x, goalTile.y, goalTile.z];
 
         if (distanceField == null) {
             return int.MaxValue;
@@ -56,8 +73,12 @@ public class NavigationManager : MonoBehaviour {
         return getPathVector(worldPositionToGridPosition(playerTransform.position), worldPositionToGridPosition(currentPosition));
     }
 
-    public int getGridDistanceToPlayer(Vector3 currentPosition) {
+    public int getGridDistanceToPlayerWorld(Vector3 currentPosition) {
         return getGridDistance(worldPositionToGridPosition(playerTransform.position), worldPositionToGridPosition(currentPosition));
+    }
+
+    public int getGridDistanceToPlayer(Vector3Int currentPosition) {
+        return getGridDistance(worldPositionToGridPosition(playerTransform.position), currentPosition);
     }
 
     public void calculateVectorFields(int[,,] inputDistanceField, int unwalkableTileValue) {

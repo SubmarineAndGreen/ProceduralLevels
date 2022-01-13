@@ -12,7 +12,6 @@ public class Dash : MonoBehaviour {
     Timer dashCooldownTimer;
     Rigidbody rb;
     [SerializeField] Transform playerCameraTransform;
-    [SerializeField] public UI_Display ui;
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -30,8 +29,7 @@ public class Dash : MonoBehaviour {
 
     private void addDash() {
         availableDashCount += 1;
-        Debug.Log("(cooldown) dashes: " + availableDashCount);
-        ui.UpdateDashes(availableDashCount);
+        // Debug.Log("(cooldown) dashes: " + availableDashCount);
     }
 
     private void runCooldownIfNotMaxDashes() {
@@ -54,8 +52,7 @@ public class Dash : MonoBehaviour {
             Vector3 lookDirection = playerCameraTransform.forward.normalized;
             float speedAfterDash = rb.velocity.magnitude + dashAddedSpeed;
             rb.velocity = lookDirection * speedAfterDash;
-            Debug.Log("(use) dashes: " + availableDashCount);
-            ui.UpdateDashes(availableDashCount);
+            // Debug.Log("(use) dashes: " + availableDashCount);
         }
     }
 
@@ -63,7 +60,5 @@ public class Dash : MonoBehaviour {
         if (Mouse.current.rightButton.wasPressedThisFrame) {
             tryDash();
         }
-        //Debug.Log(dashCooldownTimer.getTimeRunning());
-        ui.UpdateDashesCooldown(dashCooldownTimer.getTimeRunning());
     }
 }
