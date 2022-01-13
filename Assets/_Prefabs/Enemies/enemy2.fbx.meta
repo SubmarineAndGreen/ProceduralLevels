@@ -1,0 +1,210 @@
+fileFormatVersion: 2
+guid: 2bede59ec3137134e9f248ea0f7b346d
+ModelImporter:
+  serializedVersion: 20200
+  internalIDToNameTable:
+  - first:
+      74: -1982674111982096124
+    second: enemy2_wings1|CubeAction
+  - first:
+      74: 1944007595408364346
+    second: enemy2_wings1|enemy1_wingsAction
+  - first:
+      74: 8012845550483428211
+    second: enemy2_wings1|enemy2_wings1Action
+  - first:
+      74: -1107827470407555325
+    second: enemy2_wings1|enemy2_wings2Action
+  - first:
+      74: -1756389937779196587
+    second: enemy2_wings1|enemy2_wings3Action
+  - first:
+      74: -1815432650138777454
+    second: enemy2_wings1|enemy2_wings4Action
+  - first:
+      74: -7946784242494311007
+    second: enemy2_wings1|enemy4_crystalAction
+  - first:
+      74: -2971835552393655892
+    second: enemy2_wings1|enemy4Action
+  - first:
+      74: 6142658079073634847
+    second: enemy2_wings1|SphereAction
+  - first:
+      74: 6720753166679314451
+    second: enemy2_wings2|CubeAction
+  - first:
+      74: -6959854902155182351
+    second: enemy2_wings2|enemy1_wingsAction
+  - first:
+      74: 482112929226379131
+    second: enemy2_wings2|enemy2_wings1Action
+  - first:
+      74: 3760652884573015811
+    second: enemy2_wings2|enemy2_wings2Action
+  - first:
+      74: -3749628661044089696
+    second: enemy2_wings2|enemy2_wings3Action
+  - first:
+      74: 5638823896002357201
+    second: enemy2_wings2|enemy2_wings4Action
+  - first:
+      74: -3527210566981898251
+    second: enemy2_wings2|enemy4_crystalAction
+  - first:
+      74: -3352186066159795490
+    second: enemy2_wings2|enemy4Action
+  - first:
+      74: 3328661682583420612
+    second: enemy2_wings2|SphereAction
+  - first:
+      74: -4494845980499119943
+    second: enemy2_wings3|CubeAction
+  - first:
+      74: -4535415162895629849
+    second: enemy2_wings3|enemy1_wingsAction
+  - first:
+      74: 3442854306478142040
+    second: enemy2_wings3|enemy2_wings1Action
+  - first:
+      74: -8317258442784912911
+    second: enemy2_wings3|enemy2_wings2Action
+  - first:
+      74: -580823803491252199
+    second: enemy2_wings3|enemy2_wings3Action
+  - first:
+      74: -2479021225338871832
+    second: enemy2_wings3|enemy2_wings4Action
+  - first:
+      74: 5099510469741656181
+    second: enemy2_wings3|enemy4_crystalAction
+  - first:
+      74: 9034791294998649518
+    second: enemy2_wings3|enemy4Action
+  - first:
+      74: 3992395485849270876
+    second: enemy2_wings3|SphereAction
+  - first:
+      74: 1814006407664885919
+    second: enemy2_wings4|CubeAction
+  - first:
+      74: 699854301454585163
+    second: enemy2_wings4|enemy1_wingsAction
+  - first:
+      74: 8724163256383906426
+    second: enemy2_wings4|enemy2_wings1Action
+  - first:
+      74: 5395277523016971005
+    second: enemy2_wings4|enemy2_wings2Action
+  - first:
+      74: -2495625453016930479
+    second: enemy2_wings4|enemy2_wings3Action
+  - first:
+      74: -7497100058037167017
+    second: enemy2_wings4|enemy2_wings4Action
+  - first:
+      74: 1789187202950117252
+    second: enemy2_wings4|enemy4_crystalAction
+  - first:
+      74: 3038384480014363300
+    second: enemy2_wings4|enemy4Action
+  - first:
+      74: 3829455050488472042
+    second: enemy2_wings4|SphereAction
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

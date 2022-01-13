@@ -10,11 +10,15 @@ public class UI_Display : MonoBehaviour
     [SerializeField] public Slider healthSlider;
     [SerializeField] public Slider progressSlider;
     [SerializeField] public Slider energySlider;
+    [SerializeField] public GameObject dashSliderGO;
+    private Renderer dashSlider;
     //[SerializeField] public TextMeshProUGUI healthText;
+    [SerializeField] public TextMeshProUGUI dashUsesText;
     [SerializeField] public TextMeshProUGUI weaponText;
     [SerializeField] public GameObject deathScreen;
     [SerializeField] public GameObject victoryScreen;
     [SerializeField] public GameObject pauseMenu;
+    
     public bool godMode;
 
     private bool isPaused;
@@ -28,6 +32,35 @@ public class UI_Display : MonoBehaviour
         isPaused = false;
         isSceneChanging = false;
         godMode = false;
+        dashSlider=dashSliderGO.GetComponent<Renderer>();
+        //dashSlider=dashSliderGO.GetComponent<Material>();
+
+
+        dashSlider.material.SetFloat("_Progress", 0);
+    }
+
+    private void Update()
+    {
+        /*if(dashUses!=2)
+        {
+            dashProgress += Time.deltaTime;
+            dashSlider.sharedMaterial.SetFloat("_Progress", dashProgress/dashProgressMax);
+            if(dashProgress>=dashProgressMax)
+            {
+                dashSlider.sharedMaterial.SetFloat("_Progress", 0);
+                dashProgress = 0;
+            }
+        }*/
+    }
+
+    public void UpdateDashes(int dashes)
+    {
+        dashUsesText.SetText(dashes.ToString());
+    }
+
+    public void UpdateDashesCooldown(float cd)
+    {
+        //dashSlider.SetFloat("_Progress", cd / 2);
     }
 
     public void UpdateHealth(int hp)
