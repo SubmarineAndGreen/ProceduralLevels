@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6391994035274979151}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 343993268632141164}
   - component: {fileID: 2523668120659686809}
   - component: {fileID: 1911746751978933292}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: platform_collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2659587387947963697}
   - component: {fileID: 8932999583321045038}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: stairs_collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 3375920600339257851}
   - component: {fileID: 1580331922484428079}
   - component: {fileID: 5850668534555668756}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7685476313075236079}
   - component: {fileID: 6947485826088235556}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: stairs_collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -274,7 +274,7 @@ GameObject:
   - component: {fileID: 4774464008379704310}
   - component: {fileID: 2939045427139797824}
   - component: {fileID: 6275996536247032607}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: platform_collider (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +331,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6918338001921171742}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: pivot (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -362,7 +362,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6002878491600233915}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -439,6 +439,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlantSpot
       objectReference: {fileID: 0}
+    - target: {fileID: 3626122282121581207, guid: fbaae90aaa2b82b44aa2d1fd21306132, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbaae90aaa2b82b44aa2d1fd21306132, type: 3}
 --- !u!4 &3668979507130193133 stripped
@@ -500,6 +504,10 @@ PrefabInstance:
     - target: {fileID: 3626122282121581207, guid: fbaae90aaa2b82b44aa2d1fd21306132, type: 3}
       propertyPath: m_Name
       value: PlantSpot (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626122282121581207, guid: fbaae90aaa2b82b44aa2d1fd21306132, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbaae90aaa2b82b44aa2d1fd21306132, type: 3}

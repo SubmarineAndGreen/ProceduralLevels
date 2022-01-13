@@ -22,6 +22,7 @@ public class GameLoop : MonoBehaviour {
     [SerializeField] List<DifficultyData> difficultyData;
     DifficultyData currentDifficultyData;
     float remainingTime;
+    bool timeElapsed;
     int distanceToGoal;
 
     [Header("UI")]
@@ -47,6 +48,9 @@ public class GameLoop : MonoBehaviour {
 
 
     private void Update() {
+        if(timeElapsed) {
+            return;
+        }
         Vector3Int currentTile = navigationManager.worldPositionToGridPosition(playerTransform.position);
 
         if (currentTile != playerTile) {
@@ -174,7 +178,7 @@ public class GameLoop : MonoBehaviour {
 
         if (remainingTime <= 0) {
             remainingTime = 0;
-            timeElapsed();
+            onTimeElapsed();
         }
 
         updateTimeUI();
@@ -186,7 +190,8 @@ public class GameLoop : MonoBehaviour {
         showAddedTimeUIText(timeToAdd);
     }
 
-    void timeElapsed() {
+    void onTimeElapsed() {
+        timeElapsed = true;
         Debug.Log("time elapsed!");
     }
 
@@ -238,9 +243,9 @@ public class GameLoop : MonoBehaviour {
         Color flashColor = Color.red;
 
         return DOTween.Sequence().Append(
-            DOTween.To(() => timerText.color, color => timerText.color = color, flashColor, flashDuration)
+            DOTween.To(() => timerText.color, color => timerText.color = color, flashColor, flashDuration).SetEase(Ease.InQuart)
         ).Append(
-            DOTween.To(() => timerText.color, color => timerText.color = color, startingColor, flashDuration)
+            DOTween.To(() => timerText.color, color => timerText.color = color, startingColor, flashDuration).SetEase(Ease.OutQuart)
         ).SetLoops(-1);
     }
 

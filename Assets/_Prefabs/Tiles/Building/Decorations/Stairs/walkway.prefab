@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3554140080807807090}
   - component: {fileID: 2555330001272032099}
   - component: {fileID: 7106741361879571559}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: walkway
   m_TagString: Untagged
   m_Icon: {fileID: 0}

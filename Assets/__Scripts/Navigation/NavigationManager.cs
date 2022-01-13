@@ -10,7 +10,9 @@ public class NavigationManager : MonoBehaviour {
     public float tileSize;
     [HideInInspector] public List<Vector3Int> walkableTiles;
     [HideInInspector] public List<Vector3Int> doorTiles;
-    public LayerMask playerLayer;
+    public int playerLayer;
+    public LayerMask levelMask;
+    public LayerMask ignoreDecorationsMask;
     public Vector3Int getRandomWalkableTile() {
         return walkableTiles[Random.Range(0, walkableTiles.Count - 1)];
     }
@@ -25,6 +27,8 @@ public class NavigationManager : MonoBehaviour {
         gridOrigin = levelGrid.transform.position;
         walkableTiles = new List<Vector3Int>();
         playerLayer = LayerMask.NameToLayer("Player");
+        levelMask = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Enemy")) | (1 << LayerMask.NameToLayer("Decorations")) | (1 << LayerMask.NameToLayer("EnemyIgnoreDecorations")));
+        ignoreDecorationsMask = ~(1 << LayerMask.NameToLayer("Decorations"));
     }
 
     public int[,,][,,] vectorFields;
