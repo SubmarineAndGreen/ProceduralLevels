@@ -12,7 +12,7 @@ public class PlayerStatus : MonoBehaviour
     void Start()
     {
         playerHP = playerMaxHP;
-        ui.UpdateHealth(playerMaxHP);
+        // ui.UpdateHealth(playerMaxHP);
     }
 
     // Update is called once per frame

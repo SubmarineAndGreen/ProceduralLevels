@@ -11,7 +11,7 @@ public class UI_Display : MonoBehaviour
     [SerializeField] public Slider progressSlider;
     [SerializeField] public Slider energySlider;
     [SerializeField] public GameObject dashSliderGO;
-    private Renderer dashSlider;
+    private Image dashSlider;
     //[SerializeField] public TextMeshProUGUI healthText;
     [SerializeField] public TextMeshProUGUI dashUsesText;
     [SerializeField] public TextMeshProUGUI weaponText;
@@ -32,7 +32,7 @@ public class UI_Display : MonoBehaviour
         isPaused = false;
         isSceneChanging = false;
         godMode = false;
-        dashSlider=dashSliderGO.GetComponent<Renderer>();
+        dashSlider= dashSliderGO.GetComponent<Image>();
         //dashSlider=dashSliderGO.GetComponent<Material>();
 
 
@@ -60,7 +60,7 @@ public class UI_Display : MonoBehaviour
 
     public void UpdateDashesCooldown(float cd)
     {
-        //dashSlider.SetFloat("_Progress", cd / 2);
+        dashSlider.material.SetFloat("_Progress", cd / 2);
     }
 
     public void UpdateHealth(int hp)

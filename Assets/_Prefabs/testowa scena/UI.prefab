@@ -1816,6 +1816,8 @@ MonoBehaviour:
   healthSlider: {fileID: 6727416383380653672}
   progressSlider: {fileID: 6727416383924476672}
   energySlider: {fileID: 6727416383979693922}
+  dashSliderGO: {fileID: 0}
+  dashUsesText: {fileID: 0}
   weaponText: {fileID: 6727416383004138655}
   deathScreen: {fileID: 449238109252958877}
   victoryScreen: {fileID: 7505131427063198697}
@@ -2047,7 +2049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.990566, g: 0, b: 0.025077406, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2083,7 +2085,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}

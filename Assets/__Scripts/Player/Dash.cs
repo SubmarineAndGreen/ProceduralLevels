@@ -31,7 +31,7 @@ public class Dash : MonoBehaviour {
     private void addDash() {
         availableDashCount += 1;
         // Debug.Log("(cooldown) dashes: " + availableDashCount);
-        ui.UpdateDashes(availableDashCount);
+        // ui.UpdateDashes(availableDashCount);
     }
 
     private void runCooldownIfNotMaxDashes() {
@@ -55,7 +55,7 @@ public class Dash : MonoBehaviour {
             float speedAfterDash = rb.velocity.magnitude + dashAddedSpeed;
             rb.velocity = lookDirection * speedAfterDash;
             // Debug.Log("(use) dashes: " + availableDashCount);
-            ui.UpdateDashes(availableDashCount);
+            // ui.UpdateDashes(availableDashCount);
         }
     }
 
@@ -63,6 +63,6 @@ public class Dash : MonoBehaviour {
         if (Mouse.current.rightButton.wasPressedThisFrame) {
             tryDash();
         }
-        ui.UpdateDashesCooldown(dashCooldownTimer.getTimeRunning());
+        // ui.UpdateDashesCooldown(dashCooldownTimer.getTimeRunning());
     }
 }

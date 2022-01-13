@@ -6,10 +6,11 @@ using UnityEngine.UI;
 using System;
 using DG.Tweening;
 
-public class GameLoop : MonoBehaviour {
+public class Game : MonoBehaviour {
     [SerializeField] LevelBuilder levelBuilder;
     NavigationManager navigationManager;
     [SerializeField] GameObject playerPrefab;
+    [HideInInspector] public GameObject playerObject;
     Transform playerTransform;
     [SerializeField] NavigationHintSpawner navigationHintSpawner;
     Vector3Int playerTile;
@@ -80,8 +81,8 @@ public class GameLoop : MonoBehaviour {
         Vector3 playerSpawn = navigationManager.gridPositionToWorldPosition(playerSpawnTile);
         playerTile = playerSpawnTile;
         previousPlayerTile = playerSpawnTile;
-        GameObject player = Instantiate(playerPrefab, playerSpawn, Quaternion.identity);
-        playerTransform = player.transform.GetChild(0);
+        GameObject playerObject = Instantiate(playerPrefab, playerSpawn, Quaternion.identity);
+        playerTransform = playerObject.transform.GetChild(0);
 
         navigationManager.playerTransform = playerTransform;
     }

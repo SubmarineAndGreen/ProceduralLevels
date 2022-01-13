@@ -31,7 +31,7 @@ public class WeaponsController : MonoBehaviour {
         weapon = 0;
         swordController = sword.GetComponent<SwordController>();
         sword.SetActive(false);
-        ui.UpdateWeapon(0);
+        // ui.UpdateWeapon(0);
     }
 
     void Update() {
