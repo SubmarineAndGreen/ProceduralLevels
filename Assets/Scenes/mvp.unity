@@ -561,7 +561,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 170644594}
   dashSliderGO: {fileID: 866489650}
-  dashImage: []
+  dashImage:
+  - {fileID: 1958535635}
+  - {fileID: 1931545841}
+  - {fileID: 1598415782}
+  - {fileID: 370700771}
   deathScreen: {fileID: 13892382}
   victoryScreen: {fileID: 283563523}
   pauseMenu: {fileID: 1478753655}
