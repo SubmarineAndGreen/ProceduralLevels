@@ -32,6 +32,7 @@ public class WeaponsController : MonoBehaviour {
         swordController = sword.GetComponent<SwordController>();
         sword.SetActive(false);
         // ui.UpdateWeapon(0);
+        ui = FindObjectOfType<UI_Display>();
     }
 
     void Update() {
@@ -50,14 +51,14 @@ public class WeaponsController : MonoBehaviour {
         if (Keyboard.current.eKey.wasPressedThisFrame) {
             //timeToFire = Time.time + 1 * fireRate1;
             ChangeWeapon(true);
-            ui.UpdateWeapon(weapon);
+            //ui.UpdateWeapon(weapon);
         }
         if (Keyboard.current.qKey.wasPressedThisFrame) {
             //timeToFire = Time.time + 1 * fireRate1;
             ChangeWeapon(false);
-            ui.UpdateWeapon(weapon);
+            //ui.UpdateWeapon(weapon);
         }
-        if (Keyboard.current.fKey.wasPressedThisFrame && ui.energySlider.value == 100) {
+        /*if (Keyboard.current.fKey.wasPressedThisFrame && ui.energySlider.value == 100) {
             ui.energySlider.value = 0;
             var energyExplossion = Instantiate(energyExplossionFBX, cam.transform.position, Quaternion.identity) as GameObject;
             Destroy(energyExplossion, 3);
@@ -68,7 +69,7 @@ public class WeaponsController : MonoBehaviour {
                 }
             }
             ui.energySlider.value = 0;
-        }
+        }*/
         if(Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             EscapeMenu();

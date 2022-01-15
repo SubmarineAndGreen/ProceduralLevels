@@ -56,8 +56,8 @@ public class Floater : MonoBehaviour {
     public void TakeDamage(int damage) {
         hp -= damage;
         if (hp <= 0) {
-            ui.AddProgress(1);
-            ui.AddEnergy(10);
+            //ui.AddProgress(1);
+            //ui.AddEnergy(10);
             Destroy(gameObject);
         }
     }

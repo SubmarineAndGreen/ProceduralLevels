@@ -49,8 +49,8 @@ public class ConstructStatus : MonoBehaviour
         Debug.Log("Enemy took " + damage + " damage");
         if (enemyCurrentHP <= 0)
         {
-            ui.AddProgress(5);
-            ui.AddEnergy(10);
+            //ui.AddProgress(5);
+            //ui.AddEnergy(10);
             Destroy(gameObject);
         }
     }

@@ -52,8 +52,8 @@ public class SpikeBoiStatus : MonoBehaviour
         Debug.Log("Enemy took " + damage + " damage");
         if (enemyCurrentHP <= 0)
         {
-            ui.AddProgress(1);
-            ui.AddEnergy(10);
+            //ui.AddProgress(1);
+            //ui.AddEnergy(10);
             Destroy(gameObject);
         }
     }

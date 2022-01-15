@@ -8,24 +8,27 @@ using UnityEngine.SceneManagement;
 public class UI_Display : MonoBehaviour
 {
     [SerializeField] public Slider healthSlider;
-    [SerializeField] public Slider progressSlider;
-    [SerializeField] public Slider energySlider;
+    //[SerializeField] public Slider progressSlider;
+    //[SerializeField] public Slider energySlider;
     [SerializeField] public GameObject dashSliderGO;
     private Image dashSlider;
     //[SerializeField] public TextMeshProUGUI healthText;
-    [SerializeField] public TextMeshProUGUI dashUsesText;
-    [SerializeField] public TextMeshProUGUI weaponText;
+    //[SerializeField] public TextMeshProUGUI dashUsesText;
+    [SerializeField] public GameObject[] dashImage;
+    //[SerializeField] public TextMeshProUGUI weaponText;
     [SerializeField] public GameObject deathScreen;
     [SerializeField] public GameObject victoryScreen;
     [SerializeField] public GameObject pauseMenu;
-    
+    [SerializeField] public GameObject dashEffect;
+    [SerializeField] public GameObject dashPosition;
+
     public bool godMode;
 
     private bool isPaused;
     private bool isSceneChanging;
     public int hp;
-    public int energy;
-    public int progress;
+    //public int energy;
+    //public int progress;
 
     private void Start()
     {
@@ -41,21 +44,44 @@ public class UI_Display : MonoBehaviour
 
     private void Update()
     {
-        /*if(dashUses!=2)
-        {
-            dashProgress += Time.deltaTime;
-            dashSlider.sharedMaterial.SetFloat("_Progress", dashProgress/dashProgressMax);
-            if(dashProgress>=dashProgressMax)
-            {
-                dashSlider.sharedMaterial.SetFloat("_Progress", 0);
-                dashProgress = 0;
-            }
-        }*/
+        
     }
 
     public void UpdateDashes(int dashes)
     {
-        dashUsesText.SetText(dashes.ToString());
+        switch (dashes)
+        {
+            case 0:
+                dashImage[0].SetActive(false);
+                dashImage[1].SetActive(false);
+                dashImage[2].SetActive(false);
+                dashImage[3].SetActive(false);
+                break;
+            case 1:
+                dashImage[0].SetActive(true);
+                dashImage[1].SetActive(false);
+                dashImage[2].SetActive(false);
+                dashImage[3].SetActive(false);
+                break;
+            case 2:
+                dashImage[0].SetActive(true);
+                dashImage[1].SetActive(true);
+                dashImage[2].SetActive(false);
+                dashImage[3].SetActive(false);
+                break;
+            case 3:
+                dashImage[0].SetActive(true);
+                dashImage[1].SetActive(true);
+                dashImage[2].SetActive(true);
+                dashImage[3].SetActive(false);
+                break;
+            case 4:
+                dashImage[0].SetActive(true);
+                dashImage[1].SetActive(true);
+                dashImage[2].SetActive(true);
+                dashImage[3].SetActive(true);
+                break;
+        }
     }
 
     public void UpdateDashesCooldown(float cd)
@@ -69,7 +95,7 @@ public class UI_Display : MonoBehaviour
         if(!godMode)
             healthSlider.value = hp;
     }
-    public void UpdateWeapon(int weapon)
+    /*public void UpdateWeapon(int weapon)
     {
         switch (weapon)
         {
@@ -80,8 +106,8 @@ public class UI_Display : MonoBehaviour
                 weaponText.text = "Claymore";
                 break;
         }
-    }
-    public void AddProgress(int progress)
+    }*/
+    /*public void AddProgress(int progress)
     {
         progressSlider.value += progress;
         if(progressSlider.value==100&&!isSceneChanging)
@@ -89,11 +115,11 @@ public class UI_Display : MonoBehaviour
             isSceneChanging = true;
             NewLevel();
         }
-    }
-    public void AddEnergy(int energy)
+    }*/
+    /*public void AddEnergy(int energy)
     {
         energySlider.value += energy;
-    }
+    }*/
     public void DeathScreen()
     {
         deathScreen.SetActive(true);
@@ -124,6 +150,13 @@ public class UI_Display : MonoBehaviour
     public void ExitButton()
     {
         StartCoroutine(Pause());
+    }
+    public void DashEffect()
+    {
+        if (dashPosition.Equals(null)) dashPosition=GameObject.Find("dashPosition");
+        GameObject temp = Instantiate(dashEffect, dashPosition.transform);
+        Destroy(temp, 2);
+        //dashEffect.Play();
     }
     IEnumerator Win()
     {
