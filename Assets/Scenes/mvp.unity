@@ -561,11 +561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 170644594}
   dashSliderGO: {fileID: 866489650}
-  dashImage:
-  - {fileID: 1958535635}
-  - {fileID: 1931545841}
-  - {fileID: 1598415782}
-  - {fileID: 370700771}
+  dashImage: []
   deathScreen: {fileID: 13892382}
   victoryScreen: {fileID: 283563523}
   pauseMenu: {fileID: 1478753655}
@@ -984,7 +980,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 07eaeb58d8d8b5e4c93d3e683765043b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4e1ed30995d1e3e44aea3cf78cb1f741, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1723,6 +1719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc448bc048814041aa14a9ff11d856f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInSight: 0
   raycastSkippedPhysicsFramesCount: 5
   followForce: 300
   navigationSpeed: 1000
@@ -3112,7 +3109,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 07eaeb58d8d8b5e4c93d3e683765043b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4e1ed30995d1e3e44aea3cf78cb1f741, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3398,7 +3395,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 07eaeb58d8d8b5e4c93d3e683765043b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4e1ed30995d1e3e44aea3cf78cb1f741, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3473,7 +3470,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 07eaeb58d8d8b5e4c93d3e683765043b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4e1ed30995d1e3e44aea3cf78cb1f741, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
