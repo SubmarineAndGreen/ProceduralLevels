@@ -37,6 +37,6 @@ public class MineBullet : MonoBehaviour, IBullet {
 
     private void OnTriggerEnter(Collider other) {
         rb.isKinematic = true;
-        Debug.Log("mine hit");
+        // Debug.Log("mine hit");
     }
 }

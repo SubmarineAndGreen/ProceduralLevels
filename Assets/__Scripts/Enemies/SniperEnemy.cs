@@ -5,7 +5,8 @@ using DG.Tweening;
 
 public class SniperEnemy : MonoBehaviour {
     [SerializeField] Color laserStartingColor, laserEndColor;
-    public Transform target;
+    [HideInInspector] public Transform target;
+    [SerializeField] NavigationAI navigationAI;
     [SerializeField] float shotCooldown, chargeTime;
     Timer shotCooldownTimer;
     Timer chargeTimer;
@@ -17,12 +18,19 @@ public class SniperEnemy : MonoBehaviour {
     [SerializeField] GameObject bulletPrefab;
 
     private void Update() {
-        if (shotReady) {
+        if (shotReady && navigationAI.playerInSight) {
             startCharge();
         }
 
         if (charging) {
-            laserLineRenderer.SetPosition(1, target.position);
+            if (navigationAI.playerInSight) {
+                laserLineRenderer.SetPosition(1, target.position);
+            } else {
+                stopCharge();
+                chargeTimer.stop();
+                chargeTimer.resetTime();
+                shotReady = true;
+            }
         }
     }
 
@@ -62,6 +70,7 @@ public class SniperEnemy : MonoBehaviour {
     void stopCharge() {
         charging = false;
         laserLineRenderer.positionCount = 0;
+
         if (laserTween.IsActive()) {
             laserTween.Rewind();
         } else {

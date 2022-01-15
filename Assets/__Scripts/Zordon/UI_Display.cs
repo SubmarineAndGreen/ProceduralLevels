@@ -5,17 +5,11 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class UI_Display : MonoBehaviour
-{
+public class UI_Display : MonoBehaviour {
     [SerializeField] public Slider healthSlider;
-    //[SerializeField] public Slider progressSlider;
-    //[SerializeField] public Slider energySlider;
     [SerializeField] public GameObject dashSliderGO;
     private Image dashSlider;
-    //[SerializeField] public TextMeshProUGUI healthText;
-    //[SerializeField] public TextMeshProUGUI dashUsesText;
     [SerializeField] public GameObject[] dashImage;
-    //[SerializeField] public TextMeshProUGUI weaponText;
     [SerializeField] public GameObject deathScreen;
     [SerializeField] public GameObject victoryScreen;
     [SerializeField] public GameObject pauseMenu;
@@ -27,164 +21,86 @@ public class UI_Display : MonoBehaviour
     private bool isPaused;
     private bool isSceneChanging;
     public int hp;
-    //public int energy;
-    //public int progress;
 
-    private void Start()
-    {
+    private void Start() {
         isPaused = false;
         isSceneChanging = false;
         godMode = false;
-        dashSlider= dashSliderGO.GetComponent<Image>();
-        //dashSlider=dashSliderGO.GetComponent<Material>();
+        dashSlider = dashSliderGO.GetComponent<Image>();
 
 
         dashSlider.material.SetFloat("_Progress", 0);
     }
 
-    private void Update()
-    {
-        
-    }
-
-    public void UpdateDashes(int dashes)
-    {
-        switch (dashes)
-        {
-            case 0:
-                dashImage[0].SetActive(false);
-                dashImage[1].SetActive(false);
-                dashImage[2].SetActive(false);
-                dashImage[3].SetActive(false);
-                break;
-            case 1:
-                dashImage[0].SetActive(true);
-                dashImage[1].SetActive(false);
-                dashImage[2].SetActive(false);
-                dashImage[3].SetActive(false);
-                break;
-            case 2:
-                dashImage[0].SetActive(true);
-                dashImage[1].SetActive(true);
-                dashImage[2].SetActive(false);
-                dashImage[3].SetActive(false);
-                break;
-            case 3:
-                dashImage[0].SetActive(true);
-                dashImage[1].SetActive(true);
-                dashImage[2].SetActive(true);
-                dashImage[3].SetActive(false);
-                break;
-            case 4:
-                dashImage[0].SetActive(true);
-                dashImage[1].SetActive(true);
-                dashImage[2].SetActive(true);
-                dashImage[3].SetActive(true);
-                break;
+    public void UpdateDashes(int dashes) {
+        const int maxDashes = 4;
+        for(int i = 0; i < maxDashes; i++) {
+            dashImage[i].SetActive(i <= dashes);
         }
     }
 
-    public void UpdateDashesCooldown(float cd)
-    {
+    public void UpdateDashesCooldown(float cd) {
         dashSlider.material.SetFloat("_Progress", cd / 2);
     }
 
-    public void UpdateHealth(int hp)
-    {
+    public void UpdateHealth(int hp) {
         //healthText.text = "Health: " + hp;
-        if(!godMode)
+        if (!godMode)
             healthSlider.value = hp;
     }
-    /*public void UpdateWeapon(int weapon)
-    {
-        switch (weapon)
-        {
-            case 0:
-                weaponText.text = "Magic Missiles";
-                break;
-            case 1:
-                weaponText.text = "Claymore";
-                break;
-        }
-    }*/
-    /*public void AddProgress(int progress)
-    {
-        progressSlider.value += progress;
-        if(progressSlider.value==100&&!isSceneChanging)
-        {
-            isSceneChanging = true;
-            NewLevel();
-        }
-    }*/
-    /*public void AddEnergy(int energy)
-    {
-        energySlider.value += energy;
-    }*/
-    public void DeathScreen()
-    {
+
+    public void DeathScreen() {
         deathScreen.SetActive(true);
         StartCoroutine(Death());
     }
-    public void NewLevel()
-    {
+    public void NewLevel() {
         victoryScreen.SetActive(true);
         StartCoroutine(Win());
     }
-    public void PauseMenu()
-    {
+    public void PauseMenu() {
         isPaused = !isPaused;
         pauseMenu.SetActive(isPaused);
-        if(isPaused)
-        {
+        if (isPaused) {
             Time.timeScale = 0f;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
-        }
-        else
-        {
+        } else {
             Time.timeScale = 1.0f;
             Cursor.visible = false;
-            Cursor.lockState=CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
-    public void ExitButton()
-    {
+    public void ExitButton() {
         StartCoroutine(Pause());
     }
-    public void DashEffect()
-    {
-        if (dashPosition.Equals(null)) dashPosition=GameObject.Find("dashPosition");
+
+    public void DashEffect() {
+        if (dashPosition.Equals(null)) dashPosition = GameObject.Find("dashPosition");
         GameObject temp = Instantiate(dashEffect, dashPosition.transform);
         Destroy(temp, 2);
         //dashEffect.Play();
     }
-    IEnumerator Win()
-    {
+    IEnumerator Win() {
         yield return new WaitForSeconds(2);
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("mvp");
 
         // Wait until the asynchronous scene fully loads
-        while (!asyncLoad.isDone)
-        {
+        while (!asyncLoad.isDone) {
             yield return null;
         }
     }
-    IEnumerator Death()
-    {
+    IEnumerator Death() {
         yield return new WaitForSeconds(4);
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Main Menu");
-        
-        while (!asyncLoad.isDone)
-        {
+
+        while (!asyncLoad.isDone) {
             yield return null;
         }
     }
-    IEnumerator Pause()
-    {
+    IEnumerator Pause() {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Main Menu");
 
-        while (!asyncLoad.isDone)
-        {
+        while (!asyncLoad.isDone) {
             yield return null;
         }
     }

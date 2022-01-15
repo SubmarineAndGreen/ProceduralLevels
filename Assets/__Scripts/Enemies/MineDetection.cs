@@ -22,6 +22,9 @@ public class MineDetection : MonoBehaviour
             Rigidbody playerRb = other.gameObject.GetComponent<Rigidbody>();
             player.takeDamage(damage);
             playerRb.AddForce((playerRb.position - transform.position).normalized * pushBackForce, ForceMode.Impulse);
+
+            Destroy(transform.parent.gameObject);
+            Destroy(this.gameObject);
         }
     }
 }

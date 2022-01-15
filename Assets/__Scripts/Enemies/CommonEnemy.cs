@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CommonEnemy : MonoBehaviour
 {
-    public Transform target;
+    [HideInInspector] public Transform target;
+    [SerializeField] NavigationAI navigationAI;
     Timer barrageCooldownTimer;
     Timer barrageEachBulletCooldownTimer;
 
@@ -16,7 +17,7 @@ public class CommonEnemy : MonoBehaviour
     [SerializeField] float bulletStartingOffset = 1f;
 
     private void Update() {
-        if(barrageReady) {
+        if(barrageReady && navigationAI.playerInSight) {
             startBulletBarrage();
         }
     }
