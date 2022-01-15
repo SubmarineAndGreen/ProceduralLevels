@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    [SerializeField] public UI_Display ui;
+    public UI_Display ui;
     public int playerHP;
     public int playerMaxHP=10;
 
@@ -13,6 +13,11 @@ public class PlayerStatus : MonoBehaviour
     {
         playerHP = playerMaxHP;
         // ui.UpdateHealth(playerMaxHP);
+    }
+
+    private void Awake()
+    {
+        ui = FindObjectOfType<UI_Display>();
     }
 
     // Update is called once per frame
