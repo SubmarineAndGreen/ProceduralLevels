@@ -19,7 +19,7 @@ public class UI_Display : MonoBehaviour {
     public bool godMode;
 
     private bool isPaused;
-    private bool isSceneChanging;
+    // private bool isSceneChanging;
     public int hp;
 
     private void Start() {
