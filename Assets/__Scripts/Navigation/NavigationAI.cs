@@ -11,7 +11,7 @@ public class NavigationAI : MonoBehaviour {
     LayerMask levelMask;
     int enemyLayer;
     int ignoreDecorationsLayer;
-    bool playerInSight = false;
+    [HideInInspector] public bool playerInSight = false;
     [SerializeField] int raycastSkippedPhysicsFramesCount = 5;
     int currentSkippedFrames = 0;
     [SerializeField] float followForce = 100f;
