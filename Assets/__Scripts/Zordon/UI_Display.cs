@@ -35,7 +35,7 @@ public class UI_Display : MonoBehaviour {
     public void UpdateDashes(int dashes) {
         const int maxDashes = 4;
         for(int i = 0; i < maxDashes; i++) {
-            dashImage[i].SetActive(i <= dashes);
+            dashImage[i].SetActive(i < dashes);
         }
     }
 
