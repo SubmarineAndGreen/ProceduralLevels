@@ -24,7 +24,7 @@ public class UI_Display : MonoBehaviour {
 
     private void Start() {
         isPaused = false;
-        isSceneChanging = false;
+        // isSceneChanging = false;
         godMode = false;
         dashSlider = dashSliderGO.GetComponent<Image>();
 
