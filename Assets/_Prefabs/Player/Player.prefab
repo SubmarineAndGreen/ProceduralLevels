@@ -77,8 +77,9 @@ GameObject:
   - component: {fileID: 7711137511671875110}
   - component: {fileID: 7711137511671875165}
   - component: {fileID: 5421612076315244267}
-  - component: {fileID: 5036196300076983728}
   - component: {fileID: 5179804665272600378}
+  - component: {fileID: 1425079341142978043}
+  - component: {fileID: 6482531838833256903}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -176,6 +177,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundCheckDistanceFromOrigin: 1.35
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4087
   maxGroundAngle: 60
   maxSpeed: 20
   maxVerticalSpeed: 120
@@ -217,21 +221,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 7711137512837268063}
   aimingHit: {x: 0, y: 0, z: 0}
---- !u!114 &5036196300076983728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7711137511671875111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47060b5c894122740995fa66364203a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ui: {fileID: 0}
-  playerHP: 0
-  playerMaxHP: 10
 --- !u!114 &5179804665272600378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,6 +239,32 @@ MonoBehaviour:
   playerCameraTransform: {fileID: 7711137512837268062}
   ui: {fileID: 0}
   dashEffect: {fileID: 1383507732343888502, guid: 582809447e1945e4fbe48d8cbb581596, type: 3}
+--- !u!114 &1425079341142978043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7711137511671875111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5f1d5fd63a5eb24681d657e28425658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+--- !u!114 &6482531838833256903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7711137511671875111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dc5c8db025f7184e950ef56fd205241, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagablePlayer: {fileID: 1425079341142978043}
 --- !u!1 &7711137512837268061
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,7 +330,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 3575
+    m_Bits: 15863
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

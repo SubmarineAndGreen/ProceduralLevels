@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8531065604917838671}
   - component: {fileID: 8531065604917838670}
   - component: {fileID: 8531065604917838664}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Homing Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -234,8 +234,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82ef81ce81681e947b25c6907d47c5e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: 10
-  angularVelocity: 20
+  velocity: 20
+  angularVelocity: 60
   target: {fileID: 0}
 --- !u!136 &8531065604917838664
 CapsuleCollider:

@@ -7,15 +7,33 @@ public class SniperEnemy : MonoBehaviour {
     [SerializeField] Color laserStartingColor, laserEndColor;
     [HideInInspector] public Transform target;
     [SerializeField] NavigationAI navigationAI;
-    [SerializeField] float shotCooldown, chargeTime;
+    NavigationManager navigationManager;
+
+    [SerializeField] float shotCooldown, chargeTime, multiBulletCooldown;
+    [SerializeField] int maxMultiBulletCount = 3;
+    int currentBulletCount = 0;
     Timer shotCooldownTimer;
     Timer chargeTimer;
+    Timer multiBulletTimer;
     bool charging;
     bool shotReady = true;
     LineRenderer laserLineRenderer;
     Tween laserTween;
-    float bulletStartingOffset = 1f;
+    float bulletStartingOffset = 2f;
     [SerializeField] GameObject bulletPrefab;
+
+    private void Awake() {
+        shotCooldownTimer = TimerManager.getInstance().CreateAndRegisterTimer(shotCooldown, false, false, () => shotReady = true);
+        chargeTimer = TimerManager.getInstance().CreateAndRegisterTimer(chargeTime, false, false, chargeFinished);
+        multiBulletTimer = TimerManager.getInstance().CreateAndRegisterTimer(multiBulletCooldown, true, false, spawnBullet);
+        laserLineRenderer = GetComponent<LineRenderer>();
+        laserLineRenderer.sharedMaterial.SetColor("_BaseColor", laserStartingColor);
+    }
+
+    private void Start() {
+        navigationManager = NavigationManager.instance;
+        target = navigationManager.playerTransform;
+    }
 
     private void Update() {
         if (shotReady && navigationAI.playerInSight) {
@@ -24,6 +42,7 @@ public class SniperEnemy : MonoBehaviour {
 
         if (charging) {
             if (navigationAI.playerInSight) {
+                laserLineRenderer.SetPosition(0, transform.position);
                 laserLineRenderer.SetPosition(1, target.position);
             } else {
                 stopCharge();
@@ -34,12 +53,7 @@ public class SniperEnemy : MonoBehaviour {
         }
     }
 
-    private void Awake() {
-        shotCooldownTimer = TimerManager.getInstance().CreateAndRegisterTimer(shotCooldown, false, false, () => shotReady = true);
-        chargeTimer = TimerManager.getInstance().CreateAndRegisterTimer(chargeTime, false, false, chargeFinished);
-        laserLineRenderer = GetComponent<LineRenderer>();
-        laserLineRenderer.sharedMaterial.SetColor("_BaseColor", laserStartingColor);
-    }
+
 
     void startCharge() {
         // Debug.Log("charge start");
@@ -61,7 +75,6 @@ public class SniperEnemy : MonoBehaviour {
                 laserLineRenderer.GetPropertyBlock(propertyBlock, 0);
                 propertyBlock.SetColor("_BaseColor", color);
                 laserLineRenderer.SetPropertyBlock(propertyBlock, 0);
-                // laserLineRenderer.material.SetColor("_BaseColor", color);
             },
             laserEndColor, chargeTime
         ).SetEase(Ease.InCubic);
@@ -81,13 +94,23 @@ public class SniperEnemy : MonoBehaviour {
     void chargeFinished() {
         // Debug.Log("charge finished");
         stopCharge();
-        shotCooldownTimer.resetTime();
-        shotCooldownTimer.run();
+        multiBulletTimer.resetTime();
+        multiBulletTimer.run();
+    }
+
+    void spawnBullet() {
+        if (currentBulletCount == maxMultiBulletCount) {
+            currentBulletCount = 0;
+            multiBulletTimer.stop();
+            shotCooldownTimer.resetTime();
+            shotCooldownTimer.run();
+        }
 
         Vector3 bulletOffset = target.position - this.transform.position;
         bulletOffset = bulletOffset.normalized * bulletStartingOffset;
         GameObject bulletObject = Instantiate(bulletPrefab, transform.position + bulletOffset, Quaternion.identity);
         IBullet bullet = bulletObject.GetComponent<IBullet>();
         bullet.setTarget(target);
+        currentBulletCount++;
     }
 }

@@ -25,9 +25,14 @@ public class NavigationManager : MonoBehaviour {
     private void Awake() {
         instance = this;
         gridOrigin = levelGrid.transform.position;
-        walkableTiles = new List<Vector3Int>();
         playerLayer = LayerMask.NameToLayer("Player");
-        levelMask = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Enemy")) | (1 << LayerMask.NameToLayer("Decorations")) | (1 << LayerMask.NameToLayer("EnemyIgnoreDecorations")));
+        levelMask = ~((1 << LayerMask.NameToLayer("Player"))
+        | (1 << LayerMask.NameToLayer("Enemy"))
+        | (1 << LayerMask.NameToLayer("Decorations"))
+        | (1 << LayerMask.NameToLayer("EnemyIgnoreDecorations"))
+        | (1 << LayerMask.NameToLayer("Bullets"))
+        | (1 << LayerMask.NameToLayer("MineDetection"))
+        );
         ignoreDecorationsMask = ~(1 << LayerMask.NameToLayer("Decorations"));
     }
 
@@ -35,7 +40,7 @@ public class NavigationManager : MonoBehaviour {
     public int[,,][,,] distanceFields;
 
     public Vector3 getPathVector(Vector3Int goalTile, Vector3Int currentTile) {
-        if(!Navigation.inBounds(goalTile, tileGridDimensions) || !Navigation.inBounds(currentTile, tileGridDimensions)) {
+        if (!Navigation.inBounds(goalTile, tileGridDimensions) || !Navigation.inBounds(currentTile, tileGridDimensions)) {
             return Vector3.zero;
         }
         var vectorField = vectorFields[goalTile.x, goalTile.y, goalTile.z];
@@ -54,7 +59,7 @@ public class NavigationManager : MonoBehaviour {
     }
 
     public int getGridDistance(Vector3Int goalTile, Vector3Int sourceTile) {
-        if(!Navigation.inBounds(goalTile, tileGridDimensions) || !Navigation.inBounds(sourceTile, tileGridDimensions)) {
+        if (!Navigation.inBounds(goalTile, tileGridDimensions) || !Navigation.inBounds(sourceTile, tileGridDimensions)) {
             return int.MaxValue;
         }
 

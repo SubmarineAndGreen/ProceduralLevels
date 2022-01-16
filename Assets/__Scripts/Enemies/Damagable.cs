@@ -6,9 +6,9 @@ using UnityEngine;
 public class Damagable : MonoBehaviour
 {
     public float health;
-    public event Action onTakeDamage;
+    public event Action afterTakeDamage;
     public void takeDamage(float damage) {
         health -= damage;
-        onTakeDamage();
+        afterTakeDamage();
     }
 }

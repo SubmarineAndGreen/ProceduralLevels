@@ -6,6 +6,7 @@ public class CommonEnemy : MonoBehaviour
 {
     [HideInInspector] public Transform target;
     [SerializeField] NavigationAI navigationAI;
+    NavigationManager navigationManager;
     Timer barrageCooldownTimer;
     Timer barrageEachBulletCooldownTimer;
 
@@ -15,6 +16,15 @@ public class CommonEnemy : MonoBehaviour
     int spawnedBulletCount = 0;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float bulletStartingOffset = 1f;
+    private void Awake() {
+        barrageCooldownTimer = TimerManager.getInstance().CreateAndRegisterTimer(barrageCooldown, false, false, () => barrageReady = true);
+        barrageEachBulletCooldownTimer = TimerManager.getInstance().CreateAndRegisterTimer(barrageEachBulletCooldown, true, false, spawnBarrageBullet);
+    }
+
+    private void Start() {
+        navigationManager = NavigationManager.instance;
+        target = navigationManager.playerTransform;
+    }
 
     private void Update() {
         if(barrageReady && navigationAI.playerInSight) {
@@ -22,10 +32,6 @@ public class CommonEnemy : MonoBehaviour
         }
     }
 
-    private void Awake() {
-        barrageCooldownTimer = TimerManager.getInstance().CreateAndRegisterTimer(barrageCooldown, false, false, () => barrageReady = true);
-        barrageEachBulletCooldownTimer = TimerManager.getInstance().CreateAndRegisterTimer(barrageEachBulletCooldown, true, false, spawnBarrageBullet);
-    }
 
     void startBulletBarrage() {
         barrageReady = false;

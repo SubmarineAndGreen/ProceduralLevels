@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2046525603377212744}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.9670377, y: -1.2044811, z: -1.6169739}
-  m_LocalScale: {x: 2.68443, y: 2.68443, z: 2.68443}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 839714929665022468}
   m_RootOrder: 1
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 5
-  pushBackForce: 1
+  pushBackForce: 300
   mineRigidbody: {fileID: 4485894484474773269}
 --- !u!1 &5445079163886415626
 GameObject:
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 4485894484474773269}
   - component: {fileID: 2600298127012952219}
   - component: {fileID: 3852784590698131873}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Mine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,10 +209,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68562593b3363d64fb17ac88633dd20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  launchSpeed: 1
+  launchSpeed: 50
   gravity: 20
-  startingToruqe: 10
-  launchAngle: 30
+  launchAngle: 10
   despawnTime: 100
 --- !u!54 &4485894484474773269
 Rigidbody:
@@ -241,8 +240,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.6389667
-  m_Center: {x: -0.00000009934107, y: 0, z: 0}
+  m_Radius: 1.395266
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!96 &3852784590698131873
 TrailRenderer:
   serializedVersion: 2
@@ -293,7 +292,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -359,7 +358,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 839714929665022468}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Mine
   m_TagString: Untagged
   m_Icon: {fileID: 0}

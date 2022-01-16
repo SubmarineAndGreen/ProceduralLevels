@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 4201313208576062426}
   - component: {fileID: 4201313208576062405}
   - component: {fileID: 4201313208576062404}
-  - component: {fileID: 4201313208576062407}
   - component: {fileID: 4201313208576062406}
   - component: {fileID: 4201313208576062425}
-  m_Layer: 0
+  - component: {fileID: 4722906343465019933}
+  m_Layer: 12
   m_Name: Sniper Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.2
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -206,19 +206,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 5
---- !u!114 &4201313208576062407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4201313208576062401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6e3556f09700494f9e0ebe61a7c26a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocity: 100
 --- !u!54 &4201313208576062406
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -249,3 +236,18 @@ CapsuleCollider:
   m_Height: 3.5402155
   m_Direction: 2
   m_Center: {x: -0.005420685, y: 0, z: -0.012561321}
+--- !u!114 &4722906343465019933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4201313208576062401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82ef81ce81681e947b25c6907d47c5e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocity: 175
+  angularVelocity: 100
+  target: {fileID: 0}

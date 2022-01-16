@@ -23,8 +23,11 @@ public class MineDetection : MonoBehaviour
             player.takeDamage(damage);
             playerRb.AddForce((playerRb.position - transform.position).normalized * pushBackForce, ForceMode.Impulse);
 
+            for(int i = 0; i < transform.parent.childCount; i++) {
+                Destroy(transform.parent.GetChild(i).gameObject);
+            }
             Destroy(transform.parent.gameObject);
-            Destroy(this.gameObject);
+
         }
     }
 }

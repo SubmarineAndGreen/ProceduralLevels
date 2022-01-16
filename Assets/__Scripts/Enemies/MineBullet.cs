@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MineBullet : MonoBehaviour, IBullet {
 
-    [SerializeField] float launchSpeed, gravity, startingToruqe;
+    [SerializeField] float launchSpeed, gravity;
     [SerializeField] float launchAngle = 10f;
     [SerializeField] float despawnTime = 100f;
 
@@ -17,8 +17,10 @@ public class MineBullet : MonoBehaviour, IBullet {
     private void Update() {
         despawnTime -= Time.deltaTime;
         if(despawnTime <= 0) {
-            Destroy(transform.GetChild(0).gameObject);
-            Destroy(this.gameObject);
+            for(int i = 0; i < transform.parent.childCount; i++) {
+                Destroy(transform.parent.GetChild(i).gameObject);
+            }
+            Destroy(transform.parent.gameObject);
         }    
     }
 
@@ -31,8 +33,7 @@ public class MineBullet : MonoBehaviour, IBullet {
 
         Vector3 toTarget = target.position - transform.position;
         toTarget = Quaternion.AngleAxis(launchAngle, Vector3.Cross(toTarget, transform.up)) * toTarget;
-        rb.AddForce(toTarget * launchSpeed, ForceMode.VelocityChange);
-        rb.AddTorque(Random.insideUnitSphere * startingToruqe, ForceMode.VelocityChange);
+        rb.AddForce(toTarget.normalized * launchSpeed, ForceMode.VelocityChange);
     }
 
     private void OnTriggerEnter(Collider other) {

@@ -36,7 +36,7 @@ public class LevelBuilder : MonoBehaviour {
 
 
     [HideInInspector] public string pipesSampleFileName;
-    public Vector3Int playerSpawn;
+    [HideInInspector] public Vector3Int playerSpawn;
 
     public void generateLevel() {
         #region MAIN_STRUCTURE

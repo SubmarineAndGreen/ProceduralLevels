@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour {
     int groundContactCount;
     bool grounded;
     [SerializeField] float groundCheckDistanceFromOrigin = 1.25f;
+    [SerializeField] LayerMask groundMask;
     [SerializeField] float maxGroundAngle;
     float minNormalY;
     [SerializeField] float maxSpeed;
@@ -95,8 +96,13 @@ public class PlayerController : MonoBehaviour {
     }
 
     void groundCheck() {
-        Ray groundCheckRay = new Ray(transform.position, Vector3.down);
-        if (Physics.Raycast(groundCheckRay, out groundCheckInfo, groundCheckDistanceFromOrigin)) {
+        // Ray groundCheckRay = new Ray(transform.position, Vector3.down);
+        if (Physics.Raycast(transform.position,
+                            Vector3.down,
+                            out groundCheckInfo,
+                            groundCheckDistanceFromOrigin,
+                            groundMask,
+                            QueryTriggerInteraction.Ignore)) {
             // Debug.Log("ray hit");
             if (groundCheckInfo.normal.y >= minNormalY) {
                 // Debug.Log("ground");

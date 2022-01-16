@@ -17,6 +17,7 @@ public class NavigationAI : MonoBehaviour {
     [SerializeField] float followForce = 100f;
     [SerializeField] float navigationSpeed = 25f;
     [SerializeField] int switchToForceDistance = 2;
+    [SerializeField] LayerMask playerLineOfSightMask;
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -59,17 +60,19 @@ public class NavigationAI : MonoBehaviour {
         int gridDistanceToPlayer = navigationManager.getGridDistanceToPlayer(navigationManager.worldPositionToGridPosition(rb.position));
 
         if (playerInSight || gridDistanceToPlayer < switchToForceDistance) {
+            // Debug.Log("following");
             this.gameObject.layer = enemyLayer;
             rb.AddForce(directionToTarget * followForce * Time.fixedDeltaTime, ForceMode.Force);
 
         } else {
+            // Debug.Log("navigating");
             this.gameObject.layer = ignoreDecorationsLayer;
             rb.velocity = (targetWorldPosition - transform.position).normalized * navigationSpeed * Time.fixedDeltaTime;
         }
     }
 
     bool raycastForPlayerPosition() {
-        if (Physics.Linecast(rb.position, navigationManager.playerTransform.position, out rayHit, navigationManager.ignoreDecorationsMask)) {
+        if (Physics.Linecast(rb.position, navigationManager.playerTransform.position, out rayHit, playerLineOfSightMask)) {
             if (rayHit.collider.gameObject.layer == navigationManager.playerLayer) {
                 targetWorldPosition = rayHit.point;
                 // Debug.Log("player hit");
