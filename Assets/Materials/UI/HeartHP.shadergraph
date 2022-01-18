@@ -1228,7 +1228,7 @@
     },
     "m_Name": "Health Points",
     "m_DefaultReferenceName": "Vector1_423e56b960004cdb8bb7afa370a13786",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_Health",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,

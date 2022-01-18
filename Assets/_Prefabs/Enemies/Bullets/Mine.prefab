@@ -108,9 +108,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79ea9f2583b99264f8410f2d2d16d38a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
-  pushBackForce: 300
+  flashColor: {r: 1, g: 0, b: 0, a: 0}
+  explosionDelay: 1.25
+  damageRange: 15
+  explosionRange: 25
+  damage: 20
+  maxPushBackForce: 150
+  minPushBackForce: 50
   mineRigidbody: {fileID: 4485894484474773269}
+  _renderer: {fileID: 2619239240832706175}
 --- !u!1 &5445079163886415626
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,8 +217,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   launchSpeed: 50
   gravity: 20
+  startingToruqe: 0
   launchAngle: 10
   despawnTime: 100
+  mineDetectionCollider: {fileID: 8749330453629081084}
 --- !u!54 &4485894484474773269
 Rigidbody:
   m_ObjectHideFlags: 0

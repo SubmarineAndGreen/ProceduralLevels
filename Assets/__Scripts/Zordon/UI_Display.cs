@@ -15,6 +15,8 @@ public class UI_Display : MonoBehaviour {
     [SerializeField] public GameObject pauseMenu;
     [SerializeField] public GameObject dashEffect;
     [SerializeField] public GameObject dashPosition;
+    public Image heartImageBar;
+    public TextMeshProUGUI hpText;
 
     public bool godMode;
 

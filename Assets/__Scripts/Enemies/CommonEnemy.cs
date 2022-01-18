@@ -10,9 +10,9 @@ public class CommonEnemy : MonoBehaviour
     Timer barrageCooldownTimer;
     Timer barrageEachBulletCooldownTimer;
 
-    [SerializeField] float barrageCooldown = 3, barrageEachBulletCooldown = 0.2f;
+    public float barrageCooldown = 3, barrageEachBulletCooldown = 0.2f;
     bool barrageReady = true;
-    [SerializeField] int bulletsInBarrage = 5;
+    public int bulletsInBarrage = 5;
     int spawnedBulletCount = 0;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float bulletStartingOffset = 1f;

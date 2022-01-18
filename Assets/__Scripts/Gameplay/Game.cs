@@ -7,6 +7,8 @@ using System;
 using DG.Tweening;
 
 public class Game : MonoBehaviour {
+
+    static int globalEnemyCount;
     [SerializeField] LevelBuilder levelBuilder;
     NavigationManager navigationManager;
     [SerializeField] GameObject playerPrefab;
@@ -20,38 +22,52 @@ public class Game : MonoBehaviour {
     int reachedGoalCounter = 0;
     int currentDifficulty = 0;
     [SerializeField] List<int> nextDifficultyGoalCount;
-    [SerializeField] List<DifficultyData> difficultyData;
-    DifficultyData currentDifficultyData;
+    [SerializeField] List<CommonDifficultyData> difficultyData;
+    CommonDifficultyData currentDifficultyData;
     float remainingTime;
     bool timeElapsed;
     int distanceToGoal;
+
+    [HideInInspector] public int enemyCount;
+    [SerializeField] List<GameObject> enemyPrefabs;
+    [SerializeField] List<GameObject> bulletPrefabs;
+    [SerializeField] float enemySpawnCooldown = 10f;
+    [SerializeField] float minEnemySpawnDistance, maxEnemySpawnDistance;
+    Timer enemySpawnTimer;
 
     [Header("UI")]
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] TextMeshProUGUI addedTimeText;
     [SerializeField] TextMeshProUGUI distanceText;
+    [SerializeField] TextMeshProUGUI scoreText;
 
     Sequence flashSequence;
     float flashTimeThreshold = 10f;
 
     void Start() {
+        updateScoreUIText();
+
         levelBuilder.generateLevel();
         navigationManager = NavigationManager.instance;
 
         currentDifficultyData = difficultyData[0];
 
+        flashSequence = createTimeTextFlashSequence();
+
         spawnPlayer();
         pickGoal();
+        updateDistanceToGoal();
         createNavigationHints();
 
-        flashSequence = createTimeTextFlashSequence();
+        enemySpawnTimer = TimerManager.getInstance().CreateAndRegisterTimer(enemySpawnCooldown, true, true, spawnEnemies);
     }
 
 
     private void Update() {
-        if(timeElapsed) {
+        if (timeElapsed) {
             return;
         }
+
         Vector3Int currentTile = navigationManager.worldPositionToGridPosition(playerTransform.position);
 
         if (currentTile != playerTile) {
@@ -64,14 +80,48 @@ public class Game : MonoBehaviour {
 
         updateRemainingTime();
 
-        if(remainingTime < flashTimeThreshold) {
+        if (remainingTime < flashTimeThreshold) {
             flashSequence.Play();
         } else {
-            if(flashSequence.IsPlaying()) {
+            if (flashSequence.IsPlaying()) {
                 flashSequence.Rewind();
             }
         }
 
+    }
+
+    void spawnEnemies() {
+        int distanceToPlayer = -1;
+        Vector3Int randomSpawnTile = Vector3Int.zero;
+
+        while (!(distanceToPlayer >= minEnemySpawnDistance && distanceToPlayer <= maxEnemySpawnDistance)) {
+            randomSpawnTile = navigationManager.getRandomWalkableTile();
+            distanceToPlayer = navigationManager.getGridDistanceToPlayer(randomSpawnTile);
+        }
+
+        Debug.Log("enemy:" + randomSpawnTile);
+        Debug.Log(navigationManager.worldPositionToGridPosition(navigationManager.playerTransform.position));
+
+        Vector3 spawnPosition = navigationManager.gridPositionToWorldPosition(randomSpawnTile);
+        int spawnedEnemies = 0;
+        while (spawnedEnemies < currentDifficultyData.maxEnemySpawnGroup && globalEnemyCount < currentDifficultyData.maxEnemyCount) {
+            spawnedEnemies++;
+            globalEnemyCount++;
+
+            float chance = UnityEngine.Random.Range(0f, 100f);
+            int enemyIndex = 0;
+            chance -= currentDifficultyData.enemySpawnChances[0];
+            // Debug.Log("1:" + chance);
+            while (chance >= 0) {
+                enemyIndex++;
+                // Debug.Log("2:" + currentDifficultyData.enemySpawnChances[enemyIndex]);
+                // Debug.Log("3:" + chance);
+                chance -= currentDifficultyData.enemySpawnChances[enemyIndex];
+            }
+
+            Vector3 randomOffset = UnityEngine.Random.insideUnitSphere * (navigationManager.tileSize / 2);
+            Instantiate(enemyPrefabs[enemyIndex], spawnPosition + randomOffset, Quaternion.identity);
+        }
     }
 
     private void spawnPlayer() {
@@ -150,8 +200,6 @@ public class Game : MonoBehaviour {
     }
 
     void updateDifficulty() {
-        reachedGoalCounter++;
-
         if (nextDifficultyGoalCount[currentDifficulty] == -1) {
             return;
         }
@@ -161,11 +209,44 @@ public class Game : MonoBehaviour {
             reachedGoalCounter = 0;
             currentDifficulty++;
             currentDifficultyData = difficultyData[currentDifficulty];
+
+            updateEnemyPrefabs(currentDifficulty);
+        }
+    }
+
+    void updateEnemyPrefabs(float currentDifficulty) {
+        if (currentDifficulty > 1) {
+            CommonEnemy commonEnemy = enemyPrefabs[0].GetComponent<CommonEnemy>();
+            CommonEnemy homingEnemy = enemyPrefabs[1].GetComponent<CommonEnemy>();
+            SniperEnemy sniperEnemy = enemyPrefabs[2].GetComponent<SniperEnemy>();
+            CommonEnemy mineEnemy = enemyPrefabs[3].GetComponent<CommonEnemy>();
+
+            SimpleBullet commonBullet = bulletPrefabs[0].GetComponent<SimpleBullet>();
+            HomingBullet homingBullet = bulletPrefabs[1].GetComponent<HomingBullet>();
+
+            switch (currentDifficulty) {
+                case 2:
+                    commonEnemy.bulletsInBarrage = 12;
+                    homingEnemy.bulletsInBarrage = 12;
+                    sniperEnemy.maxMultiBulletCount = 6;
+                    mineEnemy.bulletsInBarrage = 2;
+                    break;
+                case 3:
+                    commonEnemy.barrageCooldown = 1;
+                    homingEnemy.barrageCooldown = 1;
+                    break;
+                case 4:
+                    mineEnemy.bulletsInBarrage = 3;
+                    commonBullet.velocity = 70;
+                    homingBullet.velocity = 60;
+                    break;
+            }
         }
     }
 
     void goalReached() {
         reachedGoalCounter++;
+        updateScoreUIText();
         updateDifficulty();
         pickGoal();
         previousPlayerTile = playerTile;
@@ -265,10 +346,17 @@ public class Game : MonoBehaviour {
         distanceText.text = $"distance: {distanceToGoal.ToString("00")}";
     }
 
+    void updateScoreUIText() {
+        scoreText.text = $"score: {reachedGoalCounter}";
+    }
+
     [System.Serializable]
-    struct DifficultyData {
+    class CommonDifficultyData {
         public int minDistance;
         public int maxDistance;
         public float timePerDistance;
+        public int maxEnemyCount;
+        public float[] enemySpawnChances;
+        public float maxEnemySpawnGroup;
     }
 }

@@ -22,8 +22,9 @@ public class TimerManager : MonoBehaviour {
     // }
 
     private void Update() {
-        foreach (Timer timer in timers) {
-            if (timer.isRunning()) {
+        for (int i = 0; i < timers.Count; i++) {
+            Timer timer = timers[i];
+            if (timer != null && timer.isRunning()) {
                 timer.updateTime(Time.deltaTime);
             }
         }

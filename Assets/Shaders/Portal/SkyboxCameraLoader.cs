@@ -6,6 +6,6 @@ using UnityEngine.SceneManagement;
 public class SkyboxCameraLoader : MonoBehaviour
 {
     private void Start() {
-        SceneManager.LoadScene("SkyboxCamera", LoadSceneMode.Additive);
+        var op = SceneManager.LoadSceneAsync("SkyboxCamera", LoadSceneMode.Additive);
     }
 }

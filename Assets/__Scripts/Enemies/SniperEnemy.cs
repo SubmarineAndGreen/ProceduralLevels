@@ -10,7 +10,7 @@ public class SniperEnemy : MonoBehaviour {
     NavigationManager navigationManager;
 
     [SerializeField] float shotCooldown, chargeTime, multiBulletCooldown;
-    [SerializeField] int maxMultiBulletCount = 3;
+    public int maxMultiBulletCount = 3;
     int currentBulletCount = 0;
     Timer shotCooldownTimer;
     Timer chargeTimer;

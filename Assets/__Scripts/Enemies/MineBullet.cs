@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class MineBullet : MonoBehaviour, IBullet {
 
-    [SerializeField] float launchSpeed, gravity;
+    [SerializeField] float launchSpeed, gravity, startingToruqe;
     [SerializeField] float launchAngle = 10f;
     [SerializeField] float despawnTime = 100f;
+    [SerializeField] SphereCollider mineDetectionCollider;
 
     Rigidbody rb;
     
     private void Awake() {
+        mineDetectionCollider.enabled = false;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -38,6 +40,6 @@ public class MineBullet : MonoBehaviour, IBullet {
 
     private void OnTriggerEnter(Collider other) {
         rb.isKinematic = true;
-        // Debug.Log("mine hit");
+        mineDetectionCollider.enabled = true;
     }
 }

@@ -32,16 +32,16 @@ public class NavigationAI : MonoBehaviour {
         currentSkippedFrames = raycastSkippedPhysicsFramesCount;
     }
 
-    bool start = true;
-    private void Update() {
-        if (start) {
-            this.transform.position = navigationManager.gridPositionToWorldPosition(navigationManager.worldPositionToGridPosition(navigationManager.playerTransform.position));
-            start = false;
-        }
+    // bool start = true;
+    // private void Update() {
+    //     if (start) {
+    //         this.transform.position = navigationManager.gridPositionToWorldPosition(navigationManager.worldPositionToGridPosition(navigationManager.playerTransform.position));
+    //         start = false;
+    //     }
 
-        Debug.DrawLine(rb.position, targetWorldPosition);
-        Debug.DrawLine(rb.position, navigationManager.playerTransform.position, Color.yellow);
-    }
+    //     Debug.DrawLine(rb.position, targetWorldPosition);
+    //     Debug.DrawLine(rb.position, navigationManager.playerTransform.position, Color.yellow);
+    // }
 
     private void FixedUpdate() {
         if (currentSkippedFrames == raycastSkippedPhysicsFramesCount) {
