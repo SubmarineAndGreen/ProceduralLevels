@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ConstructStatus : MonoBehaviour
 {
-    [SerializeField] public UI_Display ui;
+    [SerializeField] public GameUI ui;
     [SerializeField] public int enemyMaxHP = 3;
     public int enemyCurrentHP;
     [SerializeField] public int damageOfEnemy;
@@ -21,7 +21,7 @@ public class ConstructStatus : MonoBehaviour
     void Start()
     {
         SetMaxHP();
-        ui = GameObject.Find("Status").GetComponent<UI_Display>();
+        ui = GameObject.Find("Status").GetComponent<GameUI>();
     }
 
     // Update is called once per frame

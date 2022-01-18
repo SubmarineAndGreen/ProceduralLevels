@@ -37,15 +37,15 @@ public class GrapplingHook : MonoBehaviour {
         // Debug.Log("on cd: " + !timerOffCd);
         // Debug.Log((transform.position - aiming.aimingHit).magnitude);
         if (cooldownReady && Mouse.current.rightButton.wasPressedThisFrame) {
-            if ((transform.position - aiming.aimingHit).magnitude <= maxGrappleDistance) {
+            if ((transform.position - aiming.aimingRayHit).magnitude <= maxGrappleDistance) {
                 startCooldown();
 
                 grapplingActive = true;
-                grapplingPoint = aiming.aimingHit;
+                grapplingPoint = aiming.aimingRayHit;
                 stratedPulling = false;
 
                 lineRenderer.positionCount = 2;
-                lineRenderer.SetPosition(1, aiming.aimingHit);
+                lineRenderer.SetPosition(1, aiming.aimingRayHit);
             }
         }
 

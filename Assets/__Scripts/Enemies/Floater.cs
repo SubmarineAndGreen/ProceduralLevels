@@ -17,12 +17,12 @@ public class Floater : MonoBehaviour {
     FloaterState state;
     RaycastHit lineOfSightInfo;
     private int hp;
-    public UI_Display ui;
+    public GameUI ui;
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         lineOfSightInfo = new RaycastHit();
-        ui = GameObject.Find("Status").GetComponent<UI_Display>();
+        ui = GameObject.Find("Status").GetComponent<GameUI>();
     }
 
     private void Start() {

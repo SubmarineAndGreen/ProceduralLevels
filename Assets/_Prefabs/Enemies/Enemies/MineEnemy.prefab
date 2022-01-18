@@ -222,6 +222,8 @@ GameObject:
   - component: {fileID: 1346354612488956781}
   - component: {fileID: 2615873332264757226}
   - component: {fileID: 6337681200142959272}
+  - component: {fileID: -7082890837499404119}
+  - component: {fileID: -8282847786213135446}
   m_Layer: 7
   m_Name: MineEnemy
   m_TagString: Untagged
@@ -355,9 +357,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInSight: 0
   raycastSkippedPhysicsFramesCount: 5
-  followForce: 200
-  navigationSpeed: 400
+  followForce: 300
+  navigationSpeed: 800
   switchToForceDistance: 2
   playerLineOfSightMask:
     serializedVersion: 2
     m_Bits: 87
+--- !u!114 &-7082890837499404119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346354612488956780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5f1d5fd63a5eb24681d657e28425658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 1
+--- !u!114 &-8282847786213135446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346354612488956780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16d9c2981bc58634084fd85d23353c06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRemainingTimeToAdd: 3
+  explosionPrefab: {fileID: 966197035209824879, guid: 5a25f8d0e319ed640bedd9b2ce572d64, type: 3}

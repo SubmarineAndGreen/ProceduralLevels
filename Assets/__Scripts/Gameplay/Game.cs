@@ -8,7 +8,8 @@ using DG.Tweening;
 
 public class Game : MonoBehaviour {
 
-    static int globalEnemyCount;
+    public static Game instance;
+
     [SerializeField] LevelBuilder levelBuilder;
     NavigationManager navigationManager;
     [SerializeField] GameObject playerPrefab;
@@ -20,14 +21,16 @@ public class Game : MonoBehaviour {
     [SerializeField] GameObject goalPrefab;
     Vector3Int goalTile;
     int reachedGoalCounter = 0;
+    int totalReachedGoalCounter = 0;
     int currentDifficulty = 0;
     [SerializeField] List<int> nextDifficultyGoalCount;
     [SerializeField] List<CommonDifficultyData> difficultyData;
     CommonDifficultyData currentDifficultyData;
-    float remainingTime;
+    static float remainingTime;
     bool timeElapsed;
     int distanceToGoal;
 
+    [HideInInspector] public int globalEnemyCount;
     [HideInInspector] public int enemyCount;
     [SerializeField] List<GameObject> enemyPrefabs;
     [SerializeField] List<GameObject> bulletPrefabs;
@@ -36,16 +39,27 @@ public class Game : MonoBehaviour {
     Timer enemySpawnTimer;
 
     [Header("UI")]
+    [SerializeField] Canvas gameUI;
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] TextMeshProUGUI addedTimeText;
     [SerializeField] TextMeshProUGUI distanceText;
     [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] List<Image> difficultyStarImages;
+
+    [SerializeField] Sprite starFilled, starBorder;
 
     Sequence flashSequence;
     float flashTimeThreshold = 10f;
 
+    private void Awake() {
+        instance = this;
+    }
+
     void Start() {
+        remainingTime = 20f;
+
         updateScoreUIText();
+        updateDifficultyUI();
 
         levelBuilder.generateLevel();
         navigationManager = NavigationManager.instance;
@@ -99,8 +113,8 @@ public class Game : MonoBehaviour {
             distanceToPlayer = navigationManager.getGridDistanceToPlayer(randomSpawnTile);
         }
 
-        Debug.Log("enemy:" + randomSpawnTile);
-        Debug.Log(navigationManager.worldPositionToGridPosition(navigationManager.playerTransform.position));
+        // Debug.Log("enemy:" + randomSpawnTile);
+        // Debug.Log(navigationManager.worldPositionToGridPosition(navigationManager.playerTransform.position));
 
         Vector3 spawnPosition = navigationManager.gridPositionToWorldPosition(randomSpawnTile);
         int spawnedEnemies = 0;
@@ -200,17 +214,25 @@ public class Game : MonoBehaviour {
     }
 
     void updateDifficulty() {
+        updateDifficultyUI();
+
         if (nextDifficultyGoalCount[currentDifficulty] == -1) {
             return;
         }
 
         if (reachedGoalCounter > nextDifficultyGoalCount[currentDifficulty]) {
-            Debug.Log("next difficulty");
+            // Debug.Log("next difficulty");
             reachedGoalCounter = 0;
             currentDifficulty++;
             currentDifficultyData = difficultyData[currentDifficulty];
 
             updateEnemyPrefabs(currentDifficulty);
+        }
+    }
+
+    void updateDifficultyUI() {
+        for (int i = 0; i < difficultyStarImages.Count; i++) {
+            difficultyStarImages[i].sprite = currentDifficulty >= i ? starFilled : starBorder;
         }
     }
 
@@ -246,6 +268,7 @@ public class Game : MonoBehaviour {
 
     void goalReached() {
         reachedGoalCounter++;
+        totalReachedGoalCounter++;
         updateScoreUIText();
         updateDifficulty();
         pickGoal();
@@ -282,39 +305,39 @@ public class Game : MonoBehaviour {
     }
 
     void showAddedTimeUIText(float addedTime) {
+        TextMeshProUGUI addedTimeTextCopy = Instantiate(addedTimeText.gameObject, gameUI.transform).GetComponent<TextMeshProUGUI>();
+
         // Debug.Log(addedTime);
         float tweenDuration = 1.5f;
-        float originalHeight = addedTimeText.rectTransform.anchoredPosition.y;
-        float targetHeight = addedTimeText.rectTransform.anchoredPosition.y - 128;
+        float originalHeight = addedTimeTextCopy.rectTransform.anchoredPosition.y;
+        float targetHeight = addedTimeTextCopy.rectTransform.anchoredPosition.y - 128;
 
-        addedTimeText.text = $"+{formatUITime(addedTime)}";
+        addedTimeTextCopy.text = $"+{formatUITime(addedTime)}";
 
-        Color textColor = addedTimeText.color;
+        Color textColor = addedTimeTextCopy.color;
         textColor.a = 1f;
-        addedTimeText.color = textColor;
+        addedTimeTextCopy.color = textColor;
 
         DOTween.To(() => {
-            Color textColor = addedTimeText.color;
+            Color textColor = addedTimeTextCopy.color;
             return textColor.a;
         }, newAlpha => {
-            Color textColor = addedTimeText.color;
+            Color textColor = addedTimeTextCopy.color;
             textColor.a = newAlpha;
-            addedTimeText.color = textColor;
+            addedTimeTextCopy.color = textColor;
 
         }, 0f, tweenDuration).SetEase(Ease.InQuad);
 
         var heightTween = DOTween.To(() => {
-            return addedTimeText.rectTransform.anchoredPosition.y;
+            return addedTimeTextCopy.rectTransform.anchoredPosition.y;
         }, height => {
-            Vector2 positon = addedTimeText.rectTransform.anchoredPosition;
+            Vector2 positon = addedTimeTextCopy.rectTransform.anchoredPosition;
             positon.y = height;
-            addedTimeText.rectTransform.anchoredPosition = positon;
+            addedTimeTextCopy.rectTransform.anchoredPosition = positon;
         }, targetHeight, tweenDuration);
 
         heightTween.onComplete += () => {
-            Vector2 positon = addedTimeText.rectTransform.anchoredPosition;
-            positon.y = originalHeight;
-            addedTimeText.rectTransform.anchoredPosition = positon;
+            Destroy(addedTimeTextCopy.gameObject);
         };
     }
 
@@ -347,7 +370,7 @@ public class Game : MonoBehaviour {
     }
 
     void updateScoreUIText() {
-        scoreText.text = $"score: {reachedGoalCounter}";
+        scoreText.text = $"score: {totalReachedGoalCounter}";
     }
 
     [System.Serializable]
@@ -358,5 +381,10 @@ public class Game : MonoBehaviour {
         public int maxEnemyCount;
         public float[] enemySpawnChances;
         public float maxEnemySpawnGroup;
+    }
+
+    public void addTime(float time) {
+        remainingTime += time;
+        showAddedTimeUIText(time);
     }
 }

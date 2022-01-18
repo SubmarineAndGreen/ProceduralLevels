@@ -113,4 +113,10 @@ public class SniperEnemy : MonoBehaviour {
         bullet.setTarget(target);
         currentBulletCount++;
     }
+
+    private void OnDestroy() {
+        chargeTimer.stop();
+        multiBulletTimer.stop();
+        shotCooldownTimer.stop();
+    }
 }

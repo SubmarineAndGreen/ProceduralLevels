@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    public UI_Display ui;
+    public GameUI ui;
     public int playerHP;
     public int playerMaxHP=10;
 
@@ -17,7 +17,7 @@ public class PlayerStatus : MonoBehaviour
 
     private void Awake()
     {
-        ui = FindObjectOfType<UI_Display>();
+        ui = FindObjectOfType<GameUI>();
     }
 
     // Update is called once per frame

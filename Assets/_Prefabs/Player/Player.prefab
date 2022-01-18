@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3353837586258740434}
   m_Layer: 6
-  m_Name: dashPosition
+  m_Name: Dash VFX Position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 5179804665272600378}
   - component: {fileID: 1425079341142978043}
   - component: {fileID: 6482531838833256903}
+  - component: {fileID: 4958641955092519760}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -220,7 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 7711137512837268063}
-  aimingHit: {x: 0, y: 0, z: 0}
+  aimingRayHit: {x: 0, y: 0, z: 0}
 --- !u!114 &5179804665272600378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,8 +234,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 590b361deabf61f43863e979f4077e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashCooldown: 2
-  maxDashCount: 4
+  dashCooldown: 1.5
+  maxDashCount: 3
   dashAddedSpeed: 25
   playerCameraTransform: {fileID: 7711137512837268062}
   ui: {fileID: 0}
@@ -267,6 +268,21 @@ MonoBehaviour:
   damagablePlayer: {fileID: 1425079341142978043}
   regenerationCooldown: 5
   regenerationPerSecond: 10
+--- !u!114 &4958641955092519760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7711137511671875111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecaa866b27f25e44bb0a8c0eecbe336a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aiming: {fileID: 5421612076315244267}
+  bulletPrefab: {fileID: 5826954109305584156, guid: 6feda0ca69e789245a2a3073185fd0bc, type: 3}
+  shootingCooldown: 0.2
 --- !u!1 &7711137512837268061
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +348,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 15863
+    m_Bits: 32247
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

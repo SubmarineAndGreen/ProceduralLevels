@@ -56,4 +56,9 @@ public class CommonEnemy : MonoBehaviour
         IBullet bullet = bulletObject.GetComponentInChildren<IBullet>();
         bullet.setTarget(target);
     }
+
+    private void OnDestroy() {
+        barrageCooldownTimer.stop();
+        barrageEachBulletCooldownTimer.stop();
+    }
 }

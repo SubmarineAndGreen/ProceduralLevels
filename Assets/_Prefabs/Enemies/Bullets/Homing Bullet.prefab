@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427a60dc0f5dd234a85718f0a08eb63a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 10
 --- !u!54 &8531065604917838671
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: 40
-  angularVelocity: 60
+  angularVelocity: 120
   target: {fileID: 0}
 --- !u!136 &8531065604917838664
 CapsuleCollider:

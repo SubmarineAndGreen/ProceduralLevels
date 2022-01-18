@@ -5,16 +5,16 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class UI_Display : MonoBehaviour {
-    [SerializeField] public Slider healthSlider;
-    [SerializeField] public GameObject dashSliderGO;
-    private Image dashSlider;
-    [SerializeField] public GameObject[] dashImage;
-    [SerializeField] public GameObject deathScreen;
-    [SerializeField] public GameObject victoryScreen;
-    [SerializeField] public GameObject pauseMenu;
-    [SerializeField] public GameObject dashEffect;
-    [SerializeField] public GameObject dashPosition;
+public class GameUI : MonoBehaviour {
+    public Slider healthSlider;
+    [SerializeField] private GameObject dashSlider;
+    [HideInInspector] public Image dashSliderImage;
+    public GameObject[] dashImage;
+    public GameObject deathScreen;
+    public GameObject victoryScreen;
+    public GameObject pauseMenu;
+    public GameObject dashEffect;
+    public GameObject dashPosition;
     public Image heartImageBar;
     public TextMeshProUGUI hpText;
 
@@ -24,26 +24,30 @@ public class UI_Display : MonoBehaviour {
     // private bool isSceneChanging;
     public int hp;
 
+    private void Awake() {
+        dashSliderImage = dashSlider.GetComponent<Image>();
+    }
+
     private void Start() {
         isPaused = false;
         // isSceneChanging = false;
         godMode = false;
-        dashSlider = dashSliderGO.GetComponent<Image>();
+        // dashSlider = dashSliderGO.GetComponent<Image>();
 
 
-        dashSlider.material.SetFloat("_Progress", 0);
+        // dashSlider.material.SetFloat("_Progress", 0);
     }
 
-    public void UpdateDashes(int dashes) {
-        const int maxDashes = 4;
-        for(int i = 0; i < maxDashes; i++) {
-            dashImage[i].SetActive(i < dashes);
-        }
-    }
+    // public void UpdateDashes(int dashes) {
+    //     const int maxDashes = 4;
+    //     for(int i = 0; i < maxDashes; i++) {
+    //         dashImage[i].SetActive(i < dashes);
+    //     }
+    // }
 
-    public void UpdateDashesCooldown(float cd) {
-        dashSlider.material.SetFloat("_Progress", cd / 2);
-    }
+    // public void UpdateDashesCooldown(float cd) {
+    //     dashSlider.material.SetFloat("_Progress", cd / 2);
+    // }
 
     public void UpdateHealth(int hp) {
         //healthText.text = "Health: " + hp;
@@ -77,10 +81,12 @@ public class UI_Display : MonoBehaviour {
     }
 
     public void DashEffect() {
-        if (dashPosition.Equals(null)) dashPosition = GameObject.Find("dashPosition");
+        if (dashPosition.Equals(null)) {
+            dashPosition = GameObject.Find("Dash VFX Position");
+        }
+
         GameObject temp = Instantiate(dashEffect, dashPosition.transform);
         Destroy(temp, 2);
-        //dashEffect.Play();
     }
     IEnumerator Win() {
         yield return new WaitForSeconds(2);

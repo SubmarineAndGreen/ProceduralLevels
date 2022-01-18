@@ -12,12 +12,12 @@ public class Dash : MonoBehaviour {
     Timer dashCooldownTimer;
     Rigidbody rb;
     [SerializeField] Transform playerCameraTransform;
-    [SerializeField] public UI_Display ui;
+    [SerializeField] public GameUI ui;
     [SerializeField] public GameObject dashEffect;
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
-        ui = FindObjectOfType<UI_Display>();
+        ui = FindObjectOfType<GameUI>();
     }
 
     private void Start() {
@@ -33,7 +33,7 @@ public class Dash : MonoBehaviour {
     private void addDash() {
         availableDashCount += 1;
         // Debug.Log("(cooldown) dashes: " + availableDashCount);
-        ui.UpdateDashes(availableDashCount);
+        updateDashCountUI();
     }
 
     private void runCooldownIfNotMaxDashes() {
@@ -59,7 +59,7 @@ public class Dash : MonoBehaviour {
             // Debug.Log("(use) dashes: " + availableDashCount);
             ui.DashEffect();
             //Instantiate(dashEffect, playerCameraTransform);
-            ui.UpdateDashes(availableDashCount);
+            updateDashCountUI();
         }
     }
 
@@ -67,6 +67,16 @@ public class Dash : MonoBehaviour {
         if (Mouse.current.rightButton.wasPressedThisFrame) {
             tryDash();
         }
-        ui.UpdateDashesCooldown(dashCooldownTimer.getTimeRunning());
+        UpdateDashesCooldown(dashCooldownTimer.getTimeRunning());
+    }
+
+    void updateDashCountUI() {
+        for (int i = 0; i < maxDashCount; i++) {
+            ui.dashImage[i].SetActive(i < availableDashCount);
+        }
+    }
+
+    public void UpdateDashesCooldown(float cd) {
+        ui.dashSliderImage.material.SetFloat("_Progress", cd / dashCooldown);
     }
 }

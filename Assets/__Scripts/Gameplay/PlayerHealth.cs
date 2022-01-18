@@ -15,7 +15,7 @@ public class PlayerHealth : MonoBehaviour {
     TextMeshProUGUI hpText;
 
     private void Awake() {
-        UI_Display ui = FindObjectOfType<UI_Display>();
+        GameUI ui = FindObjectOfType<GameUI>();
         
         heartImage = ui.heartImageBar;
         heartImage.material.SetFloat("_Health", damagablePlayer.health);

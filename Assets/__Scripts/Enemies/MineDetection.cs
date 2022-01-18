@@ -8,6 +8,7 @@ public class MineDetection : MonoBehaviour {
     [SerializeField] Color flashColor;
     int playerLayer;
     [SerializeField] float explosionDelay = 1f, damageRange = 10, explosionRange = 20;
+    [SerializeField] GameObject explosionPrefab;
     bool triggered = false;
     [SerializeField] float damage, maxPushBackForce = 250f, minPushBackForce = 100f;
     [SerializeField] Rigidbody mineRigidbody;
@@ -75,5 +76,9 @@ public class MineDetection : MonoBehaviour {
 
             
         }
+    }
+
+    private void OnDestroy() {
+        Destroy(Instantiate(explosionPrefab, transform.position, Quaternion.identity), 4f);
     }
 }
