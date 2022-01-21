@@ -6,6 +6,7 @@ using UnityEditor;
 using DeBroglie;
 using DeBroglie.Constraints;
 using System;
+using System.Threading.Tasks;
 
 [RequireComponent(typeof(WfcRunner))]
 public class LevelBuilder : MonoBehaviour {
@@ -38,7 +39,7 @@ public class LevelBuilder : MonoBehaviour {
     [HideInInspector] public string pipesSampleFileName;
     [HideInInspector] public Vector3Int playerSpawn;
 
-    public void generateLevel() {
+    public IEnumerator generateLevel() {
         #region MAIN_STRUCTURE
         System.Diagnostics.Stopwatch allStopwatch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -91,21 +92,21 @@ public class LevelBuilder : MonoBehaviour {
         createEmptyBorderConstraint(wfcConstraints, wfcTiles);
         // createStructureConstraints(new Vector3Int(6, 6, 6), patioBase, wfcConstraints, wfcTiles, new List<Vector3Int>());
 
-        int[,,] generatedTiles;
-        bool generationSuccess = wfcRunner.runAdjacentModel(out generatedTiles,
-                                                            fullDimensions,
+        var wfcTask = Task<int[,,]>.Run(() => wfcRunner.runAdjacentModel(fullDimensions,
                                                             tileSets[TILESET_MAIN],
                                                             samplerResult.uniqueTiles,
                                                             samplerResult.rules,
                                                             wfcTiles,
                                                             wfcConstraints,
-                                                            seed);
+                                                            seed)); 
+
+        yield return new WaitUntil(() => wfcTask.IsCompleted);
+        
+        int[,,] generatedTiles = wfcTask.Result;
 
         wfcStopwatch.Stop();
 
-        if (!generationSuccess) {
-            Debug.LogError("WFC failed!");
-        }
+
 
         Dictionary<int, List<Vector3Int>> generatedTilePositionsByIndex = new Dictionary<int, List<Vector3Int>>();
 
@@ -122,7 +123,7 @@ public class LevelBuilder : MonoBehaviour {
         List<Vector3Int> doorTiles = placeDoors(levelGrid, samplerResult);
 
         System.Diagnostics.Stopwatch navigationStopwatch = System.Diagnostics.Stopwatch.StartNew();
-        initializeNavigation(tileIndices, tileSetIndices);
+        yield return StartCoroutine(initializeNavigation(tileIndices, tileSetIndices));
         navigationStopwatch.Stop();
 
         List<Vector3Int> walkableTilePositions = getWalkableTiles(tileIndices, tileSetIndices);
@@ -149,7 +150,7 @@ public class LevelBuilder : MonoBehaviour {
         wfcConstraints.Add(emptyBorderConstraint);
     }
 
-    private void initializeNavigation(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {
+    private IEnumerator initializeNavigation(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {
         Vector3Int fullDimensions = tileIndices.dimensions;
         int[,,] inputDistanceField = new int[fullDimensions.x, fullDimensions.y, fullDimensions.z];
         int blockedTile = -1;
@@ -165,10 +166,14 @@ public class LevelBuilder : MonoBehaviour {
         });
 
         NavigationManager navigation = NavigationManager.instance;
-        navigation.calculateVectorFields(inputDistanceField, blockedTile);
+        var fieldsTask = Task.Run(() => navigation.calculateVectorFields(inputDistanceField, blockedTile));
+
+        yield return new WaitUntil(() => fieldsTask.IsCompleted);
 
         navigation.tileSize = scaleFactor;
         navigation.tileGridDimensions = fullDimensions;
+
+        yield return null;
     }
 
     private List<Vector3Int> getWalkableTiles(Grid3D<int> tileIndices, Grid3D<int> tileSetIndices) {

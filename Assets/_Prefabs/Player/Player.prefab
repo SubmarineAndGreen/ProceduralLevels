@@ -240,6 +240,7 @@ MonoBehaviour:
   playerCameraTransform: {fileID: 7711137512837268062}
   ui: {fileID: 0}
   dashEffect: {fileID: 1383507732343888502, guid: 582809447e1945e4fbe48d8cbb581596, type: 3}
+  dashPosition: {fileID: 3353837586258740434}
 --- !u!114 &1425079341142978043
 MonoBehaviour:
   m_ObjectHideFlags: 0

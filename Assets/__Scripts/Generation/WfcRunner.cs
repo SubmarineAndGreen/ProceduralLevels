@@ -25,14 +25,13 @@ public class WfcRunner : MonoBehaviour {
 
     // [HideInInspector] public SamplerResult samplerResult;
 
-    public bool runAdjacentModel(out int[,,] result,
-                                 Vector3Int outputDimensions,
-                                 TileSet tileSet,
-                                 List<int> tiles,
-                                 List<TileRule> rules,
-                                 Dictionary<int, DeBroglie.Tile> tileObjects,
-                                 List<ITileConstraint> constraints,
-                                 int rngSeed = LevelBuilder.NO_SEED) {
+    public int[,,] runAdjacentModel(Vector3Int outputDimensions,
+                                    TileSet tileSet,
+                                    List<int> tiles,
+                                    List<TileRule> rules,
+                                    Dictionary<int, DeBroglie.Tile> tileObjects,
+                                    List<ITileConstraint> constraints,
+                                    int rngSeed = LevelBuilder.NO_SEED) {
         System.Random rng;
         if (rngSeed == LevelBuilder.NO_SEED) {
             rng = new System.Random((int)DateTime.Now.Ticks);
@@ -98,8 +97,8 @@ public class WfcRunner : MonoBehaviour {
 
         Debug.Log($"{(success ? "sucess" : "contradiction")} tries:{numberOfTries - tries}");
 
-        result = propagator.ToValueArray<int>().ToArray3d<int>();
-        return success;
+        int[,,] result = propagator.ToValueArray<int>().ToArray3d<int>();
+        return result;
     }
 }
 

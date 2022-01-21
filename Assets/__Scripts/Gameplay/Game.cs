@@ -44,6 +44,7 @@ public class Game : MonoBehaviour {
     [SerializeField] TextMeshProUGUI addedTimeText;
     [SerializeField] TextMeshProUGUI distanceText;
     [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] TextMeshProUGUI countdownText;
     [SerializeField] List<Image> difficultyStarImages;
 
     [SerializeField] Sprite starFilled, starBorder;
@@ -74,6 +75,8 @@ public class Game : MonoBehaviour {
         createNavigationHints();
 
         enemySpawnTimer = TimerManager.getInstance().CreateAndRegisterTimer(enemySpawnCooldown, true, true, spawnEnemies);
+
+        StartCoroutine(startingCountdown());
     }
 
 
@@ -145,10 +148,15 @@ public class Game : MonoBehaviour {
         Vector3 playerSpawn = navigationManager.gridPositionToWorldPosition(playerSpawnTile);
         playerTile = playerSpawnTile;
         previousPlayerTile = playerSpawnTile;
-        GameObject playerObject = Instantiate(playerPrefab, playerSpawn, Quaternion.identity);
-        playerTransform = playerObject.transform.GetChild(0);
+        GameObject playerRoot = Instantiate(playerPrefab, playerSpawn, Quaternion.identity);
+        playerObject = playerRoot.transform.GetChild(0).gameObject;
+        playerTransform = playerRoot.transform.GetChild(0);
 
         navigationManager.playerTransform = playerTransform;
+
+        GameObject skyboxRoot = GameObject.Find("SkyboxSphere");
+        GameObject skyboxCamera = skyboxRoot.transform.Find("SkyboxCamera").gameObject;
+        skyboxCamera.SetActive(true);
     }
 
     private void pickGoal() {
@@ -240,8 +248,8 @@ public class Game : MonoBehaviour {
         if (currentDifficulty > 1) {
             CommonEnemy commonEnemy = enemyPrefabs[0].GetComponent<CommonEnemy>();
             CommonEnemy homingEnemy = enemyPrefabs[1].GetComponent<CommonEnemy>();
-            SniperEnemy sniperEnemy = enemyPrefabs[2].GetComponent<SniperEnemy>();
-            CommonEnemy mineEnemy = enemyPrefabs[3].GetComponent<CommonEnemy>();
+            CommonEnemy mineEnemy = enemyPrefabs[2].GetComponent<CommonEnemy>();
+            SniperEnemy sniperEnemy = enemyPrefabs[3].GetComponent<SniperEnemy>();
 
             SimpleBullet commonBullet = bulletPrefabs[0].GetComponent<SimpleBullet>();
             HomingBullet homingBullet = bulletPrefabs[1].GetComponent<HomingBullet>();
@@ -386,5 +394,41 @@ public class Game : MonoBehaviour {
     public void addTime(float time) {
         remainingTime += time;
         showAddedTimeUIText(time);
+    }
+
+    void setPaused(bool isPaused) {
+        if (isPaused) {
+            Time.timeScale = 0f;
+            playerObject.SetActive(false);
+        } else {
+            Time.timeScale = 1f;
+            playerObject.SetActive(true);
+        }
+    }
+
+    IEnumerator startingCountdown() {
+        int countdown = 3;
+        const string goText = "GO!";
+
+        setPaused(true);
+
+        while (countdown != 0) {
+            countdownText.text = countdown.ToString();
+            countdown--;
+            // Debug.Log("aaa");
+            yield return new WaitForSecondsRealtime(1);
+        }
+
+        countdownText.text = goText;
+        DOTween.To(() => countdownText.color.a,
+        alpha => {
+            Color col = countdownText.color;
+            col.a = alpha;
+            countdownText.color = col;
+        }, 0f, 1f);
+
+        setPaused(false);
+
+        yield return null;
     }
 }

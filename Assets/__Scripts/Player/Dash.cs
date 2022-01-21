@@ -12,8 +12,9 @@ public class Dash : MonoBehaviour {
     Timer dashCooldownTimer;
     Rigidbody rb;
     [SerializeField] Transform playerCameraTransform;
-    [SerializeField] public GameUI ui;
+    [HideInInspector] public GameUI ui;
     [SerializeField] public GameObject dashEffect;
+    [SerializeField] Transform dashPosition;
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -57,7 +58,7 @@ public class Dash : MonoBehaviour {
             float speedAfterDash = rb.velocity.magnitude + dashAddedSpeed;
             rb.velocity = lookDirection * speedAfterDash;
             // Debug.Log("(use) dashes: " + availableDashCount);
-            ui.DashEffect();
+            spawnDashEffect();
             //Instantiate(dashEffect, playerCameraTransform);
             updateDashCountUI();
         }
@@ -78,5 +79,11 @@ public class Dash : MonoBehaviour {
 
     public void UpdateDashesCooldown(float cd) {
         ui.dashSliderImage.material.SetFloat("_Progress", cd / dashCooldown);
+    }
+
+    public void spawnDashEffect() {
+        const float effectDuration = 2;
+        GameObject dashVFX = Instantiate(dashEffect, dashPosition);
+        Destroy(dashVFX, effectDuration);
     }
 }
