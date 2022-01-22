@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour {
     Vector3 playerRotation = Vector3.zero;
     float maxVerticalRotation = 85f;
     [SerializeField] Vector2 mouseSensitivity;
+    [SerializeField] SFXPlaying sfx;
 
     private void OnValidate() {
         minNormalY = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
@@ -157,6 +158,10 @@ public class PlayerController : MonoBehaviour {
 
         Vector3 totalVelocity = newVelocityWithDrag + verticalComponent;
 
+        if (!grounded || (totalVelocity.x == 0 && totalVelocity.z == 0))
+            sfx.StopWalk();
+        else
+            sfx.PlayWalk();
 
         rb.velocity = totalVelocity;
     }
