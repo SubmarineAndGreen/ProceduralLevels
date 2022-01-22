@@ -15,6 +15,7 @@ public class Dash : MonoBehaviour {
     [HideInInspector] public GameUI ui;
     [SerializeField] public GameObject dashEffect;
     [SerializeField] Transform dashPosition;
+    [SerializeField] SFXPlaying sfx;
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -59,6 +60,7 @@ public class Dash : MonoBehaviour {
             rb.velocity = lookDirection * speedAfterDash;
             // Debug.Log("(use) dashes: " + availableDashCount);
             spawnDashEffect();
+            sfx.PlayDash();
             //Instantiate(dashEffect, playerCameraTransform);
             updateDashCountUI();
         }
