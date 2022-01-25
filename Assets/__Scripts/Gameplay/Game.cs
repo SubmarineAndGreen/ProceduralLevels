@@ -37,6 +37,7 @@ public class Game : MonoBehaviour {
     [SerializeField] float enemySpawnCooldown = 10f;
     [SerializeField] float minEnemySpawnDistance, maxEnemySpawnDistance;
     Timer enemySpawnTimer;
+    Damagable playerStatus;
 
     [Header("UI")]
     [SerializeField] Canvas gameUI;
@@ -46,8 +47,9 @@ public class Game : MonoBehaviour {
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI countdownText;
     [SerializeField] List<Image> difficultyStarImages;
-
     [SerializeField] Sprite starFilled, starBorder;
+
+    [HideInInspector] public bool isGamePaused;
 
     Sequence flashSequence;
     float flashTimeThreshold = 10f;
@@ -70,6 +72,8 @@ public class Game : MonoBehaviour {
         flashSequence = createTimeTextFlashSequence();
 
         spawnPlayer();
+        playerStatus = playerObject.GetComponent<Damagable>();
+
         pickGoal();
         updateDistanceToGoal();
         createNavigationHints();
@@ -81,6 +85,8 @@ public class Game : MonoBehaviour {
 
 
     private void Update() {
+        checkLossCondition();
+
         if (timeElapsed) {
             return;
         }
@@ -396,11 +402,13 @@ public class Game : MonoBehaviour {
         showAddedTimeUIText(time);
     }
 
-    void setPaused(bool isPaused) {
+    public void setPaused(bool isPaused) {
         if (isPaused) {
+            isGamePaused = true;
             Time.timeScale = 0f;
             playerObject.SetActive(false);
         } else {
+            isGamePaused = false;
             Time.timeScale = 1f;
             playerObject.SetActive(true);
         }
@@ -430,5 +438,11 @@ public class Game : MonoBehaviour {
         setPaused(false);
 
         yield return null;
+    }
+
+    void checkLossCondition() {
+        if(playerStatus.health <= 0 || remainingTime <= 0) {
+            setPaused(true);
+        } 
     }
 }

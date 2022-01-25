@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/InBuild/SkyboxCamera.unity
     guid: 7f74736d7efae9a4b810544235b468d6
+  - enabled: 1
+    path: Assets/Scenes/InBuild/GameLoading.unity
+    guid: 1c1ec8b0d0f3775499334f387a90a3d0
   m_configObjects: {}

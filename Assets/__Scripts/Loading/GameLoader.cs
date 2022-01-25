@@ -23,4 +23,8 @@ public class GameLoader : MonoBehaviour
         loadingScreen.SetActive(false);
         game.enabled = true;
     }
+
+    public static void LoadNewLevel() {
+        SceneManager.LoadScene("GameLoading", LoadSceneMode.Single);
+    }
 }
