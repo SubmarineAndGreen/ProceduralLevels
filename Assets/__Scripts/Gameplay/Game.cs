@@ -40,6 +40,7 @@ public class Game : MonoBehaviour {
     Damagable playerStatus;
 
     [Header("UI")]
+    [SerializeField] GameUI ui;
     [SerializeField] Canvas gameUI;
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] TextMeshProUGUI addedTimeText;
@@ -443,6 +444,7 @@ public class Game : MonoBehaviour {
     void checkLossCondition() {
         if(playerStatus.health <= 0 || remainingTime <= 0) {
             setPaused(true);
+            ui.showLossScreen();
         } 
     }
 }
