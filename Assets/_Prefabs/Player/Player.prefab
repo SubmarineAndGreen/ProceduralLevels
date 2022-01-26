@@ -136,6 +136,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5579901176680991055}
+  - component: {fileID: 8335331728147946375}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -161,6 +162,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8335331728147946375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5231489966705550095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e79f9463eb4a3d74397ef0fe8070da47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeToSave: 0
+  enemyDefeatedToSave: 0
+  shotsFiredToSave: 0
 --- !u!1 &5652310555379938050
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,6 +573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dash: {fileID: 2082918350761156922}
   walk: {fileID: 2553626044666928521}
+  saveSerial: {fileID: 8335331728147946375}
 --- !u!1 &7711137512837268061
 GameObject:
   m_ObjectHideFlags: 0

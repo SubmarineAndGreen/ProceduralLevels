@@ -6,6 +6,17 @@ public class SFXPlaying : MonoBehaviour
 {
     public AudioSource dash;
     public AudioSource walk;
+    [SerializeField] SaveSerial saveSerial;
+    private float volume;
+
+    private void Awake()
+    {
+        saveSerial.LoadGame();
+        volume = saveSerial.volumeToSave;
+        dash.volume = volume;
+        walk.volume = volume;
+    }
+
     public void PlayDash()
     {
         Debug.Log("DASH SFX");

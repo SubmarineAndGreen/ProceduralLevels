@@ -26,6 +26,7 @@ public class Shooting : MonoBehaviour {
             float spawnOffset = 0.75f;
 
             Instantiate(bulletPrefab, transform.position + toTarget.normalized * spawnOffset, Quaternion.LookRotation(toTarget));
+            GameObject.FindObjectOfType<SaveSerial>().shotsFiredToSave++;
         }
     }
 }

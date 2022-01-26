@@ -12,6 +12,7 @@ public class DamagableEnemy : MonoBehaviour {
         damagable = GetComponent<Damagable>();
         damagable.afterTakeDamage += () => {
             if (damagable.health <= 0) {
+                GameObject.FindObjectOfType<SaveSerial>().enemyDefeatedToSave++;
                 Destroy(this.gameObject);
             }
         };

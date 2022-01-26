@@ -49,5 +49,7 @@ public class GameUI : MonoBehaviour {
         isGameOver = true;
         Cursor.lockState = CursorLockMode.None;
         gameOverMenu.SetActive(true);
+        GameObject gameObject = (GameObject)GameObject.Find("Player(Clone)");
+        gameObject.GetComponent<SaveSerial>().SaveGame();
     }
 }
