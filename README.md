@@ -1,5 +1,5 @@
 # ProceduralLevels
-Shooter game with procedurally generated labirynth using Wave Function Collapse algorithm. Unity/C#
+Shooter game with procedurally generated tile based labirynth using Wave Function Collapse algorithm. Unity/C#
 ## Screenshots
 <p>
   <img src="https://user-images.githubusercontent.com/53352286/152868981-89970283-347c-4fca-88b1-525689152b95.png" width="500">
