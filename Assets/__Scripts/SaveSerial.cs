@@ -21,7 +21,7 @@ public class SaveSerial : MonoBehaviour
         data.shotsFired = shotsFiredToSave;
         bf.Serialize(file, data);
         file.Close();
-        Debug.Log("Game data saved!");
+        //Debug.Log("Game data saved!");
     }
 
     public void LoadGame()
@@ -38,11 +38,11 @@ public class SaveSerial : MonoBehaviour
             volumeToSave = data.volume;
             enemyDefeatedToSave = data.enemyDefeated;
             shotsFiredToSave = data.shotsFired;
-            Debug.Log("Game data loaded!");
+            //Debug.Log("Game data loaded!");
         }
         else
         {
-            Debug.LogError("There is no save data!");
+            //Debug.LogError("There is no save data!");
             volumeToSave = 1;
             enemyDefeatedToSave = 0;
             shotsFiredToSave = 0;

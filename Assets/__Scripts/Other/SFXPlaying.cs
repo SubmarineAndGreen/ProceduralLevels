@@ -19,14 +19,14 @@ public class SFXPlaying : MonoBehaviour
 
     public void PlayDash()
     {
-        Debug.Log("DASH SFX");
+        //Debug.Log("DASH SFX");
         dash.Play();
     }
     public void PlayWalk()
     {
         if(!walk.isPlaying)
         {
-            Debug.Log("WALK SFX");
+            //Debug.Log("WALK SFX");
             walk.Play();
         }
     }
