@@ -16,6 +16,7 @@ public class CommonEnemy : MonoBehaviour
     int spawnedBulletCount = 0;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float bulletStartingOffset = 1f;
+    
     private void Awake() {
         barrageCooldownTimer = TimerManager.getInstance().CreateAndRegisterTimer(barrageCooldown, false, false, () => barrageReady = true);
         barrageEachBulletCooldownTimer = TimerManager.getInstance().CreateAndRegisterTimer(barrageEachBulletCooldown, true, false, spawnBarrageBullet);

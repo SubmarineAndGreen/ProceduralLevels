@@ -38,9 +38,9 @@ public class NavigationTest : MonoBehaviour {
     public NavigationVisuals visuals;
 
     private void Update() {
-        if(Keyboard.current.spaceKey.wasPressedThisFrame) {
-            runOneDistanceField(sourceCell);
-        }
+        // if(Keyboard.current.spaceKey.wasPressedThisFrame) {
+        //     runOneDistanceField(sourceCell);
+        // }
     }
 
     public void runAll() {

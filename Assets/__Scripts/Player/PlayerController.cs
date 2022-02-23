@@ -52,24 +52,17 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        // updateState();
         groundCheck();
         updateRbRotation();
         updateHorizontalVelocity();
         handleJump();
         applyGravity();
-        // Debug.Log(groundContactCount);
-        // clearState();
         floatAboveGroundColliderSeamFix();
     }
 
     void Update() {
         readInput();
         updateRotationValues();
-        // Debug.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistanceFromOrigin);
-        // Debug.Log(grounded);
-        // Debug.Log(playerInput.jump);
-
     }
 
     private void LateUpdate() {
@@ -97,20 +90,16 @@ public class PlayerController : MonoBehaviour {
     }
 
     void groundCheck() {
-        // Ray groundCheckRay = new Ray(transform.position, Vector3.down);
         if (Physics.Raycast(transform.position,
                             Vector3.down,
                             out groundCheckInfo,
                             groundCheckDistanceFromOrigin,
                             groundMask,
                             QueryTriggerInteraction.Ignore)) {
-            // Debug.Log("ray hit");
             if (groundCheckInfo.normal.y >= minNormalY) {
-                // Debug.Log("ground");
                 grounded = true;
                 groundNormal = groundCheckInfo.normal;
             } else {
-                // Debug.Log("not ground");
                 grounded = false;
                 groundNormal = Vector3.up;
             }
@@ -121,13 +110,16 @@ public class PlayerController : MonoBehaviour {
     }
 
     void updateHorizontalVelocity() {
-        // Debug.Log(grounded);
-        Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, groundNormal);
-        Vector3 projectedRight = Vector3.ProjectOnPlane(transform.right, groundNormal);
+        Vector3 projectedForward = 
+            Vector3.ProjectOnPlane(transform.forward, groundNormal);
+        Vector3 projectedRight = 
+            Vector3.ProjectOnPlane(transform.right, groundNormal);
 
         Vector3 movementPlaneNormal = grounded ? groundNormal : Vector3.up;
-        Vector3 wishDirection = Vector3.ProjectOnPlane(transform.TransformDirection(playerInput.movementAxes), movementPlaneNormal);
-        // Debug.Log(playerInput.movementAxes);
+        Vector3 wishDirection =
+        Vector3.ProjectOnPlane(
+            transform.TransformDirection(playerInput.movementAxes),
+        movementPlaneNormal);
 
         Vector3 oldVelocity = rb.velocity;
         Vector3 verticalComponent = Vector3.Dot(oldVelocity, groundNormal) * groundNormal;
@@ -152,24 +144,24 @@ public class PlayerController : MonoBehaviour {
             newVelocityWithDrag = Vector3.ClampMagnitude(newVelocityWithDrag, oldVelocity.magnitude);
         }
 
+        Vector3 totalVelocity = newVelocityWithDrag + verticalComponent;
+        rb.velocity = totalVelocity;
+
         if (!grounded || jumpedLastUpdate) {
             jumpedLastUpdate = false;
         }
 
-        Vector3 totalVelocity = newVelocityWithDrag + verticalComponent;
 
         if (!grounded || (totalVelocity.x == 0 && totalVelocity.z == 0))
             sfx.StopWalk();
         else
             sfx.PlayWalk();
 
-        rb.velocity = totalVelocity;
     }
 
     private void applyGravity() {
         Vector3 velocity = rb.velocity;
         if (!grounded) {
-            // Debug.Log("gravity");
             float verticalVelocity = velocity.y;
             velocity.y -= gravity * Time.fixedDeltaTime;
             velocity.y = Mathf.Clamp(velocity.y, -maxVerticalSpeed, maxVerticalSpeed);
@@ -180,12 +172,8 @@ public class PlayerController : MonoBehaviour {
     private void handleJump() {
         if (playerInput.jumpQueued && grounded) {
             playerInput.jumpQueued = false;
-            jumpedLastUpdate = true;
             float jumpSpeed = Mathf.Sqrt(2 * gravity * jumpHeight);
-            // Debug.Log(jumpSpeed);
             rb.velocity += Vector3.up * jumpSpeed;
-            //jump along normal / nie dziala bez zmian w kontroli predkosci
-            // rb.velocity += groundNormal * jumpSpeed;
         }
     }
 

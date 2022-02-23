@@ -40,9 +40,9 @@ public class NavigationVisuals : MonoBehaviour {
 
     public void updateDistanceFieldVisuals(int[,,] distanceField) {
         // showDistanceField(distanceField, true);
-        grid.tileIndices.updateEach((x, y, z, value) => {
-            return 1;
-        });
+        // grid.tileIndices.updateEach((x, y, z, value) => {
+        //     return 1;
+        // });
 
         grid.rebuildGrid();
         grid.tileIndices.forEach((x, y, z, value) => {

@@ -46,7 +46,7 @@ public class NavigationAI : MonoBehaviour {
     private void FixedUpdate() {
         if (currentSkippedFrames == raycastSkippedPhysicsFramesCount) {
             currentSkippedFrames = 0;
-            if (!raycastForPlayerPosition()) {
+            if (!linecastForPlayerPosition()) {
                 findFurthestCellCenterInLineOfSight();
                 playerInSight = false;
             } else {
@@ -60,22 +60,23 @@ public class NavigationAI : MonoBehaviour {
         int gridDistanceToPlayer = navigationManager.getGridDistanceToPlayer(navigationManager.worldPositionToGridPosition(rb.position));
 
         if (playerInSight || gridDistanceToPlayer < switchToForceDistance) {
-            // Debug.Log("following");
             this.gameObject.layer = enemyLayer;
             rb.AddForce(directionToTarget * followForce * Time.fixedDeltaTime, ForceMode.Force);
 
         } else {
-            // Debug.Log("navigating");
             this.gameObject.layer = ignoreDecorationsLayer;
             rb.velocity = (targetWorldPosition - transform.position).normalized * navigationSpeed * Time.fixedDeltaTime;
         }
     }
 
-    bool raycastForPlayerPosition() {
-        if (Physics.Linecast(rb.position, navigationManager.playerTransform.position, out rayHit, playerLineOfSightMask)) {
-            if (rayHit.collider.gameObject.layer == navigationManager.playerLayer) {
+    bool linecastForPlayerPosition() {
+        if (Physics.Linecast(rb.position,
+                             navigationManager.playerTransform.position,
+                             out rayHit,
+                             playerLineOfSightMask)) {
+            if (rayHit.collider.gameObject.layer
+                == navigationManager.playerLayer) {
                 targetWorldPosition = rayHit.point;
-                // Debug.Log("player hit");
                 return true;
             }
         }
@@ -85,32 +86,45 @@ public class NavigationAI : MonoBehaviour {
     void findFurthestCellCenterInLineOfSight() {
         int maxTries = 10;
 
-        Vector3Int playerTile = navigationManager.worldPositionToGridPosition(navigationManager.playerTransform.position);
-        Vector3Int currentPosition = navigationManager.worldPositionToGridPosition(rb.position);
+        Vector3Int playerTile =
+        navigationManager.worldPositionToGridPosition(
+            navigationManager.playerTransform.position
+        );
+
+        Vector3Int currentPosition =
+        navigationManager.worldPositionToGridPosition(rb.position);
 
         Vector3Int furthestCellInLineOfSight = currentPosition;
         Vector3Int nextCell = currentPosition;
         while (true) {
-            if (maxTries-- == 0) {
+            if (--maxTries == 0) {
                 break;
             }
 
-            Vector3Int nextCellOffset = Vector3Int.FloorToInt(navigationManager.getPathVector(playerTile, nextCell));
+            Vector3Int nextCellOffset = Vector3Int.FloorToInt(
+                navigationManager.getPathVector(playerTile, nextCell)
+            );
             if (nextCellOffset == Vector3Int.zero) {
                 break;
             }
 
             nextCell += nextCellOffset;
 
-            Vector3 nextTargetWorldPositon = navigationManager.gridPositionToWorldPosition(nextCell);
-            if (Physics.Linecast(rb.position, nextTargetWorldPositon, out rayHit, levelMask)) {
+            Vector3 nextTargetWorldPositon = 
+                navigationManager.gridPositionToWorldPosition(nextCell);
+            if (Physics.Linecast(rb.position,
+                                 nextTargetWorldPositon,
+                                 out rayHit,
+                                 levelMask)) {
                 break;
             } else {
                 furthestCellInLineOfSight = nextCell;
             }
         }
 
-        // Debug.Log("tile hit," + furthestCellInLineOfSight);
-        targetWorldPosition = navigationManager.gridPositionToWorldPosition(furthestCellInLineOfSight);
+        targetWorldPosition = 
+        navigationManager.gridPositionToWorldPosition(
+            furthestCellInLineOfSight
+        );
     }
 }

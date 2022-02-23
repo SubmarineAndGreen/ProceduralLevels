@@ -340,7 +340,6 @@ public class Game : MonoBehaviour {
             Color textColor = addedTimeTextCopy.color;
             textColor.a = newAlpha;
             addedTimeTextCopy.color = textColor;
-
         }, 0f, tweenDuration).SetEase(Ease.InQuad);
 
         var heightTween = DOTween.To(() => {
